@@ -24,14 +24,16 @@
     --accent-seal-bright: #e8c86b;
     --accent-seal-dim: #8a7433;
     --accent-red: #e04040;
+    --accent-red-bright: #ff6060;
     --accent-green: #3aa862;
-    --accent-green-light: #7ee0a3;
-    --accent-green-text: #b8f0cc;
-    --accent-yellow-bg: rgba(232, 200, 107, 0.14);
-    --accent-yellow-border: #e8c86b;
-    --accent-yellow-text: #f0d888;
-    --accent-green-bg: rgba(126, 224, 163, 0.12);
-    --accent-green-border: #7ee0a3;
+    --accent-blue: #4a86c5;
+    /* Nền đặc cho các trạng thái card, tránh lộ nút xóa phía sau */
+    --card-partial-bg: #2e2818;
+    --card-partial-border: #e8c86b;
+    --card-partial-text: #f5d989;
+    --card-done-bg: #3a1518;
+    --card-done-border: #e04040;
+    --card-done-text: #ff9090;
     --font-main: Arial, 'Helvetica Neue', Helvetica, sans-serif;
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -83,18 +85,14 @@
   .header::after {
     content: '';
     position: absolute;
-    left: 20%;
-    right: 20%;
-    bottom: -1px;
-    height: 2px;
+    left: 20%; right: 20%; bottom: -1px; height: 2px;
     background: linear-gradient(90deg, transparent, var(--accent-seal-bright), transparent);
   }
   .header-badge {
     display: inline-block; font-family: var(--font-main); font-size: 0.72rem;
     letter-spacing: 3px; text-transform: uppercase; color: var(--accent-seal-bright);
     border: 1px solid var(--accent-seal); padding: 4px 14px; border-radius: 3px; margin-bottom: 12px;
-    font-weight: 700;
-    background: rgba(200, 168, 75, 0.08);
+    font-weight: 700; background: rgba(200, 168, 75, 0.08);
   }
   .header h1 {
     font-family: var(--font-main); font-size: 1.8rem; font-weight: 700;
@@ -176,13 +174,13 @@
   /* ===== HABITS (SWIPE) ===== */
   .habits-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
 
-  /* Wrap chỉ để chứa nút xóa ẩn phía sau, nền trong suốt
-     để không lộ màu đỏ khi card ở trạng thái bình thường */
+  /* Wrap: nền đặc cùng màu card để khi card ở trạng thái bình thường
+     không lộ nút xóa phía sau. Nút xóa ẩn mặc định, chỉ hiện khi swiping/swiped. */
   .habit-swipe-wrap {
     position: relative;
     overflow: hidden;
     border-radius: 6px;
-    background: transparent;
+    background: var(--bg-card);
   }
 
   .habit-delete-btn {
@@ -205,14 +203,27 @@
     user-select: none;
     z-index: 0;
     border-radius: 6px 0 0 6px;
+    /* Mặc định ẩn, chỉ hiện khi wrap có class swiping hoặc swiped */
+    visibility: hidden;
+  }
+
+  .habit-swipe-wrap.swiping .habit-delete-btn,
+  .habit-swipe-wrap.swiped .habit-delete-btn {
+    visibility: visible;
   }
 
   .habit-card {
-    background: var(--bg-card); border: 1px solid var(--border-subtle);
-    border-radius: 6px; padding: 12px 14px; display: flex; align-items: center;
-    gap: 12px; cursor: pointer;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
     transition: background 0.2s, border-color 0.2s, transform 0.2s ease;
-    position: relative; z-index: 1;
+    position: relative;
+    z-index: 1;
     will-change: transform;
     user-select: none;
   }
@@ -223,35 +234,35 @@
   }
   .habit-card:active { background: var(--bg-card-hover); }
 
-  /* Trạng thái CHƯA LÀM: mặc định */
-
-  /* Trạng thái MỘT PHẦN (click 1 lần): VÀNG */
+  /* Trạng thái MỘT PHẦN (click 1 lần): VÀNG - nền đặc */
   .habit-card.partial {
-    border-color: var(--accent-yellow-border);
-    background: var(--accent-yellow-bg);
+    border-color: var(--card-partial-border);
+    background: var(--card-partial-bg);
   }
-  .habit-card.partial::before { background: var(--accent-yellow-border); }
-  .habit-card.partial .habit-name { color: var(--accent-yellow-text); }
+  .habit-card.partial::before { background: var(--card-partial-border); }
+  .habit-card.partial .habit-name { color: var(--card-partial-text); }
   .habit-card.partial .habit-check {
-    background: var(--accent-yellow-border);
-    border-color: var(--accent-yellow-border);
+    background: var(--card-partial-border);
+    border-color: var(--card-partial-border);
     color: #0a0e1a;
   }
-  .habit-card.partial .habit-meta { color: var(--accent-yellow-text); }
+  .habit-card.partial .habit-meta { color: var(--card-partial-text); }
+  .habit-card.partial:active { background: #3a3420; }
 
-  /* Trạng thái HOÀN THÀNH (click 2 lần): XANH NHẠT */
+  /* Trạng thái HOÀN THÀNH (click 2 lần): ĐỎ - nền đặc */
   .habit-card.done {
-    border-color: var(--accent-green-border);
-    background: var(--accent-green-bg);
+    border-color: var(--card-done-border);
+    background: var(--card-done-bg);
   }
-  .habit-card.done::before { background: var(--accent-green-border); }
-  .habit-card.done .habit-name { color: var(--accent-green-text); }
+  .habit-card.done::before { background: var(--card-done-border); }
+  .habit-card.done .habit-name { color: var(--card-done-text); }
   .habit-card.done .habit-check {
-    background: var(--accent-green);
-    border-color: var(--accent-green-border);
+    background: var(--card-done-border);
+    border-color: var(--card-done-border);
     color: #ffffff;
   }
-  .habit-card.done .habit-meta { color: var(--accent-green-text); }
+  .habit-card.done .habit-meta { color: var(--card-done-text); }
+  .habit-card.done:active { background: #4a1a1e; }
 
   .habit-check {
     width: 30px; height: 30px; min-width: 30px; border: 2px solid var(--border-active);
@@ -423,7 +434,7 @@
   .cal-cell.level-1 { background: rgba(232, 200, 107, 0.18); }
   .cal-cell.level-2 { background: rgba(232, 200, 107, 0.32); }
   .cal-cell.level-3 { background: rgba(232, 200, 107, 0.5); color: #ffffff; }
-  .cal-cell.level-4 { background: rgba(126, 224, 163, 0.45); border-color: var(--accent-green-border); color: #ffffff; }
+  .cal-cell.level-4 { background: rgba(224, 64, 64, 0.5); border-color: var(--accent-red); color: #ffffff; }
 
   .legend {
     display: flex; align-items: center; justify-content: center; gap: 6px;
@@ -501,16 +512,6 @@
     transition: opacity 0.3s;
   }
   .note-meta .saved-indicator.show { opacity: 1; }
-
-  .note-history-title {
-    font-family: var(--font-main);
-    font-size: 0.8rem;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--accent-seal);
-    margin: 18px 0 10px;
-    font-weight: 700;
-  }
 
   .note-list-item {
     background: var(--bg-card);
@@ -733,7 +734,6 @@
 
 <div class="container">
 
-  <!-- ==================== VIEW: TODAY ==================== -->
   <div id="view-today" class="view active">
 
     <div class="header">
@@ -839,7 +839,6 @@
 
   </div>
 
-  <!-- ==================== VIEW: MONTH ==================== -->
   <div id="view-month" class="view">
 
     <div class="header">
@@ -866,7 +865,7 @@
       <div class="legend-swatch" style="background:rgba(232,200,107,0.18)"></div>
       <div class="legend-swatch" style="background:rgba(232,200,107,0.32)"></div>
       <div class="legend-swatch" style="background:rgba(232,200,107,0.5)"></div>
-      <div class="legend-swatch" style="background:rgba(126,224,163,0.45)"></div>
+      <div class="legend-swatch" style="background:rgba(224,64,64,0.5)"></div>
       <span>100%</span>
     </div>
 
@@ -894,7 +893,6 @@
 
   </div>
 
-  <!-- ==================== VIEW: NOTES ==================== -->
   <div id="view-notes" class="view">
 
     <div class="header">
@@ -944,7 +942,6 @@
 
   </div>
 
-  <!-- ==================== VIEW: STATS ==================== -->
   <div id="view-stats" class="view">
 
     <div class="header">
@@ -1062,7 +1059,6 @@
 (function() {
   'use strict';
 
-  // ===== CONSTANTS =====
   const STORAGE_KEY = 'winter_arc_data_v1';
   const EXPORT_VERSION = 3;
   const ARC_START = '2026-10-01';
@@ -1087,7 +1083,6 @@
   const DAYS_VN = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
   const MONTH_NAMES_VN = ['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'];
 
-  // ===== STATE =====
   let state = {
     habits: [],
     checkins: {},
@@ -1107,7 +1102,6 @@
 
   const $ = id => document.getElementById(id);
 
-  // ===== DATE UTILS =====
   function todayStr() {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
@@ -1145,7 +1139,6 @@
     return formatDateVN(key);
   }
 
-  // ===== PERSISTENCE =====
   function loadState() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -1194,7 +1187,6 @@
     return Math.round((done / total) * 100);
   }
 
-  // ===== AUDIO =====
   function initAudio() {
     if (!audioCtx) {
       try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
@@ -1233,7 +1225,6 @@
     pattern();
   }
 
-  // ===== REMINDER =====
   function startReminderTimer() {
     stopReminderTimer();
     if (!state.reminder.enabled) return;
@@ -1282,7 +1273,6 @@
     if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
   }
 
-  // ===== EXPORT / IMPORT JSON =====
   function buildExportObject() {
     return {
       _meta: {
@@ -1467,7 +1457,6 @@
     }
   }
 
-  // ===== RENDER: TODAY =====
   function render() {
     renderHeader();
     renderDate();
@@ -1495,6 +1484,10 @@
   }
 
   // ===== HABIT GESTURES =====
+  // Nút xóa mặc định visibility:hidden.
+  // - Trong lúc kéo (swiping): thêm class 'swiping' vào wrap để hiện nút xóa
+  // - Sau khi kéo qua ngưỡng: thêm class 'swiped' để giữ nút xóa hiện
+  // - Khi không kéo hoặc kéo chưa đủ: gỡ cả hai class để ẩn nút xóa
   function attachHabitGestures(wrap, card, habit) {
     let startX = 0, startY = 0;
     let moved = false;
@@ -1506,6 +1499,7 @@
     function closeAllSwiped() {
       document.querySelectorAll('.habit-swipe-wrap.swiped').forEach(w => {
         w.classList.remove('swiped');
+        w.classList.remove('swiping');
         const c = w.querySelector('.habit-card');
         if (c) c.style.transform = '';
       });
@@ -1535,6 +1529,8 @@
 
       if (Math.abs(dx) > Math.abs(dy) && dx > 0) {
         if (e && e.cancelable) e.preventDefault();
+        // Đang kéo sang phải -> hiện nút xóa
+        wrap.classList.add('swiping');
         const offset = Math.min(dx, SNAP);
         card.style.transition = 'none';
         card.style.transform = `translateX(${offset}px)`;
@@ -1545,6 +1541,7 @@
       if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
       const dx = clientX - startX;
       card.style.transition = 'transform 0.2s ease';
+      wrap.classList.remove('swiping');
 
       if (dx > SWIPE_TRIGGER) {
         closeAllSwiped();
@@ -1573,6 +1570,7 @@
 
     card.addEventListener('touchcancel', () => {
       if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
+      wrap.classList.remove('swiping');
       card.style.transition = 'transform 0.2s ease';
       if (!wrap.classList.contains('swiped')) card.style.transform = '';
       moved = false;
@@ -1586,12 +1584,13 @@
     card.addEventListener('mouseup', (e) => onEnd(e.clientX));
     card.addEventListener('mouseleave', () => {
       if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
+      wrap.classList.remove('swiping');
       moved = false;
     });
 
-    // Click cycle: 0 -> 1 (vàng) -> 2 (xanh nhạt) -> 0
+    // Click cycle: 0 -> 1 (vàng) -> 2 (đỏ) -> 0
     // Nếu đang swipe mở thì click chỉ đóng swipe, không đổi trạng thái
-    card.addEventListener('click', (e) => {
+    card.addEventListener('click', () => {
       if (moved) return;
       if (wrap.classList.contains('swiped')) {
         closeAllSwiped();
@@ -1739,7 +1738,7 @@
         }
       });
     } else if (missed === 0 && total > 0) {
-      missedList.innerHTML = '<div style="font-family:var(--font-main);font-size:0.9rem;color:var(--accent-green);padding:6px 0;letter-spacing:0.5px;font-weight:700;">Tất cả đã hoàn thành. Tiếp tục giữ vững.</div>';
+      missedList.innerHTML = '<div style="font-family:var(--font-main);font-size:0.9rem;color:var(--accent-red);padding:6px 0;letter-spacing:0.5px;font-weight:700;">Tất cả đã hoàn thành. Tiếp tục giữ vững.</div>';
     }
   }
 
@@ -1754,7 +1753,6 @@
     return div.innerHTML;
   }
 
-  // ===== MULTI DELETE DIALOG =====
   function openMultiDeleteDialog(preselectId) {
     const list = $('multiDeleteList');
     list.innerHTML = '';
@@ -1776,7 +1774,6 @@
     $('multiDeleteModal').classList.add('active');
   }
 
-  // ===== RENDER: MONTH CALENDAR =====
   function renderMonthView() {
     if (!monthViewDate) monthViewDate = parseDate(state.selectedDate || todayStr());
     const year = monthViewDate.getFullYear();
@@ -1840,7 +1837,6 @@
     $('mZero').textContent = zero;
   }
 
-  // ===== RENDER: NOTES VIEW =====
   function renderNotesView() {
     document.querySelectorAll('.notes-tab').forEach(tab => {
       tab.classList.toggle('active', tab.dataset.noteMode === state.noteMode);
@@ -1950,7 +1946,6 @@
     flashNoteSaved();
   }
 
-  // ===== CHART UTILS =====
   function getCtx(canvas) {
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
@@ -2005,8 +2000,8 @@
 
       const grad = ctx.createLinearGradient(0, y, 0, pad.top + plotH);
       if (highlightIdx === i) {
-        grad.addColorStop(0, '#7ee0a3');
-        grad.addColorStop(1, '#3aa862');
+        grad.addColorStop(0, '#ff6060');
+        grad.addColorStop(1, '#b83232');
       } else {
         grad.addColorStop(0, '#e8c86b');
         grad.addColorStop(1, '#8a7433');
@@ -2139,7 +2134,6 @@
     });
   }
 
-  // ===== RENDER: STATS =====
   function computeStats() {
     let totalCheckins = 0;
     Object.values(state.checkins).forEach(day => {
@@ -2244,7 +2238,6 @@
     }
   }
 
-  // ===== VIEW SWITCH =====
   function switchView(view) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     const el = document.getElementById('view-' + view);
@@ -2261,7 +2254,6 @@
     }
   }
 
-  // ===== QUOTE =====
   let quoteIndex = 0;
   function rotateQuote() {
     const el = $('quoteText');
@@ -2277,7 +2269,6 @@
     }, 400);
   }
 
-  // ===== TOAST / CONFIRM =====
   let toastTimer = null;
   function showToast(msg) {
     const t = $('toast');
@@ -2296,7 +2287,6 @@
     $('confirmDialog').classList.add('active');
   }
 
-  // ===== EVENTS =====
   function bindEvents() {
     $('prevDay').addEventListener('click', () => {
       state.selectedDate = dateOffset(state.selectedDate || todayStr(), -1);
@@ -2528,7 +2518,6 @@
     });
   }
 
-  // ===== SERVICE WORKER =====
   function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -2539,7 +2528,6 @@
     }
   }
 
-  // ===== PERSISTENT STORAGE =====
   function requestPersistentStorage() {
     if (navigator.storage && navigator.storage.persist) {
       navigator.storage.persist().then((granted) => {
@@ -2548,7 +2536,6 @@
     }
   }
 
-  // ===== INIT =====
   function init() {
     loadState();
     if (state.habits.length === 0) {
