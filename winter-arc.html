@@ -28,6 +28,8 @@
     --accent-green-bright: #7ee0a3;
     --accent-blue: #4a86c5;
     --accent-blue-bright: #6aa8e8;
+    --title-bg: linear-gradient(90deg, rgba(200,168,75,0.28) 0%, rgba(200,168,75,0.10) 60%, rgba(200,168,75,0.02) 100%);
+    --title-bg-strong: linear-gradient(90deg, rgba(200,168,75,0.35) 0%, rgba(200,168,75,0.15) 70%, rgba(200,168,75,0.05) 100%);
     --card-partial-bg: #2e2818;
     --card-partial-border: #e8c86b;
     --card-partial-text: #f5d989;
@@ -73,7 +75,7 @@
   /* HEADER */
   .header {
     text-align: center;
-    padding: 20px 16px 16px;
+    padding: 20px 16px 20px;
     margin-bottom: 16px;
     border-radius: 10px;
     background: linear-gradient(180deg, rgba(200, 168, 75, 0.12) 0%, rgba(200, 168, 75, 0.03) 60%, transparent 100%);
@@ -98,10 +100,19 @@
     text-shadow: 0 0 20px rgba(200, 168, 75, 0.3);
   }
   .header h1 .accent { color: var(--accent-seal-bright); text-shadow: 0 0 24px rgba(232, 200, 107, 0.6); }
+
+  /* NGÀY X / 92 - NỀN NỔI BẬT */
   .header-sub {
-    font-family: var(--font-main); font-size: 0.85rem; color: var(--text-secondary);
-    letter-spacing: 2px; margin-top: 8px; text-transform: uppercase;
+    display: inline-block;
+    font-family: var(--font-main); font-size: 0.9rem; color: #ffffff;
+    letter-spacing: 2px; margin-top: 12px; text-transform: uppercase;
     font-style: italic; font-weight: 700;
+    background: var(--title-bg-strong);
+    border: 1px solid var(--accent-seal);
+    border-radius: 5px;
+    padding: 7px 20px;
+    box-shadow: 0 0 16px rgba(200, 168, 75, 0.3), inset 0 1px 0 rgba(232, 200, 107, 0.25);
+    text-shadow: 0 0 8px rgba(232, 200, 107, 0.4);
   }
 
   /* QUOTE */
@@ -111,7 +122,16 @@
     margin-bottom: 14px; border-radius: 0 6px 6px 0;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
   }
-  .quote-label { font-family: var(--font-main); font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-seal); margin-bottom: 8px; font-weight: 700; }
+  .quote-label {
+    display: inline-block;
+    font-family: var(--font-main); font-size: 0.72rem; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--accent-seal-bright);
+    margin-bottom: 10px; font-weight: 700;
+    padding: 5px 12px;
+    background: var(--title-bg);
+    border-left: 3px solid var(--accent-seal-bright);
+    border-radius: 3px;
+  }
   .quote-text { font-family: var(--font-main); font-size: 1rem; color: #ffffff; font-style: italic; line-height: 1.6; min-height: 2.6em; transition: opacity 0.4s ease; }
   .quote-text.fade-out { opacity: 0; }
   .quote-author { font-family: var(--font-main); font-size: 0.85rem; color: var(--accent-seal); margin-top: 8px; text-align: right; letter-spacing: 1px; font-style: italic; font-weight: 700; }
@@ -144,38 +164,42 @@
     box-shadow: 0 0 8px rgba(232, 200, 107, 0.4);
   }
 
-  /* HABITS SECTION HEADER + COLLAPSE */
-  .habits-section { margin-bottom: 16px; }
-  .habits-header {
+  /* SECTION TITLE BAR - NỀN VÀNG NỔI BẬT */
+  .section-title-bar {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 8px 12px;
-    background: var(--bg-panel);
-    border: 1px solid var(--border-subtle);
-    border-radius: 6px;
+    padding: 10px 14px;
+    background: var(--title-bg);
+    border: 1px solid var(--accent-seal);
+    border-left: 3px solid var(--accent-seal-bright);
+    border-radius: 5px;
     margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(232, 200, 107, 0.15);
   }
-  .habits-title {
+  .section-title-bar .section-title {
     font-family: var(--font-main); font-size: 0.85rem;
     letter-spacing: 1.5px; text-transform: uppercase;
-    color: var(--accent-seal); font-weight: 700;
+    color: var(--accent-seal-bright); font-weight: 700;
+    text-shadow: 0 0 6px rgba(232, 200, 107, 0.35);
   }
-  .habits-title .count {
-    color: var(--accent-seal-bright);
+  .section-title-bar .section-title .count {
+    color: #ffffff;
     font-style: normal;
+    text-shadow: none;
   }
-  .habits-header .toggle-btn {
-    font-size: 0.72rem; color: var(--text-secondary);
-    border: 1px solid var(--border-subtle);
-    padding: 3px 10px; border-radius: 3px; cursor: pointer;
-    letter-spacing: 0.5px; font-style: italic; font-weight: 400;
-    background: var(--bg-card);
+  .section-title-bar .toggle-btn {
+    font-size: 0.72rem; color: #ffffff;
+    border: 1px solid var(--accent-seal);
+    padding: 4px 12px; border-radius: 3px; cursor: pointer;
+    letter-spacing: 0.5px; font-style: italic; font-weight: 700;
+    background: rgba(0, 0, 0, 0.25);
   }
-  .habits-header .toggle-btn:active { background: var(--bg-card-hover); }
+  .section-title-bar .toggle-btn:active { background: rgba(0, 0, 0, 0.5); }
 
+  /* HABITS SECTION */
+  .habits-section { margin-bottom: 16px; }
   .habits-section.collapsed .habits-list { display: none; }
-  .habits-section.collapsed .habits-header { margin-bottom: 0; }
+  .habits-section.collapsed .section-title-bar { margin-bottom: 0; }
 
-  /* HABITS */
   .habits-list { display: flex; flex-direction: column; gap: 10px; }
 
   .habit-swipe-wrap {
@@ -218,15 +242,9 @@
   }
 
   .habit-swipe-wrap.swiping-right .habit-delete-btn,
-  .habit-swipe-wrap.swiped-right .habit-delete-btn {
-    opacity: 1;
-    pointer-events: auto;
-  }
+  .habit-swipe-wrap.swiped-right .habit-delete-btn { opacity: 1; pointer-events: auto; }
   .habit-swipe-wrap.swiping-left .habit-edit-btn,
-  .habit-swipe-wrap.swiped-left .habit-edit-btn {
-    opacity: 1;
-    pointer-events: auto;
-  }
+  .habit-swipe-wrap.swiped-left .habit-edit-btn { opacity: 1; pointer-events: auto; }
 
   .habit-card {
     background: var(--bg-card);
@@ -275,19 +293,9 @@
   .habit-streak { font-family: var(--font-main); font-size: 1.05rem; color: var(--accent-seal-bright); font-weight: 700; text-align: center; min-width: 44px; }
   .habit-streak .streak-label { font-size: 0.68rem; color: var(--text-muted); display: block; letter-spacing: 0.5px; font-style: italic; font-weight: 400; }
 
-  /* SUMMARY */
+  /* PANELS */
   .summary-panel { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px; margin-bottom: 14px; }
-  .summary-title {
-    font-family: var(--font-main); font-size: 0.85rem; letter-spacing: 1.5px;
-    text-transform: uppercase; color: var(--accent-seal);
-    margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
-    font-weight: 700;
-  }
-  .summary-title .toggle-btn {
-    font-size: 0.72rem; color: var(--text-secondary); border: 1px solid var(--border-subtle);
-    padding: 3px 10px; border-radius: 3px; cursor: pointer; letter-spacing: 0.5px;
-    font-style: italic; font-weight: 400;
-  }
+
   .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .summary-item { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 5px; padding: 12px 10px; text-align: center; }
   .summary-item .val { font-family: var(--font-main); font-size: 1.55rem; font-weight: 700; color: #ffffff; line-height: 1; }
@@ -620,8 +628,18 @@
   .stat-card { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px 10px; text-align: center; }
   .stat-card .stat-val { font-family: var(--font-main); font-size: 1.7rem; font-weight: 700; color: var(--accent-seal-bright); line-height: 1; }
   .stat-card .stat-lbl { font-family: var(--font-main); font-size: 0.72rem; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-muted); margin-top: 6px; }
+
   .chart-box { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 12px 10px; margin-bottom: 14px; }
-  .chart-title { font-family: var(--font-main); font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase; color: var(--accent-seal); margin-bottom: 10px; font-weight: 700; }
+  .chart-title {
+    font-family: var(--font-main); font-size: 0.78rem; letter-spacing: 0.5px;
+    text-transform: uppercase; color: var(--accent-seal-bright); 
+    margin-bottom: 10px; font-weight: 700;
+    display: inline-block;
+    padding: 6px 12px;
+    background: var(--title-bg);
+    border-left: 3px solid var(--accent-seal-bright);
+    border-radius: 3px;
+  }
   .chart-canvas { display: block; width: 100%; }
 
   /* MODAL / CONFIRM */
@@ -635,7 +653,16 @@
     max-height: 85vh; overflow-y: auto;
   }
   @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-  .modal-title { font-family: var(--font-main); font-size: 0.9rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent-seal-bright); margin-bottom: 16px; text-align: center; font-weight: 700; }
+  .modal-title {
+    font-family: var(--font-main); font-size: 0.9rem; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--accent-seal-bright);
+    margin-bottom: 16px; text-align: center; font-weight: 700;
+    padding: 8px 14px;
+    background: var(--title-bg);
+    border: 1px solid var(--accent-seal);
+    border-radius: 5px;
+    box-shadow: inset 0 1px 0 rgba(232, 200, 107, 0.15);
+  }
   .form-group { margin-bottom: 14px; }
   .form-label { font-family: var(--font-main); font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 6px; display: block; font-weight: 700; }
   .form-input { width: 100%; background: var(--bg-card); border: 1px solid var(--border-subtle); color: var(--text-primary); font-family: var(--font-main); font-size: 1rem; padding: 12px 14px; border-radius: 5px; outline: none; transition: border-color 0.2s; }
@@ -649,7 +676,7 @@
   .multi-item input[type="checkbox"] { width: 22px; height: 22px; min-width: 22px; accent-color: var(--accent-seal); cursor: pointer; }
   .multi-item .multi-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* FOOTER - Ở CUỐI TRANG (KHÔNG CỐ ĐỊNH) */
+  /* FOOTER - Ở CUỐI TRANG */
   .site-footer {
     text-align: center;
     padding: 20px 16px 16px;
@@ -743,7 +770,7 @@
     </div>
 
     <div class="quote-box">
-      <div class="quote-label">// Châm ngôn Goggins</div>
+      <div class="quote-label">Châm ngôn Goggins</div>
       <div class="quote-text" id="quoteText"></div>
       <div class="quote-author" id="quoteAuthor"></div>
     </div>
@@ -769,16 +796,16 @@
     </div>
 
     <div class="habits-section" id="habitsSection">
-      <div class="habits-header">
-        <span class="habits-title">// Nhiệm vụ hôm nay <span class="count" id="habitsCount"></span></span>
+      <div class="section-title-bar">
+        <span class="section-title">Nhiệm vụ hôm nay <span class="count" id="habitsCount"></span></span>
         <span class="toggle-btn" id="toggleHabits">Thu gọn</span>
       </div>
       <div class="habits-list" id="habitsList"></div>
     </div>
 
     <div class="summary-panel">
-      <div class="summary-title">
-        <span>// Tổng kết</span>
+      <div class="section-title-bar">
+        <span class="section-title">Tổng kết</span>
         <span class="toggle-btn" id="toggleMissed">Chi tiết</span>
       </div>
       <div class="summary-grid">
@@ -811,7 +838,9 @@
     </div>
 
     <div class="data-section">
-      <div class="summary-title"><span>// Dữ liệu</span></div>
+      <div class="section-title-bar">
+        <span class="section-title">Dữ liệu</span>
+      </div>
       <div class="data-info" id="dataInfo">Đang tải thông tin...</div>
       <div class="controls" style="margin-bottom:0;">
         <button class="btn btn-gold" id="exportBtn">Xuất JSON</button>
@@ -821,8 +850,8 @@
     </div>
 
     <div class="reminder-section">
-      <div class="summary-title">
-        <span>// Nhắc nhở</span>
+      <div class="section-title-bar">
+        <span class="section-title">Nhắc nhở</span>
         <span class="toggle-btn" id="testAlarmBtn">Thử báo động</span>
       </div>
       <div class="reminder-row">
@@ -877,7 +906,9 @@
     </div>
 
     <div class="summary-panel">
-      <div class="summary-title"><span>// Tổng kết tháng</span></div>
+      <div class="section-title-bar">
+        <span class="section-title">Tổng kết tháng</span>
+      </div>
       <div class="summary-grid">
         <div class="summary-item">
           <div class="val green" id="mDone">0</div>
@@ -997,28 +1028,28 @@
     </div>
 
     <div class="chart-box">
-      <div class="chart-title">// 7 ngày gần nhất (% hoàn thành)</div>
+      <div class="chart-title">7 ngày gần nhất (% hoàn thành)</div>
       <canvas id="chartBar7" class="chart-canvas" style="height:150px;"></canvas>
     </div>
 
     <div class="chart-box">
-      <div class="chart-title">// Xu hướng 30 ngày</div>
+      <div class="chart-title">Xu hướng 30 ngày</div>
       <canvas id="chartLine30" class="chart-canvas" style="height:170px;"></canvas>
     </div>
 
     <div class="chart-box">
-      <div class="chart-title">// Hiệu suất theo thói quen (30 ngày)</div>
+      <div class="chart-title">Hiệu suất theo thói quen (30 ngày)</div>
       <canvas id="chartHabit" class="chart-canvas" style="height:220px;"></canvas>
     </div>
 
     <div class="chart-box">
-      <div class="chart-title">// Tổng check-in theo ngày (toàn bộ)</div>
+      <div class="chart-title">Tổng check-in theo ngày (toàn bộ)</div>
       <canvas id="chartLineAll" class="chart-canvas" style="height:170px;"></canvas>
     </div>
 
   </div>
 
-  <!-- FOOTER - Ở CUỐI TRANG -->
+  <!-- FOOTER -->
   <footer class="site-footer">
     <div class="footer-title">Winter Arc // Locked In</div>
     <div class="footer-copy">&copy; 2026 Bản quyền thuộc về</div>
@@ -1067,7 +1098,7 @@
 <!-- ADD / EDIT MODAL -->
 <div class="modal-overlay" id="addModal">
   <div class="modal-sheet">
-    <div class="modal-title" id="addModalTitle">// Thêm mục tiêu bắt buộc</div>
+    <div class="modal-title" id="addModalTitle">Thêm mục tiêu bắt buộc</div>
     <div class="form-group">
       <label class="form-label" for="habitNameInput">Tên thói quen</label>
       <input type="text" class="form-input" id="habitNameInput" placeholder="Ví dụ: Tập thể dục 30 phút" maxlength="50" autocomplete="off">
@@ -1082,7 +1113,7 @@
 <!-- MULTI DELETE MODAL -->
 <div class="modal-overlay" id="multiDeleteModal">
   <div class="modal-sheet">
-    <div class="modal-title">// Chọn nhiệm vụ để xóa</div>
+    <div class="modal-title">Chọn nhiệm vụ để xóa</div>
     <div class="multi-list" id="multiDeleteList"></div>
     <div class="modal-actions">
       <button class="btn" id="cancelMultiDelete">Hủy</button>
@@ -1172,7 +1203,6 @@
 
   const $ = id => document.getElementById(id);
 
-  // ===== DATE UTILS =====
   function todayStr() {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
@@ -1213,7 +1243,6 @@
     return toISO(d);
   }
 
-  // ===== PERSISTENCE =====
   function loadState() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -1305,7 +1334,6 @@
     return Math.round((done / total) * 100);
   }
 
-  // ===== AUDIO =====
   function initAudio() {
     if (!audioCtx) {
       try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
@@ -1359,7 +1387,6 @@
     pattern();
   }
 
-  // ===== REMINDER =====
   function startReminderTimer() {
     stopReminderTimer();
     if (!state.reminder.enabled) return;
@@ -1408,7 +1435,6 @@
     if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
   }
 
-  // ===== TIMER =====
   function formatTime(totalSec) {
     const m = Math.floor(totalSec / 60);
     const s = totalSec % 60;
@@ -1510,7 +1536,6 @@
     if (cntEl) cntEl.textContent = state.timerSessions[today] || 0;
   }
 
-  // ===== NOTES =====
   function noteTitle(content) {
     const firstLine = (content || '').split('\n').find(l => l.trim()) || '';
     return firstLine.trim();
@@ -1683,7 +1708,6 @@
     });
   }
 
-  // ===== RENDER: TODAY =====
   function render() {
     renderHeader();
     renderDate();
@@ -2020,14 +2044,14 @@
 
   function openAddHabitModal() {
     editingHabitId = null;
-    $('addModalTitle').textContent = '// Thêm mục tiêu bắt buộc';
+    $('addModalTitle').textContent = 'Thêm mục tiêu bắt buộc';
     $('habitNameInput').value = '';
     $('addModal').classList.add('active');
     setTimeout(() => $('habitNameInput').focus(), 300);
   }
   function openEditHabitModal(habit) {
     editingHabitId = habit.id;
-    $('addModalTitle').textContent = '// Sửa tên mục tiêu';
+    $('addModalTitle').textContent = 'Sửa tên mục tiêu';
     $('habitNameInput').value = habit.name;
     $('addModal').classList.add('active');
     setTimeout(() => { $('habitNameInput').focus(); $('habitNameInput').select(); }, 300);
@@ -2090,7 +2114,6 @@
     $('mZero').textContent = zero;
   }
 
-  // ===== CHARTS =====
   function getCtx(canvas) {
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
@@ -2361,7 +2384,6 @@
     }
   }
 
-  // ===== QUOTE (fix load ổn định) =====
   let quoteIndex = 0;
   let quoteTimerId = null;
 
@@ -2394,7 +2416,6 @@
     }
   }
 
-  // ===== TOAST / CONFIRM =====
   let toastTimer = null;
   function showToast(msg) {
     const t = $('toast');
@@ -2412,7 +2433,6 @@
     $('confirmDialog').classList.add('active');
   }
 
-  // ===== EXPORT / IMPORT =====
   function buildExportObject() {
     return {
       _meta: {
@@ -2548,20 +2568,16 @@
     }
   }
 
-  // ===== EVENTS =====
   function bindEvents() {
-    // Today nav
     $('prevDay').addEventListener('click', () => { state.selectedDate = dateOffset(state.selectedDate || todayStr(), -1); render(); });
     $('nextDay').addEventListener('click', () => { state.selectedDate = dateOffset(state.selectedDate || todayStr(), 1); render(); });
 
-    // Habits collapse toggle
     $('toggleHabits').addEventListener('click', () => {
       state.habitsCollapsed = !state.habitsCollapsed;
       saveState();
       renderHabitsSection();
     });
 
-    // Add habit
     $('addHabitBtn').addEventListener('click', openAddHabitModal);
     $('cancelAdd').addEventListener('click', () => {
       $('addModal').classList.remove('active');
@@ -2593,7 +2609,6 @@
       }
     });
 
-    // Reset day / all
     $('resetDayBtn').addEventListener('click', () => {
       showConfirm('ĐẶT LẠI TẤT CẢ CHECK-IN NGÀY NÀY?', () => {
         const dateStr = state.selectedDate || todayStr();
@@ -2613,7 +2628,6 @@
       });
     });
 
-    // Multi delete
     $('cancelMultiDelete').addEventListener('click', () => $('multiDeleteModal').classList.remove('active'));
     $('multiDeleteModal').addEventListener('click', (e) => {
       if (e.target === $('multiDeleteModal')) $('multiDeleteModal').classList.remove('active');
@@ -2633,21 +2647,18 @@
       });
     });
 
-    // Confirm
     $('confirmNo').addEventListener('click', () => { $('confirmDialog').classList.remove('active'); confirmCallback = null; });
     $('confirmYes').addEventListener('click', () => {
       $('confirmDialog').classList.remove('active');
       if (confirmCallback) { confirmCallback(); confirmCallback = null; }
     });
 
-    // Toggle missed
     $('toggleMissed').addEventListener('click', () => {
       const el = $('missedSection');
       el.classList.toggle('visible');
       $('toggleMissed').textContent = el.classList.contains('visible') ? 'Ẩn' : 'Chi tiết';
     });
 
-    // Reminder
     $('reminderToggle').addEventListener('click', () => {
       initAudio();
       state.reminder.enabled = !state.reminder.enabled;
@@ -2676,7 +2687,6 @@
       if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 100]);
     });
 
-    // Export/import
     $('exportBtn').addEventListener('click', () => { initAudio(); exportData(); });
     $('importBtn').addEventListener('click', () => { initAudio(); $('importFile').click(); });
     $('importFile').addEventListener('change', (e) => {
@@ -2685,7 +2695,6 @@
       e.target.value = '';
     });
 
-    // Bottom nav
     document.querySelectorAll('.nav-item').forEach(btn => {
       btn.addEventListener('click', () => {
         initAudio();
@@ -2695,7 +2704,6 @@
       });
     });
 
-    // Month nav
     $('monthPrev').addEventListener('click', () => {
       if (!monthViewDate) monthViewDate = parseDate(state.selectedDate || todayStr());
       monthViewDate.setMonth(monthViewDate.getMonth() - 1);
@@ -2707,7 +2715,6 @@
       renderMonthView();
     });
 
-    // Notes
     $('notesSearch').addEventListener('input', (e) => {
       if (notesSearchDebounce) clearTimeout(notesSearchDebounce);
       notesSearchDebounce = setTimeout(() => {
@@ -2731,7 +2738,6 @@
     });
     $('noteEditorArea').addEventListener('input', handleNoteEditorInput);
 
-    // Timer
     document.querySelectorAll('.timer-preset').forEach(p => {
       p.addEventListener('click', () => {
         initAudio();
@@ -2750,7 +2756,6 @@
     $('timerStartBtn').addEventListener('click', () => { initAudio(); startTimer(); });
     $('timerResetBtn').addEventListener('click', () => { initAudio(); resetTimer(); showToast('Đã đặt lại'); });
 
-    // Esc key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         $('addModal').classList.remove('active');
@@ -2760,7 +2765,6 @@
       }
     });
 
-    // Resize
     let resizeTimer = null;
     window.addEventListener('resize', () => {
       if (resizeTimer) clearTimeout(resizeTimer);
@@ -2826,10 +2830,8 @@
       console.error('Init error:', e);
     }
 
-    // Quote load riêng, không phụ thuộc các bước khác
     startQuoteRotation();
 
-    // Audio init
     const initAudioOnce = () => {
       initAudio();
       document.removeEventListener('touchstart', initAudioOnce);
