@@ -48,7 +48,7 @@
     font-family: var(--font-main);
     min-height: 100vh;
     min-height: 100dvh;
-    padding: calc(var(--safe-top) + 8px) 10px calc(var(--safe-bottom) + 160px);
+    padding: calc(var(--safe-top) + 8px) 10px calc(var(--safe-bottom) + 80px);
     line-height: 1.5;
     overflow-x: hidden;
     overscroll-behavior-y: contain;
@@ -144,8 +144,39 @@
     box-shadow: 0 0 8px rgba(232, 200, 107, 0.4);
   }
 
+  /* HABITS SECTION HEADER + COLLAPSE */
+  .habits-section { margin-bottom: 16px; }
+  .habits-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 12px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  .habits-title {
+    font-family: var(--font-main); font-size: 0.85rem;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--accent-seal); font-weight: 700;
+  }
+  .habits-title .count {
+    color: var(--accent-seal-bright);
+    font-style: normal;
+  }
+  .habits-header .toggle-btn {
+    font-size: 0.72rem; color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+    padding: 3px 10px; border-radius: 3px; cursor: pointer;
+    letter-spacing: 0.5px; font-style: italic; font-weight: 400;
+    background: var(--bg-card);
+  }
+  .habits-header .toggle-btn:active { background: var(--bg-card-hover); }
+
+  .habits-section.collapsed .habits-list { display: none; }
+  .habits-section.collapsed .habits-header { margin-bottom: 0; }
+
   /* HABITS */
-  .habits-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+  .habits-list { display: flex; flex-direction: column; gap: 10px; }
 
   .habit-swipe-wrap {
     position: relative;
@@ -618,40 +649,37 @@
   .multi-item input[type="checkbox"] { width: 22px; height: 22px; min-width: 22px; accent-color: var(--accent-seal); cursor: pointer; }
   .multi-item .multi-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* FOOTER - CỐ ĐỊNH TRÊN BOTTOM NAV */
+  /* FOOTER - Ở CUỐI TRANG (KHÔNG CỐ ĐỊNH) */
   .site-footer {
-    position: fixed;
-    bottom: calc(var(--safe-bottom) + 62px);
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 20px);
-    max-width: 480px;
-    padding: 8px 14px;
-    background: rgba(10, 14, 26, 0.96);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--accent-seal-dim);
-    border-radius: 8px;
     text-align: center;
-    z-index: 48;
-    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(232, 200, 107, 0.1);
+    padding: 20px 16px 16px;
+    margin-top: 24px;
+    border-radius: 10px 10px 0 0;
+    background: linear-gradient(0deg, rgba(200, 168, 75, 0.1) 0%, rgba(200, 168, 75, 0.02) 60%, transparent 100%);
+    border: 1px solid var(--accent-seal-dim);
+    border-bottom: none;
+    box-shadow: 0 -4px 20px rgba(200, 168, 75, 0.08), inset 0 1px 0 rgba(232, 200, 107, 0.15);
+    position: relative;
   }
-  .footer-copy {
-    font-family: var(--font-main);
-    font-size: 0.72rem;
-    color: var(--text-secondary);
-    letter-spacing: 0.3px;
-    line-height: 1.3;
+  .site-footer::before {
+    content: '';
+    position: absolute;
+    left: 20%; right: 20%; top: -1px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-seal-bright), transparent);
   }
+  .footer-title {
+    font-family: var(--font-main); font-size: 0.8rem; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--accent-seal-bright); font-weight: 700; margin-bottom: 6px;
+  }
+  .footer-copy { font-family: var(--font-main); font-size: 0.85rem; color: #ffffff; letter-spacing: 0.5px; margin-bottom: 4px; }
   .footer-email {
-    color: var(--accent-seal-bright);
-    font-weight: 700;
-    word-break: break-all;
+    font-family: var(--font-main); font-size: 0.9rem; color: var(--accent-seal-bright);
+    letter-spacing: 0.5px; font-weight: 700; word-break: break-all;
   }
 
   /* TOAST */
   .toast {
-    position: fixed; bottom: calc(var(--safe-bottom) + 170px); left: 50%;
+    position: fixed; bottom: calc(var(--safe-bottom) + 80px); left: 50%;
     transform: translateX(-50%) translateY(80px);
     background: var(--bg-card); border: 1px solid var(--accent-seal);
     color: #ffffff; font-family: var(--font-main); font-size: 0.88rem;
@@ -740,7 +768,13 @@
       </div>
     </div>
 
-    <div class="habits-list" id="habitsList"></div>
+    <div class="habits-section" id="habitsSection">
+      <div class="habits-header">
+        <span class="habits-title">// Nhiệm vụ hôm nay <span class="count" id="habitsCount"></span></span>
+        <span class="toggle-btn" id="toggleHabits">Thu gọn</span>
+      </div>
+      <div class="habits-list" id="habitsList"></div>
+    </div>
 
     <div class="summary-panel">
       <div class="summary-title">
@@ -984,12 +1018,14 @@
 
   </div>
 
-</div>
+  <!-- FOOTER - Ở CUỐI TRANG -->
+  <footer class="site-footer">
+    <div class="footer-title">Winter Arc // Locked In</div>
+    <div class="footer-copy">&copy; 2026 Bản quyền thuộc về</div>
+    <div class="footer-email">baobao.tran@spxexpress.com</div>
+  </footer>
 
-<!-- FOOTER - CỐ ĐỊNH -->
-<footer class="site-footer">
-  <div class="footer-copy">&copy; 2026 <span class="footer-email">baobao.tran@spxexpress.com</span></div>
-</footer>
+</div>
 
 <!-- BOTTOM NAV -->
 <div class="bottom-nav">
@@ -1119,6 +1155,7 @@
     checkins: {},
     notes: [],
     selectedDate: null,
+    habitsCollapsed: false,
     reminder: { enabled: false, intervalMin: 120, lastReminder: null, timerId: null },
     timer: { totalSec: 1500, remainingSec: 1500, running: false, endTime: null, intervalId: null },
     timerSessions: {}
@@ -1186,6 +1223,7 @@
         if (!state.checkins) state.checkins = {};
         if (!state.notes) state.notes = [];
         if (!state.timerSessions) state.timerSessions = {};
+        if (typeof state.habitsCollapsed !== 'boolean') state.habitsCollapsed = false;
         if (!state.reminder) state.reminder = { enabled: false, intervalMin: 120, lastReminder: null, timerId: null };
         if (parsed.dayNotes && typeof parsed.dayNotes === 'object') {
           Object.keys(parsed.dayNotes).forEach(k => {
@@ -1241,6 +1279,7 @@
         checkins: state.checkins,
         notes: notesClean,
         timerSessions: state.timerSessions,
+        habitsCollapsed: state.habitsCollapsed,
         reminder: {
           enabled: state.reminder.enabled,
           intervalMin: state.reminder.intervalMin,
@@ -1589,7 +1628,6 @@
         <div class="note-item-date">${formatDateTimeVN(note.updatedAt)}</div>
       `;
 
-      // Swipe right to reveal delete (giống habit)
       let sx = 0, sy = 0, moved = false;
       const SNAP = 88;
       const TRIGGER = 50;
@@ -1606,7 +1644,6 @@
         const dx = e.touches[0].clientX - sx;
         const dy = e.touches[0].clientY - sy;
         if (!moved && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) moved = true;
-        // Swipe phải để hiện nút Xóa
         if (Math.abs(dx) > Math.abs(dy) && dx > 0) {
           if (e.cancelable) e.preventDefault();
           wrap.classList.add('swiping');
@@ -1650,6 +1687,7 @@
   function render() {
     renderHeader();
     renderDate();
+    renderHabitsSection();
     renderHabits();
     renderProgress();
     renderSummary();
@@ -1670,6 +1708,24 @@
     $('dayFull').textContent = formatDateVN(d);
     const num = dayNumberInArc(d);
     $('dayCount').textContent = num >= 1 && num <= ARC_DAYS ? `Ngày ${num}/${ARC_DAYS}` : (num < 1 ? 'Trước Winter Arc' : 'Hoàn thành Winter Arc');
+  }
+
+  function renderHabitsSection() {
+    const section = $('habitsSection');
+    const toggle = $('toggleHabits');
+    const count = $('habitsCount');
+    if (!section || !toggle || !count) return;
+    if (state.habitsCollapsed) {
+      section.classList.add('collapsed');
+      toggle.textContent = 'Mở rộng';
+    } else {
+      section.classList.remove('collapsed');
+      toggle.textContent = 'Thu gọn';
+    }
+    const dateStr = state.selectedDate || todayStr();
+    let done = 0;
+    state.habits.forEach(h => { if (getCheckin(dateStr, h.id) === 2) done++; });
+    count.textContent = `(${done}/${state.habits.length})`;
   }
 
   function closeAllHabitSwipe() {
@@ -2315,7 +2371,7 @@
     if (!el || !authorEl) return;
     const q = QUOTES[idx % QUOTES.length];
     el.textContent = '"' + q.text + '"';
-    authorEl.textContent = '-- ' + q.author;
+    authorEl.textContent = q.author;
   }
   function rotateQuote() {
     const el = $('quoteText');
@@ -2497,6 +2553,13 @@
     // Today nav
     $('prevDay').addEventListener('click', () => { state.selectedDate = dateOffset(state.selectedDate || todayStr(), -1); render(); });
     $('nextDay').addEventListener('click', () => { state.selectedDate = dateOffset(state.selectedDate || todayStr(), 1); render(); });
+
+    // Habits collapse toggle
+    $('toggleHabits').addEventListener('click', () => {
+      state.habitsCollapsed = !state.habitsCollapsed;
+      saveState();
+      renderHabitsSection();
+    });
 
     // Add habit
     $('addHabitBtn').addEventListener('click', openAddHabitModal);
