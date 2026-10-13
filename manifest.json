@@ -1,0 +1,48 @@
+{
+  "name": "Winter Arc - Locked In",
+  "short_name": "Winter Arc",
+  "description": "Theo dõi tiến độ Winter Arc theo phong cách Navy SEAL",
+  "start_url": "./winter-arc.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0e1a",
+  "theme_color": "#0a0e1a",
+  "lang": "vi",
+  "dir": "ltr",
+  "categories": ["productivity", "health", "lifestyle"],
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Hôm nay",
+      "short_name": "Hôm nay",
+      "url": "./winter-arc.html",
+      "description": "Mở view Hôm nay"
+    }
+  ]
+}
