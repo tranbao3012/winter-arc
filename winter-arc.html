@@ -383,15 +383,11 @@
     position: relative;
     padding: 2px;
   }
-  .cal-cell.empty {
-    background: transparent; border-color: transparent; cursor: default;
-  }
+  .cal-cell.empty { background: transparent; border-color: transparent; cursor: default; }
   .cal-cell:not(.empty):active { transform: scale(0.94); }
   .cal-cell.today { border-color: var(--accent-seal-bright); border-width: 2px; }
   .cal-cell.selected { outline: 1px solid var(--accent-seal-bright); outline-offset: -3px; }
-  .cal-cell .cal-pct {
-    font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; font-style: italic;
-  }
+  .cal-cell .cal-pct { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; font-style: italic; }
   .cal-cell.level-1 { background: rgba(200, 168, 75, 0.15); }
   .cal-cell.level-2 { background: rgba(200, 168, 75, 0.3); }
   .cal-cell.level-3 { background: rgba(200, 168, 75, 0.5); color: #ffffff; }
@@ -402,28 +398,131 @@
     font-family: var(--font-main); font-size: 0.72rem; color: var(--text-muted);
     letter-spacing: 0.5px; margin-bottom: 14px; font-style: italic;
   }
-  .legend-swatch {
-    width: 13px; height: 13px; border-radius: 2px; border: 1px solid var(--border-subtle);
+  .legend-swatch { width: 13px; height: 13px; border-radius: 2px; border: 1px solid var(--border-subtle); }
+
+  /* ===== NOTES VIEW ===== */
+  .notes-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 4px;
+  }
+  .notes-tab {
+    flex: 1;
+    padding: 10px 8px;
+    text-align: center;
+    font-family: var(--font-main);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .notes-tab.active {
+    background: var(--accent-seal-dim);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(200, 168, 75, 0.3);
   }
 
-  /* ===== MONTH NOTE ===== */
-  .month-note-area {
+  .note-area {
     width: 100%;
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
     color: var(--text-primary);
     font-family: var(--font-main);
-    font-size: 0.95rem;
-    padding: 12px 14px;
-    border-radius: 5px;
+    font-size: 0.98rem;
+    padding: 14px 16px;
+    border-radius: 6px;
     outline: none;
     resize: vertical;
-    min-height: 90px;
-    line-height: 1.6;
+    min-height: 200px;
+    line-height: 1.7;
     transition: border-color 0.2s;
   }
-  .month-note-area:focus { border-color: var(--accent-seal); }
-  .month-note-area::placeholder { color: var(--text-muted); font-style: italic; }
+  .note-area:focus { border-color: var(--accent-seal); }
+  .note-area::placeholder { color: var(--text-muted); font-style: italic; }
+
+  .note-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-main);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 8px;
+    font-style: italic;
+    letter-spacing: 0.5px;
+  }
+  .note-meta .saved-indicator {
+    color: var(--accent-green);
+    font-style: normal;
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .note-meta .saved-indicator.show { opacity: 1; }
+
+  .note-history-title {
+    font-family: var(--font-main);
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent-seal);
+    margin: 18px 0 10px;
+    font-weight: 700;
+  }
+
+  .note-list-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-left: 3px solid var(--accent-seal);
+    border-radius: 0 5px 5px 0;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .note-list-item:active {
+    background: var(--bg-card-hover);
+    border-left-color: var(--accent-seal-bright);
+  }
+  .note-list-item .note-item-date {
+    font-family: var(--font-main);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent-seal-bright);
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .note-list-item .note-item-preview {
+    font-family: var(--font-main);
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-word;
+  }
+
+  .notes-empty {
+    text-align: center;
+    padding: 30px 20px;
+    font-family: var(--font-main);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-style: italic;
+    letter-spacing: 0.5px;
+  }
 
   /* ===== STATS VIEW ===== */
   .stats-grid {
@@ -489,12 +588,7 @@
   .modal-actions { display: flex; gap: 8px; margin-top: 20px; }
 
   /* ===== MULTI DELETE LIST ===== */
-  .multi-list {
-    max-height: 300px;
-    overflow-y: auto;
-    margin: 0 -4px;
-    padding: 0 4px;
-  }
+  .multi-list { max-height: 300px; overflow-y: auto; margin: 0 -4px; padding: 0 4px; }
   .multi-item {
     display: flex; align-items: center; gap: 12px;
     padding: 12px 8px;
@@ -508,18 +602,10 @@
   .multi-item:last-child { border-bottom: none; }
   .multi-item:active { background: rgba(200, 168, 75, 0.06); }
   .multi-item input[type="checkbox"] {
-    width: 22px;
-    height: 22px;
-    min-width: 22px;
-    accent-color: var(--accent-seal);
-    cursor: pointer;
+    width: 22px; height: 22px; min-width: 22px;
+    accent-color: var(--accent-seal); cursor: pointer;
   }
-  .multi-item .multi-name {
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+  .multi-item .multi-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   /* ===== FOOTER ===== */
   .site-footer {
@@ -536,35 +622,17 @@
   .site-footer::before {
     content: '';
     position: absolute;
-    left: 20%;
-    right: 20%;
-    top: -1px;
-    height: 2px;
+    left: 20%; right: 20%; top: -1px; height: 2px;
     background: linear-gradient(90deg, transparent, var(--accent-seal-bright), transparent);
   }
   .footer-title {
-    font-family: var(--font-main);
-    font-size: 0.8rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--accent-seal-bright);
-    font-weight: 700;
-    margin-bottom: 6px;
+    font-family: var(--font-main); font-size: 0.8rem; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--accent-seal-bright); font-weight: 700; margin-bottom: 6px;
   }
-  .footer-copy {
-    font-family: var(--font-main);
-    font-size: 0.85rem;
-    color: #ffffff;
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
-  }
+  .footer-copy { font-family: var(--font-main); font-size: 0.85rem; color: #ffffff; letter-spacing: 0.5px; margin-bottom: 4px; }
   .footer-email {
-    font-family: var(--font-main);
-    font-size: 0.9rem;
-    color: var(--accent-seal-bright);
-    letter-spacing: 0.5px;
-    font-weight: 700;
-    word-break: break-all;
+    font-family: var(--font-main); font-size: 0.9rem; color: var(--accent-seal-bright);
+    letter-spacing: 0.5px; font-weight: 700; word-break: break-all;
   }
 
   /* ===== TOAST ===== */
@@ -580,7 +648,7 @@
   }
   .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-  /* ===== BOTTOM NAV ===== */
+  /* ===== BOTTOM NAV (4 mục) ===== */
   .bottom-nav {
     position: fixed; bottom: 0; left: 0; right: 0;
     background: linear-gradient(180deg, rgba(15, 22, 40, 0.95), rgba(10, 14, 26, 1));
@@ -594,10 +662,11 @@
   }
   .nav-item {
     display: flex; flex-direction: column; align-items: center; gap: 2px;
-    padding: 6px 12px; cursor: pointer; border: none; background: none;
-    color: var(--text-muted); font-family: var(--font-main); font-size: 0.7rem;
-    letter-spacing: 0.5px; text-transform: uppercase; transition: color 0.15s;
+    padding: 6px 6px; cursor: pointer; border: none; background: none;
+    color: var(--text-muted); font-family: var(--font-main); font-size: 0.65rem;
+    letter-spacing: 0.3px; text-transform: uppercase; transition: color 0.15s;
     -webkit-tap-highlight-color: transparent; font-weight: 700;
+    flex: 1;
   }
   .nav-item.active { color: var(--accent-seal-bright); }
   .nav-item .nav-icon { font-size: 1.1rem; line-height: 1; }
@@ -791,9 +860,56 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- ==================== VIEW: NOTES ==================== -->
+  <div id="view-notes" class="view">
+
+    <div class="header">
+      <div class="header-badge">Winter Arc // Nhật ký</div>
+      <h1>Ghi <span class="accent">Chú</span></h1>
+      <div class="header-sub">Suy ngẫm &amp; bài học</div>
+    </div>
+
+    <div class="notes-tabs">
+      <button class="notes-tab active" data-note-mode="day">Theo ngày</button>
+      <button class="notes-tab" data-note-mode="month">Theo tháng</button>
+    </div>
+
+    <!-- CHẾ ĐỘ THEO NGÀY -->
+    <div id="noteDayPanel">
+      <div class="date-nav">
+        <button class="date-nav-btn" id="notePrevDay" aria-label="Ngày trước">&#8249;</button>
+        <div class="date-display">
+          <div class="day-name" id="noteDayName">Thứ Hai</div>
+          <div class="day-full" id="noteDayFull">01/01/2026</div>
+          <div class="day-count" id="noteDayCount">Ngày 1</div>
+        </div>
+        <button class="date-nav-btn" id="noteNextDay" aria-label="Ngày sau">&#8250;</button>
+      </div>
+    </div>
+
+    <!-- CHẾ ĐỘ THEO THÁNG -->
+    <div id="noteMonthPanel" style="display:none;">
+      <div class="month-nav">
+        <button class="month-nav-btn" id="noteMonthPrev">&#8249;</button>
+        <div class="month-label" id="noteMonthLabel">Tháng 10/2026</div>
+        <button class="month-nav-btn" id="noteMonthNext">&#8250;</button>
+      </div>
+    </div>
+
     <div class="summary-panel">
-      <div class="summary-title"><span>// Ghi chú tháng</span></div>
-      <textarea id="monthNote" class="month-note-area" rows="5" placeholder="Ghi lại cảm nhận, bài học, điều cần cải thiện trong tháng này..."></textarea>
+      <div class="summary-title"><span id="noteEditorTitle">// Ghi chú</span></div>
+      <textarea id="noteEditor" class="note-area" placeholder="Viết suy ngẫm, cảm nhận, bài học, điều cần cải thiện..."></textarea>
+      <div class="note-meta">
+        <span id="noteCharCount">0 ký tự</span>
+        <span class="saved-indicator" id="noteSavedIndicator">Đã lưu</span>
+      </div>
+    </div>
+
+    <div class="summary-panel">
+      <div class="summary-title"><span id="noteHistoryTitle">// Lịch sử ghi chú</span></div>
+      <div id="noteHistoryList"></div>
     </div>
 
   </div>
@@ -867,6 +983,10 @@
     <span class="nav-icon">&#9638;</span>
     Tháng
   </button>
+  <button class="nav-item" data-view="notes">
+    <span class="nav-icon">&#9998;</span>
+    Ghi chú
+  </button>
   <button class="nav-item" data-view="stats">
     <span class="nav-icon">&#9650;</span>
     Thống kê
@@ -919,7 +1039,7 @@
 
   // ===== CONSTANTS =====
   const STORAGE_KEY = 'winter_arc_data_v1';
-  const EXPORT_VERSION = 2;
+  const EXPORT_VERSION = 3;
   const ARC_START = '2026-10-01';
   const ARC_END = '2026-12-31';
   const ARC_DAYS = 92;
@@ -940,19 +1060,25 @@
   ];
 
   const DAYS_VN = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+  const MONTH_NAMES_VN = ['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'];
 
   // ===== STATE =====
   let state = {
     habits: [],
     checkins: {},
+    dayNotes: {},
     monthNotes: {},
     selectedDate: null,
+    selectedNoteDate: null,
+    noteMode: 'day',
+    selectedNoteMonth: null,
     reminder: { enabled: false, intervalMin: 120, lastReminder: null, timerId: null }
   };
 
   let monthViewDate = null;
   let audioCtx = null;
   let alarmIntervalId = null;
+  let noteSaveTimer = null;
 
   const $ = id => document.getElementById(id);
 
@@ -986,6 +1112,13 @@
   function monthKeyOf(dateObj) {
     return `${dateObj.getFullYear()}-${String(dateObj.getMonth()+1).padStart(2,'0')}`;
   }
+  function monthKeyToLabel(key) {
+    const [y, m] = key.split('-').map(Number);
+    return `${MONTH_NAMES_VN[m-1]}/${y}`;
+  }
+  function dayKeyToLabel(key) {
+    return formatDateVN(key);
+  }
 
   // ===== PERSISTENCE =====
   function loadState() {
@@ -995,7 +1128,9 @@
         const parsed = JSON.parse(raw);
         state = Object.assign(state, parsed);
         if (!state.checkins) state.checkins = {};
+        if (!state.dayNotes) state.dayNotes = {};
         if (!state.monthNotes) state.monthNotes = {};
+        if (!state.noteMode) state.noteMode = 'day';
         if (!state.reminder) state.reminder = { enabled: false, intervalMin: 120, lastReminder: null, timerId: null };
         state.reminder.timerId = null;
       }
@@ -1006,7 +1141,9 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         habits: state.habits,
         checkins: state.checkins,
+        dayNotes: state.dayNotes,
         monthNotes: state.monthNotes,
+        noteMode: state.noteMode,
         reminder: {
           enabled: state.reminder.enabled,
           intervalMin: state.reminder.intervalMin,
@@ -1104,6 +1241,7 @@
     const statusEl = $('reminderStatus');
     const lastEl = $('lastReminder');
     const toggleEl = $('reminderToggle');
+    if (!statusEl) return;
     if (state.reminder.enabled) {
       statusEl.textContent = 'Bật';
       statusEl.style.color = 'var(--accent-green)';
@@ -1132,6 +1270,7 @@
       },
       habits: state.habits.map(h => ({ id: h.id, name: h.name })),
       checkins: state.checkins,
+      dayNotes: state.dayNotes,
       monthNotes: state.monthNotes,
       reminder: {
         enabled: state.reminder.enabled,
@@ -1222,6 +1361,7 @@
 
     state.habits = data.habits.map(h => ({ id: h.id, name: h.name }));
     state.checkins = data.checkins;
+    state.dayNotes = (data.dayNotes && typeof data.dayNotes === 'object') ? data.dayNotes : {};
     state.monthNotes = (data.monthNotes && typeof data.monthNotes === 'object') ? data.monthNotes : {};
 
     if (data.reminder && typeof data.reminder === 'object') {
@@ -1316,6 +1456,7 @@
   function renderHeader() {
     const dayNum = dayNumberInArc(state.selectedDate || todayStr());
     const sub = $('headerSub');
+    if (!sub) return;
     if (dayNum >= 1 && dayNum <= ARC_DAYS) sub.textContent = `Ngày ${dayNum} / ${ARC_DAYS}`;
     else sub.textContent = dayNum < 1 ? 'Trước Winter Arc' : 'Đã hoàn thành';
   }
@@ -1330,12 +1471,12 @@
 
   // ===== HABIT GESTURES =====
   function attachHabitGestures(wrap, card, habit) {
-    let startX = 0, startY = 0, startTime = 0;
+    let startX = 0, startY = 0;
     let moved = false;
     let longPressTimer = null;
-    const SWIPE_TRIGGER = 50;   // px để tính là swipe
-    const SNAP = 88;            // px snap mở nút xóa
-    const LONG_PRESS_MS = 550;  // ms long press
+    const SWIPE_TRIGGER = 50;
+    const SNAP = 88;
+    const LONG_PRESS_MS = 550;
 
     function closeAllSwiped() {
       document.querySelectorAll('.habit-swipe-wrap.swiped').forEach(w => {
@@ -1348,7 +1489,6 @@
     function onStart(clientX, clientY) {
       startX = clientX;
       startY = clientY;
-      startTime = Date.now();
       moved = false;
       if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
       longPressTimer = setTimeout(() => {
@@ -1368,7 +1508,6 @@
         if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
       }
 
-      // Chỉ swipe ngang sang phải
       if (Math.abs(dx) > Math.abs(dy) && dx > 0) {
         if (e && e.cancelable) e.preventDefault();
         const offset = Math.min(dx, SNAP);
@@ -1390,11 +1529,9 @@
         wrap.classList.remove('swiped');
         card.style.transform = '';
       }
-      // Giữ moved = true trong 200ms để chặn click ngay sau đó
       setTimeout(() => { moved = false; }, 200);
     }
 
-    // Touch events
     card.addEventListener('touchstart', (e) => {
       if (e.touches.length !== 1) return;
       onStart(e.touches[0].clientX, e.touches[0].clientY);
@@ -1416,23 +1553,17 @@
       moved = false;
     });
 
-    // Mouse events (cho test desktop)
-    card.addEventListener('mousedown', (e) => {
-      onStart(e.clientX, e.clientY);
-    });
+    card.addEventListener('mousedown', (e) => onStart(e.clientX, e.clientY));
     card.addEventListener('mousemove', (e) => {
       if (e.buttons !== 1) return;
       onMove(e.clientX, e.clientY, null);
     });
-    card.addEventListener('mouseup', (e) => {
-      onEnd(e.clientX);
-    });
+    card.addEventListener('mouseup', (e) => onEnd(e.clientX));
     card.addEventListener('mouseleave', () => {
       if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
       moved = false;
     });
 
-    // Click xử lý: nếu đang swiped thì đóng, nếu vừa swipe thì bỏ qua, còn lại check-in
     card.addEventListener('click', (e) => {
       if (moved) return;
       if (wrap.classList.contains('swiped')) {
@@ -1583,7 +1714,7 @@
   }
 
   function renderReminder() {
-    $('reminderInterval').value = state.reminder.intervalMin;
+    if ($('reminderInterval')) $('reminderInterval').value = state.reminder.intervalMin;
     updateReminderUI();
   }
 
@@ -1677,10 +1808,117 @@
     $('mAvg').textContent = tracked > 0 ? Math.round(sumPct / tracked) + '%' : '0%';
     $('mTracked').textContent = tracked;
     $('mZero').textContent = zero;
+  }
 
-    // Ghi chú tháng
-    const key = monthKeyOf(monthViewDate);
-    $('monthNote').value = state.monthNotes[key] || '';
+  // ===== RENDER: NOTES VIEW =====
+  function renderNotesView() {
+    // Cập nhật tab active
+    document.querySelectorAll('.notes-tab').forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.noteMode === state.noteMode);
+    });
+
+    const isDay = state.noteMode === 'day';
+    $('noteDayPanel').style.display = isDay ? '' : 'none';
+    $('noteMonthPanel').style.display = isDay ? 'none' : '';
+
+    if (isDay) {
+      if (!state.selectedNoteDate) state.selectedNoteDate = todayStr();
+      const d = state.selectedNoteDate;
+      $('noteDayName').textContent = dayOfWeekVN(d);
+      $('noteDayFull').textContent = formatDateVN(d);
+      const num = dayNumberInArc(d);
+      $('noteDayCount').textContent = (num >= 1 && num <= ARC_DAYS) ? `Ngày ${num}/${ARC_DAYS}` : (num < 1 ? 'Trước Winter Arc' : 'Sau Winter Arc');
+      $('noteEditorTitle').textContent = '// Ghi chú ngày ' + formatDateVN(d);
+      $('noteEditor').value = state.dayNotes[d] || '';
+      $('noteEditor').placeholder = 'Hôm nay bạn đã làm gì tốt? Điều gì cần cải thiện? Cảm giác thế nào?';
+      $('noteHistoryTitle').textContent = '// Các ghi chú ngày gần đây';
+      renderNoteHistory('day');
+    } else {
+      if (!state.selectedNoteMonth) {
+        const base = state.selectedDate ? parseDate(state.selectedDate) : new Date();
+        state.selectedNoteMonth = monthKeyOf(base);
+      }
+      const key = state.selectedNoteMonth;
+      $('noteMonthLabel').textContent = monthKeyToLabel(key);
+      $('noteEditorTitle').textContent = '// Ghi chú ' + monthKeyToLabel(key);
+      $('noteEditor').value = state.monthNotes[key] || '';
+      $('noteEditor').placeholder = 'Tháng này bạn học được gì? Điều gì cần thay đổi trong tháng tới?';
+      $('noteHistoryTitle').textContent = '// Các ghi chú tháng';
+      renderNoteHistory('month');
+    }
+
+    updateNoteCharCount();
+  }
+
+  function renderNoteHistory(mode) {
+    const list = $('noteHistoryList');
+    list.innerHTML = '';
+
+    let entries = [];
+    if (mode === 'day') {
+      Object.keys(state.dayNotes).forEach(k => {
+        const txt = (state.dayNotes[k] || '').trim();
+        if (txt) entries.push({ key: k, text: txt, type: 'day' });
+      });
+      entries.sort((a, b) => b.key.localeCompare(a.key));
+    } else {
+      Object.keys(state.monthNotes).forEach(k => {
+        const txt = (state.monthNotes[k] || '').trim();
+        if (txt) entries.push({ key: k, text: txt, type: 'month' });
+      });
+      entries.sort((a, b) => b.key.localeCompare(a.key));
+    }
+
+    if (entries.length === 0) {
+      list.innerHTML = '<div class="notes-empty">Chưa có ghi chú nào.</div>';
+      return;
+    }
+
+    entries.slice(0, 30).forEach(entry => {
+      const div = document.createElement('div');
+      div.className = 'note-list-item';
+      const label = entry.type === 'day' ? dayKeyToLabel(entry.key) : monthKeyToLabel(entry.key);
+      const preview = entry.text.length > 120 ? entry.text.slice(0, 120) + '...' : entry.text;
+      div.innerHTML = `
+        <div class="note-item-date">${label}</div>
+        <div class="note-item-preview">${escapeHtml(preview)}</div>
+      `;
+      div.addEventListener('click', () => {
+        if (entry.type === 'day') {
+          state.selectedNoteDate = entry.key;
+        } else {
+          state.selectedNoteMonth = entry.key;
+        }
+        renderNotesView();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      list.appendChild(div);
+    });
+  }
+
+  function updateNoteCharCount() {
+    const txt = $('noteEditor').value || '';
+    $('noteCharCount').textContent = txt.length + ' ký tự';
+  }
+
+  function flashNoteSaved() {
+    const el = $('noteSavedIndicator');
+    el.classList.add('show');
+    if (noteSaveTimer) clearTimeout(noteSaveTimer);
+    noteSaveTimer = setTimeout(() => el.classList.remove('show'), 1200);
+  }
+
+  function handleNoteInput(e) {
+    if (state.noteMode === 'day') {
+      if (!state.selectedNoteDate) state.selectedNoteDate = todayStr();
+      state.dayNotes[state.selectedNoteDate] = e.target.value;
+    } else {
+      if (!state.selectedNoteMonth) return;
+      state.monthNotes[state.selectedNoteMonth] = e.target.value;
+    }
+    saveState();
+    updateNoteCharCount();
+    flashNoteSaved();
   }
 
   // ===== CHART UTILS =====
@@ -1987,6 +2225,8 @@
       requestAnimationFrame(() => requestAnimationFrame(renderStats));
     } else if (view === 'month') {
       renderMonthView();
+    } else if (view === 'notes') {
+      renderNotesView();
     } else {
       render();
     }
@@ -1997,6 +2237,7 @@
   function rotateQuote() {
     const el = $('quoteText');
     const authorEl = $('quoteAuthor');
+    if (!el) return;
     el.classList.add('fade-out');
     setTimeout(() => {
       const q = QUOTES[quoteIndex % QUOTES.length];
@@ -2072,6 +2313,7 @@
       showConfirm('XÓA TOÀN BỘ DỮ LIỆU?\nHành động này không thể hoàn tác.\n\nKhuyến nghị: xuất JSON backup trước.', () => {
         state.habits = [];
         state.checkins = {};
+        state.dayNotes = {};
         state.monthNotes = {};
         state.reminder.lastReminder = null;
         state.reminder.enabled = false;
@@ -2178,6 +2420,7 @@
       e.target.value = '';
     });
 
+    // Bottom nav
     document.querySelectorAll('.nav-item').forEach(btn => {
       btn.addEventListener('click', () => {
         initAudio();
@@ -2187,6 +2430,7 @@
       });
     });
 
+    // Month nav (view Tháng)
     $('monthPrev').addEventListener('click', () => {
       if (!monthViewDate) monthViewDate = parseDate(state.selectedDate || todayStr());
       monthViewDate.setMonth(monthViewDate.getMonth() - 1);
@@ -2198,13 +2442,51 @@
       renderMonthView();
     });
 
-    // Ghi chú tháng
-    $('monthNote').addEventListener('input', (e) => {
-      if (!monthViewDate) monthViewDate = parseDate(state.selectedDate || todayStr());
-      const key = monthKeyOf(monthViewDate);
-      state.monthNotes[key] = e.target.value;
-      saveState();
+    // Notes: tab chuyển chế độ
+    document.querySelectorAll('.notes-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        state.noteMode = tab.dataset.noteMode;
+        saveState();
+        renderNotesView();
+      });
     });
+
+    // Notes: date nav (theo ngày)
+    $('notePrevDay').addEventListener('click', () => {
+      if (!state.selectedNoteDate) state.selectedNoteDate = todayStr();
+      state.selectedNoteDate = dateOffset(state.selectedNoteDate, -1);
+      renderNotesView();
+    });
+    $('noteNextDay').addEventListener('click', () => {
+      if (!state.selectedNoteDate) state.selectedNoteDate = todayStr();
+      state.selectedNoteDate = dateOffset(state.selectedNoteDate, 1);
+      renderNotesView();
+    });
+
+    // Notes: month nav (theo tháng)
+    $('noteMonthPrev').addEventListener('click', () => {
+      if (!state.selectedNoteMonth) {
+        const base = state.selectedDate ? parseDate(state.selectedDate) : new Date();
+        state.selectedNoteMonth = monthKeyOf(base);
+      }
+      const [y, m] = state.selectedNoteMonth.split('-').map(Number);
+      const d = new Date(y, m - 2, 1);
+      state.selectedNoteMonth = monthKeyOf(d);
+      renderNotesView();
+    });
+    $('noteMonthNext').addEventListener('click', () => {
+      if (!state.selectedNoteMonth) {
+        const base = state.selectedDate ? parseDate(state.selectedDate) : new Date();
+        state.selectedNoteMonth = monthKeyOf(base);
+      }
+      const [y, m] = state.selectedNoteMonth.split('-').map(Number);
+      const d = new Date(y, m, 1);
+      state.selectedNoteMonth = monthKeyOf(d);
+      renderNotesView();
+    });
+
+    // Notes: editor
+    $('noteEditor').addEventListener('input', handleNoteInput);
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
@@ -2258,6 +2540,11 @@
       saveState();
     }
     if (!state.selectedDate) state.selectedDate = todayStr();
+    if (!state.selectedNoteDate) state.selectedNoteDate = todayStr();
+    if (!state.selectedNoteMonth) {
+      state.selectedNoteMonth = monthKeyOf(new Date());
+    }
+
     const today = todayStr();
     if (!state.checkins[today]) {
       state.checkins[today] = {};
