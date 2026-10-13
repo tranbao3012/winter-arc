@@ -25,7 +25,13 @@
     --accent-seal-dim: #8a7433;
     --accent-red: #e04040;
     --accent-green: #3aa862;
-    --accent-blue: #4a86c5;
+    --accent-green-light: #7ee0a3;
+    --accent-green-text: #b8f0cc;
+    --accent-yellow-bg: rgba(232, 200, 107, 0.14);
+    --accent-yellow-border: #e8c86b;
+    --accent-yellow-text: #f0d888;
+    --accent-green-bg: rgba(126, 224, 163, 0.12);
+    --accent-green-border: #7ee0a3;
     --font-main: Arial, 'Helvetica Neue', Helvetica, sans-serif;
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -170,11 +176,13 @@
   /* ===== HABITS (SWIPE) ===== */
   .habits-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
 
+  /* Wrap chỉ để chứa nút xóa ẩn phía sau, nền trong suốt
+     để không lộ màu đỏ khi card ở trạng thái bình thường */
   .habit-swipe-wrap {
     position: relative;
     overflow: hidden;
     border-radius: 6px;
-    background: var(--accent-red);
+    background: transparent;
   }
 
   .habit-delete-btn {
@@ -196,12 +204,14 @@
     cursor: pointer;
     user-select: none;
     z-index: 0;
+    border-radius: 6px 0 0 6px;
   }
 
   .habit-card {
     background: var(--bg-card); border: 1px solid var(--border-subtle);
     border-radius: 6px; padding: 12px 14px; display: flex; align-items: center;
-    gap: 12px; cursor: pointer; transition: background 0.2s, border-color 0.2s, transform 0.2s ease;
+    gap: 12px; cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.2s ease;
     position: relative; z-index: 1;
     will-change: transform;
     user-select: none;
@@ -211,11 +221,37 @@
     background: var(--border-subtle); transition: background 0.2s;
     border-radius: 6px 0 0 6px;
   }
-  .habit-card.done { border-color: var(--accent-green); background: rgba(58, 168, 98, 0.1); }
-  .habit-card.done::before { background: var(--accent-green); }
-  .habit-card.partial { border-color: var(--accent-blue); background: rgba(74, 134, 197, 0.08); }
-  .habit-card.partial::before { background: var(--accent-blue); }
   .habit-card:active { background: var(--bg-card-hover); }
+
+  /* Trạng thái CHƯA LÀM: mặc định */
+
+  /* Trạng thái MỘT PHẦN (click 1 lần): VÀNG */
+  .habit-card.partial {
+    border-color: var(--accent-yellow-border);
+    background: var(--accent-yellow-bg);
+  }
+  .habit-card.partial::before { background: var(--accent-yellow-border); }
+  .habit-card.partial .habit-name { color: var(--accent-yellow-text); }
+  .habit-card.partial .habit-check {
+    background: var(--accent-yellow-border);
+    border-color: var(--accent-yellow-border);
+    color: #0a0e1a;
+  }
+  .habit-card.partial .habit-meta { color: var(--accent-yellow-text); }
+
+  /* Trạng thái HOÀN THÀNH (click 2 lần): XANH NHẠT */
+  .habit-card.done {
+    border-color: var(--accent-green-border);
+    background: var(--accent-green-bg);
+  }
+  .habit-card.done::before { background: var(--accent-green-border); }
+  .habit-card.done .habit-name { color: var(--accent-green-text); }
+  .habit-card.done .habit-check {
+    background: var(--accent-green);
+    border-color: var(--accent-green-border);
+    color: #ffffff;
+  }
+  .habit-card.done .habit-meta { color: var(--accent-green-text); }
 
   .habit-check {
     width: 30px; height: 30px; min-width: 30px; border: 2px solid var(--border-active);
@@ -223,15 +259,11 @@
     font-family: var(--font-main); font-size: 1.05rem; font-weight: 700;
     color: transparent; transition: all 0.2s;
   }
-  .habit-card.done .habit-check { background: var(--accent-green); border-color: var(--accent-green); color: #ffffff; }
-  .habit-card.partial .habit-check { background: var(--accent-blue); border-color: var(--accent-blue); color: #ffffff; }
   .habit-info { flex: 1; min-width: 0; }
   .habit-name {
     font-size: 1rem; font-weight: 700; color: #ffffff;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .habit-card.done .habit-name { color: var(--accent-green); }
-  .habit-card.partial .habit-name { color: var(--accent-blue); }
   .habit-meta { font-family: var(--font-main); font-size: 0.78rem; color: var(--text-muted); margin-top: 3px; letter-spacing: 0.5px; font-style: italic; }
   .habit-streak {
     font-family: var(--font-main); font-size: 1.05rem; color: var(--accent-seal-bright);
@@ -388,10 +420,10 @@
   .cal-cell.today { border-color: var(--accent-seal-bright); border-width: 2px; }
   .cal-cell.selected { outline: 1px solid var(--accent-seal-bright); outline-offset: -3px; }
   .cal-cell .cal-pct { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; font-style: italic; }
-  .cal-cell.level-1 { background: rgba(200, 168, 75, 0.15); }
-  .cal-cell.level-2 { background: rgba(200, 168, 75, 0.3); }
-  .cal-cell.level-3 { background: rgba(200, 168, 75, 0.5); color: #ffffff; }
-  .cal-cell.level-4 { background: rgba(58, 168, 98, 0.55); border-color: var(--accent-green); color: #ffffff; }
+  .cal-cell.level-1 { background: rgba(232, 200, 107, 0.18); }
+  .cal-cell.level-2 { background: rgba(232, 200, 107, 0.32); }
+  .cal-cell.level-3 { background: rgba(232, 200, 107, 0.5); color: #ffffff; }
+  .cal-cell.level-4 { background: rgba(126, 224, 163, 0.45); border-color: var(--accent-green-border); color: #ffffff; }
 
   .legend {
     display: flex; align-items: center; justify-content: center; gap: 6px;
@@ -648,7 +680,7 @@
   }
   .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-  /* ===== BOTTOM NAV (4 mục) ===== */
+  /* ===== BOTTOM NAV ===== */
   .bottom-nav {
     position: fixed; bottom: 0; left: 0; right: 0;
     background: linear-gradient(180deg, rgba(15, 22, 40, 0.95), rgba(10, 14, 26, 1));
@@ -831,10 +863,10 @@
     <div class="legend">
       <span>0%</span>
       <div class="legend-swatch" style="background:#141d33"></div>
-      <div class="legend-swatch" style="background:rgba(200,168,75,0.15)"></div>
-      <div class="legend-swatch" style="background:rgba(200,168,75,0.3)"></div>
-      <div class="legend-swatch" style="background:rgba(200,168,75,0.5)"></div>
-      <div class="legend-swatch" style="background:rgba(58,168,98,0.55)"></div>
+      <div class="legend-swatch" style="background:rgba(232,200,107,0.18)"></div>
+      <div class="legend-swatch" style="background:rgba(232,200,107,0.32)"></div>
+      <div class="legend-swatch" style="background:rgba(232,200,107,0.5)"></div>
+      <div class="legend-swatch" style="background:rgba(126,224,163,0.45)"></div>
       <span>100%</span>
     </div>
 
@@ -876,7 +908,6 @@
       <button class="notes-tab" data-note-mode="month">Theo tháng</button>
     </div>
 
-    <!-- CHẾ ĐỘ THEO NGÀY -->
     <div id="noteDayPanel">
       <div class="date-nav">
         <button class="date-nav-btn" id="notePrevDay" aria-label="Ngày trước">&#8249;</button>
@@ -889,7 +920,6 @@
       </div>
     </div>
 
-    <!-- CHẾ ĐỘ THEO THÁNG -->
     <div id="noteMonthPanel" style="display:none;">
       <div class="month-nav">
         <button class="month-nav-btn" id="noteMonthPrev">&#8249;</button>
@@ -964,7 +994,6 @@
 
   </div>
 
-  <!-- ==================== FOOTER ==================== -->
   <footer class="site-footer">
     <div class="footer-title">Winter Arc // Locked In</div>
     <div class="footer-copy">&copy; 2026 Bản quyền thuộc về</div>
@@ -973,7 +1002,6 @@
 
 </div>
 
-<!-- BOTTOM NAV -->
 <div class="bottom-nav">
   <button class="nav-item active" data-view="today">
     <span class="nav-icon">&#9632;</span>
@@ -993,7 +1021,6 @@
   </button>
 </div>
 
-<!-- ADD MODAL -->
 <div class="modal-overlay" id="addModal">
   <div class="modal-sheet">
     <div class="modal-title">// Thêm mục tiêu bắt buộc</div>
@@ -1008,7 +1035,6 @@
   </div>
 </div>
 
-<!-- MULTI DELETE MODAL -->
 <div class="modal-overlay" id="multiDeleteModal">
   <div class="modal-sheet">
     <div class="modal-title">// Chọn nhiệm vụ để xóa</div>
@@ -1020,7 +1046,6 @@
   </div>
 </div>
 
-<!-- CONFIRM -->
 <div class="confirm-dialog" id="confirmDialog">
   <div class="confirm-box">
     <p id="confirmMsg">Bạn chắc chắn?</p>
@@ -1564,6 +1589,8 @@
       moved = false;
     });
 
+    // Click cycle: 0 -> 1 (vàng) -> 2 (xanh nhạt) -> 0
+    // Nếu đang swipe mở thì click chỉ đóng swipe, không đổi trạng thái
     card.addEventListener('click', (e) => {
       if (moved) return;
       if (wrap.classList.contains('swiped')) {
@@ -1582,7 +1609,9 @@
         setTimeout(() => playBeep(1320, 0.15, 0.2, 'sine'), 100);
         if (navigator.vibrate) navigator.vibrate(30);
       } else if (next === 1) {
-        playBeep(440, 0.08, 0.15, 'sine');
+        playBeep(660, 0.08, 0.15, 'sine');
+      } else {
+        playBeep(330, 0.06, 0.1, 'sine');
       }
     });
   }
@@ -1632,11 +1661,12 @@
         if (streak > 365) break;
       }
 
+      const metaText = val === 2 ? 'Hoàn thành' : val === 1 ? 'Một phần' : 'Chưa làm';
       card.innerHTML = `
         <div class="habit-check">${val === 2 ? '&#10003;' : val === 1 ? '&#8212;' : ''}</div>
         <div class="habit-info">
           <div class="habit-name">${escapeHtml(h.name)}</div>
-          <div class="habit-meta">${val === 2 ? 'Hoàn thành' : val === 1 ? 'Một phần' : 'Chưa làm'}</div>
+          <div class="habit-meta">${metaText}</div>
         </div>
         <div class="habit-streak">
           ${streak}
@@ -1812,7 +1842,6 @@
 
   // ===== RENDER: NOTES VIEW =====
   function renderNotesView() {
-    // Cập nhật tab active
     document.querySelectorAll('.notes-tab').forEach(tab => {
       tab.classList.toggle('active', tab.dataset.noteMode === state.noteMode);
     });
@@ -1976,8 +2005,8 @@
 
       const grad = ctx.createLinearGradient(0, y, 0, pad.top + plotH);
       if (highlightIdx === i) {
-        grad.addColorStop(0, '#3aa862');
-        grad.addColorStop(1, '#1e6a3d');
+        grad.addColorStop(0, '#7ee0a3');
+        grad.addColorStop(1, '#3aa862');
       } else {
         grad.addColorStop(0, '#e8c86b');
         grad.addColorStop(1, '#8a7433');
@@ -2325,7 +2354,6 @@
       });
     });
 
-    // Multi delete modal
     $('cancelMultiDelete').addEventListener('click', () => {
       $('multiDeleteModal').classList.remove('active');
     });
@@ -2420,7 +2448,6 @@
       e.target.value = '';
     });
 
-    // Bottom nav
     document.querySelectorAll('.nav-item').forEach(btn => {
       btn.addEventListener('click', () => {
         initAudio();
@@ -2430,7 +2457,6 @@
       });
     });
 
-    // Month nav (view Tháng)
     $('monthPrev').addEventListener('click', () => {
       if (!monthViewDate) monthViewDate = parseDate(state.selectedDate || todayStr());
       monthViewDate.setMonth(monthViewDate.getMonth() - 1);
@@ -2442,7 +2468,6 @@
       renderMonthView();
     });
 
-    // Notes: tab chuyển chế độ
     document.querySelectorAll('.notes-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         state.noteMode = tab.dataset.noteMode;
@@ -2451,7 +2476,6 @@
       });
     });
 
-    // Notes: date nav (theo ngày)
     $('notePrevDay').addEventListener('click', () => {
       if (!state.selectedNoteDate) state.selectedNoteDate = todayStr();
       state.selectedNoteDate = dateOffset(state.selectedNoteDate, -1);
@@ -2463,7 +2487,6 @@
       renderNotesView();
     });
 
-    // Notes: month nav (theo tháng)
     $('noteMonthPrev').addEventListener('click', () => {
       if (!state.selectedNoteMonth) {
         const base = state.selectedDate ? parseDate(state.selectedDate) : new Date();
@@ -2485,7 +2508,6 @@
       renderNotesView();
     });
 
-    // Notes: editor
     $('noteEditor').addEventListener('input', handleNoteInput);
 
     document.addEventListener('keydown', (e) => {
