@@ -40,10 +40,8 @@
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html { font-size: 16px; -webkit-text-size-adjust: 100%; }
-
   body {
     background: var(--bg-deep);
     color: var(--text-primary);
@@ -55,7 +53,6 @@
     overflow-x: hidden;
     overscroll-behavior-y: contain;
   }
-
   body::before {
     content: '';
     position: fixed;
@@ -67,11 +64,9 @@
     pointer-events: none;
     z-index: 0;
   }
-
   .container { position: relative; z-index: 1; max-width: 500px; margin: 0 auto; }
   .view { display: none; }
   .view.active { display: block; }
-
   .header {
     text-align: center;
     padding: 20px 16px 20px;
@@ -99,7 +94,6 @@
     text-shadow: 0 0 20px rgba(200, 168, 75, 0.3);
   }
   .header h1 .accent { color: var(--accent-seal-bright); text-shadow: 0 0 24px rgba(232, 200, 107, 0.6); }
-
   .header-sub {
     display: inline-block;
     font-family: var(--font-main); font-size: 0.9rem; color: #ffffff;
@@ -112,7 +106,6 @@
     box-shadow: 0 0 16px rgba(200, 168, 75, 0.3), inset 0 1px 0 rgba(232, 200, 107, 0.25);
     text-shadow: 0 0 8px rgba(232, 200, 107, 0.4);
   }
-
   .quote-box {
     background: var(--bg-panel); border: 1px solid var(--border-subtle);
     border-left: 3px solid var(--accent-seal-bright); padding: 14px 16px;
@@ -129,10 +122,9 @@
     border-left: 3px solid var(--accent-seal-bright);
     border-radius: 3px;
   }
-  .quote-text { font-family: var(--font-main); font-size: 1rem; color: #ffffff; font-style: italic; line-height: 1.6; min-height: 2.6em; transition: opacity 0.4s ease; }
+  .quote-text { font-family: var(--font-main); font-size: 1rem; color: #ffffff; font-style: italic; line-height: 1.6; min-height: 4em; transition: opacity 0.4s ease; }
   .quote-text.fade-out { opacity: 0; }
   .quote-author { font-family: var(--font-main); font-size: 0.85rem; color: var(--accent-seal); margin-top: 8px; text-align: right; letter-spacing: 1px; font-style: italic; font-weight: 700; }
-
   .date-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; gap: 8px; }
   .date-nav-btn {
     background: var(--bg-card); border: 1px solid var(--border-active);
@@ -147,7 +139,6 @@
   .date-display .day-name { font-family: var(--font-main); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-seal); font-weight: 700; }
   .date-display .day-full { font-family: var(--font-main); font-size: 1.25rem; font-weight: 700; color: #ffffff; letter-spacing: 1px; margin-top: 4px; }
   .date-display .day-count { font-family: var(--font-main); font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px; font-style: italic; }
-
   .progress-section { margin-bottom: 14px; }
   .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
   .progress-label { font-family: var(--font-main); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; }
@@ -158,7 +149,6 @@
     border-radius: 5px; width: 0%; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 0 8px rgba(232, 200, 107, 0.4);
   }
-
   .section-title-bar {
     display: flex; justify-content: space-between; align-items: center;
     padding: 10px 14px;
@@ -175,11 +165,7 @@
     color: var(--accent-seal-bright); font-weight: 700;
     text-shadow: 0 0 6px rgba(232, 200, 107, 0.35);
   }
-  .section-title-bar .section-title .count {
-    color: #ffffff;
-    font-style: normal;
-    text-shadow: none;
-  }
+  .section-title-bar .section-title .count { color: #ffffff; font-style: normal; text-shadow: none; }
   .section-title-bar .toggle-btn {
     font-size: 0.72rem; color: #ffffff;
     border: 1px solid var(--accent-seal);
@@ -188,57 +174,33 @@
     background: rgba(0, 0, 0, 0.25);
   }
   .section-title-bar .toggle-btn:active { background: rgba(0, 0, 0, 0.5); }
-
   .habits-section { margin-bottom: 16px; }
   .habits-section.collapsed .habits-list { display: none; }
   .habits-section.collapsed .section-title-bar { margin-bottom: 0; }
-
   .habits-list { display: flex; flex-direction: column; gap: 10px; }
-
-  .habit-swipe-wrap {
-    position: relative;
-    overflow: hidden;
-    border-radius: 6px;
-    background: var(--bg-card);
-  }
-
+  .habit-swipe-wrap { position: relative; overflow: hidden; border-radius: 6px; background: var(--bg-card); }
   .habit-delete-btn {
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 88px;
+    position: absolute; left: 0; top: 0; bottom: 0; width: 88px;
     background: linear-gradient(90deg, #b83232, #e04040);
-    color: #ffffff;
-    display: flex; align-items: center; justify-content: center;
+    color: #ffffff; display: flex; align-items: center; justify-content: center;
     font-family: var(--font-main); font-size: 0.9rem; font-weight: 700;
     letter-spacing: 1px; text-transform: uppercase;
     cursor: pointer; user-select: none; z-index: 0;
-    border-radius: 6px 0 0 6px;
-    opacity: 0;
-    transition: opacity 0.2s;
-    pointer-events: none;
+    border-radius: 6px 0 0 6px; opacity: 0; transition: opacity 0.2s; pointer-events: none;
   }
-
   .habit-edit-btn {
-    position: absolute;
-    right: 0; top: 0; bottom: 0;
-    width: 88px;
+    position: absolute; right: 0; top: 0; bottom: 0; width: 88px;
     background: linear-gradient(90deg, #3a6ea5, #4a86c5);
-    color: #ffffff;
-    display: flex; align-items: center; justify-content: center;
+    color: #ffffff; display: flex; align-items: center; justify-content: center;
     font-family: var(--font-main); font-size: 0.9rem; font-weight: 700;
     letter-spacing: 1px; text-transform: uppercase;
     cursor: pointer; user-select: none; z-index: 0;
-    border-radius: 0 6px 6px 0;
-    opacity: 0;
-    transition: opacity 0.2s;
-    pointer-events: none;
+    border-radius: 0 6px 6px 0; opacity: 0; transition: opacity 0.2s; pointer-events: none;
   }
-
   .habit-swipe-wrap.swiping-right .habit-delete-btn,
   .habit-swipe-wrap.swiped-right .habit-delete-btn { opacity: 1; pointer-events: auto; }
   .habit-swipe-wrap.swiping-left .habit-edit-btn,
   .habit-swipe-wrap.swiped-left .habit-edit-btn { opacity: 1; pointer-events: auto; }
-
   .habit-card {
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
@@ -254,26 +216,22 @@
   }
   .habit-swipe-wrap.swiped-right .habit-card { transform: translateX(88px); }
   .habit-swipe-wrap.swiped-left .habit-card { transform: translateX(-88px); }
-
   .habit-card::before {
     content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
     background: var(--border-subtle); transition: background 0.2s;
     border-radius: 6px 0 0 6px;
   }
   .habit-card:active { background: var(--bg-card-hover); }
-
   .habit-card.partial { border-color: var(--card-partial-border); background: var(--card-partial-bg); }
   .habit-card.partial::before { background: var(--card-partial-border); }
   .habit-card.partial .habit-name { color: var(--card-partial-text); }
   .habit-card.partial .habit-check { background: var(--card-partial-border); border-color: var(--card-partial-border); color: #0a0e1a; }
   .habit-card.partial .habit-meta { color: var(--card-partial-text); }
-
   .habit-card.done { border-color: var(--card-done-border); background: var(--card-done-bg); }
   .habit-card.done::before { background: var(--card-done-border); }
   .habit-card.done .habit-name { color: var(--card-done-text); }
   .habit-card.done .habit-check { background: var(--card-done-border); border-color: var(--card-done-border); color: #ffffff; }
   .habit-card.done .habit-meta { color: var(--card-done-text); }
-
   .habit-check {
     width: 30px; height: 30px; min-width: 30px; border: 2px solid var(--border-active);
     border-radius: 5px; display: flex; align-items: center; justify-content: center;
@@ -285,9 +243,7 @@
   .habit-meta { font-family: var(--font-main); font-size: 0.78rem; color: var(--text-muted); margin-top: 3px; letter-spacing: 0.5px; font-style: italic; }
   .habit-streak { font-family: var(--font-main); font-size: 1.05rem; color: var(--accent-seal-bright); font-weight: 700; text-align: center; min-width: 44px; }
   .habit-streak .streak-label { font-size: 0.68rem; color: var(--text-muted); display: block; letter-spacing: 0.5px; font-style: italic; font-weight: 400; }
-
   .summary-panel { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px; margin-bottom: 14px; }
-
   .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .summary-item { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 5px; padding: 12px 10px; text-align: center; }
   .summary-item .val { font-family: var(--font-main); font-size: 1.55rem; font-weight: 700; color: #ffffff; line-height: 1; }
@@ -295,7 +251,6 @@
   .summary-item .val.red { color: var(--accent-red); }
   .summary-item .val.gold { color: var(--accent-seal-bright); }
   .summary-item .lbl { font-family: var(--font-main); font-size: 0.72rem; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-muted); margin-top: 6px; }
-
   .missed-section { margin-top: 10px; display: none; }
   .missed-section.visible { display: block; }
   .missed-item {
@@ -305,7 +260,6 @@
   }
   .missed-item:last-child { border-bottom: none; }
   .missed-item .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-red); flex-shrink: 0; }
-
   .controls { display: flex; gap: 8px; margin-bottom: 14px; }
   .btn {
     flex: 1; font-family: var(--font-main); font-size: 0.82rem; letter-spacing: 0.5px;
@@ -320,11 +274,9 @@
   .btn-danger:active { background: rgba(224, 64, 64, 0.15); }
   .btn-gold { border-color: var(--accent-seal); color: var(--accent-seal-bright); }
   .btn-green { border-color: var(--accent-green); color: var(--accent-green-bright); }
-
   .data-section { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px; margin-bottom: 14px; }
   .data-info { font-family: var(--font-main); font-size: 0.85rem; color: var(--text-secondary); letter-spacing: 0.5px; line-height: 1.7; margin-bottom: 10px; font-style: italic; }
   .data-info .hl { color: var(--accent-seal-bright); font-weight: 700; font-style: normal; }
-
   .reminder-section { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px; margin-bottom: 14px; }
   .reminder-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--border-subtle); }
   .reminder-row:last-child { border-bottom: none; }
@@ -345,7 +297,6 @@
     border-radius: 50%; background: var(--text-muted); transition: transform 0.2s, background 0.2s;
   }
   .toggle-switch.on::after { transform: translateX(20px); background: #ffffff; }
-
   .month-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; }
   .month-nav-btn {
     background: var(--bg-card); border: 1px solid var(--border-active);
@@ -372,149 +323,70 @@
   .cal-cell.level-2 { background: rgba(232, 200, 107, 0.32); }
   .cal-cell.level-3 { background: rgba(232, 200, 107, 0.5); color: #ffffff; }
   .cal-cell.level-4 { background: rgba(58, 168, 98, 0.5); border-color: var(--accent-green); color: #ffffff; }
-
   .legend { display: flex; align-items: center; justify-content: center; gap: 6px; font-family: var(--font-main); font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 14px; font-style: italic; }
   .legend-swatch { width: 13px; height: 13px; border-radius: 2px; border: 1px solid var(--border-subtle); }
-
   .notes-toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
   .notes-search {
-    flex: 1;
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    color: #ffffff;
-    font-family: var(--font-main);
-    font-size: 0.95rem;
-    padding: 10px 14px 10px 38px;
-    border-radius: 20px;
-    outline: none;
-    transition: border-color 0.2s;
+    flex: 1; background: var(--bg-card); border: 1px solid var(--border-subtle);
+    color: #ffffff; font-family: var(--font-main); font-size: 0.95rem;
+    padding: 10px 14px 10px 38px; border-radius: 20px; outline: none; transition: border-color 0.2s;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238a9bb8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'></circle><line x1='21' y1='21' x2='16.65' y2='16.65'></line></svg>");
-    background-repeat: no-repeat;
-    background-position: 14px center;
+    background-repeat: no-repeat; background-position: 14px center;
   }
   .notes-search:focus { border-color: var(--accent-seal); }
   .notes-search::placeholder { color: var(--text-muted); font-style: italic; }
-
   .notes-add-btn {
-    width: 42px; height: 42px;
-    border-radius: 50%;
-    background: var(--accent-seal-dim);
-    border: 1px solid var(--accent-seal);
-    color: #ffffff;
-    font-size: 1.5rem;
-    font-weight: 700;
-    cursor: pointer;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--accent-seal-dim); border: 1px solid var(--accent-seal);
+    color: #ffffff; font-size: 1.5rem; font-weight: 700; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    transition: background 0.15s;
-    line-height: 1;
-    padding-bottom: 2px;
+    flex-shrink: 0; transition: background 0.15s; line-height: 1; padding-bottom: 2px;
   }
   .notes-add-btn:active { background: var(--accent-seal); }
-
-  .notes-count {
-    font-family: var(--font-main);
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    letter-spacing: 0.5px;
-    margin-bottom: 10px;
-    font-style: italic;
-  }
-
+  .notes-count { font-family: var(--font-main); font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 10px; font-style: italic; }
   .notes-list { display: flex; flex-direction: column; gap: 8px; }
-
-  .note-item-wrap {
-    position: relative;
-    overflow: hidden;
-    border-radius: 8px;
-    background: var(--bg-card);
-  }
+  .note-item-wrap { position: relative; overflow: hidden; border-radius: 8px; background: var(--bg-card); }
   .note-item-del {
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 88px;
+    position: absolute; left: 0; top: 0; bottom: 0; width: 88px;
     background: linear-gradient(90deg, #b83232, #e04040);
-    color: #ffffff;
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-main);
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity 0.2s;
-    border-radius: 8px 0 0 8px;
-    pointer-events: none;
+    color: #ffffff; display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-main); font-size: 0.85rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer;
+    opacity: 0; transition: opacity 0.2s; border-radius: 8px 0 0 8px; pointer-events: none;
   }
   .note-item-wrap.swiping .note-item-del,
   .note-item-wrap.swiped-right .note-item-del { opacity: 1; pointer-events: auto; }
-
   .note-item {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: 8px;
-    padding: 12px 14px;
-    cursor: pointer;
+    background: var(--bg-card); border: 1px solid var(--border-subtle);
+    border-radius: 8px; padding: 12px 14px; cursor: pointer;
     transition: transform 0.2s ease, background 0.15s;
-    position: relative;
-    z-index: 1;
-    will-change: transform;
-    transform: translateX(0);
+    position: relative; z-index: 1; will-change: transform; transform: translateX(0);
   }
   .note-item-wrap.swiped-right .note-item { transform: translateX(88px); }
   .note-item:active { background: var(--bg-card-hover); }
-
   .note-item-title {
-    font-family: var(--font-main);
-    font-size: 1rem;
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-family: var(--font-main); font-size: 1rem; font-weight: 700;
+    color: #ffffff; margin-bottom: 4px; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
   }
   .note-item-title.empty { color: var(--text-muted); font-style: italic; }
   .note-item-preview {
-    font-family: var(--font-main);
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    word-break: break-word;
-    margin-bottom: 6px;
+    font-family: var(--font-main); font-size: 0.85rem; color: var(--text-secondary);
+    line-height: 1.5; overflow: hidden; display: -webkit-box;
+    -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    word-break: break-word; margin-bottom: 6px;
   }
-  .note-item-date {
-    font-family: var(--font-main);
-    font-size: 0.72rem;
-    color: var(--text-muted);
-    letter-spacing: 0.3px;
-  }
-
-  .notes-empty-state {
-    text-align: center;
-    padding: 50px 20px;
-    font-family: var(--font-main);
-  }
+  .note-item-date { font-family: var(--font-main); font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.3px; }
+  .notes-empty-state { text-align: center; padding: 50px 20px; font-family: var(--font-main); }
   .notes-empty-state .big { font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 6px; font-weight: 700; }
   .notes-empty-state .small { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
-
   .note-editor-overlay {
-    position: fixed;
-    inset: 0;
-    background: var(--bg-deep);
-    z-index: 300;
-    display: none;
-    flex-direction: column;
+    position: fixed; inset: 0; background: var(--bg-deep); z-index: 300;
+    display: none; flex-direction: column;
     padding: calc(var(--safe-top) + 8px) 10px calc(var(--safe-bottom) + 8px);
     overflow: hidden;
   }
   .note-editor-overlay.active { display: flex; }
-
   .note-editor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 4px 0; }
   .note-editor-back {
     background: none; border: none; color: var(--accent-seal-bright);
@@ -527,42 +399,19 @@
     font-family: var(--font-main); font-size: 0.9rem; font-weight: 700;
     cursor: pointer; padding: 6px 10px; letter-spacing: 0.5px;
   }
-
   .note-editor-meta {
-    font-family: var(--font-main);
-    font-size: 0.72rem;
-    color: var(--text-muted);
-    font-style: italic;
-    margin-bottom: 8px;
-    padding: 0 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    font-family: var(--font-main); font-size: 0.72rem; color: var(--text-muted);
+    font-style: italic; margin-bottom: 8px; padding: 0 4px;
+    display: flex; justify-content: space-between; align-items: center;
   }
-  .note-editor-meta .save-ind {
-    color: var(--accent-green-bright);
-    font-style: normal;
-    font-weight: 700;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
+  .note-editor-meta .save-ind { color: var(--accent-green-bright); font-style: normal; font-weight: 700; opacity: 0; transition: opacity 0.3s; }
   .note-editor-meta .save-ind.show { opacity: 1; }
-
   .note-editor-area {
-    flex: 1;
-    width: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: #ffffff;
-    font-family: var(--font-main);
-    font-size: 1.05rem;
-    line-height: 1.7;
-    resize: none;
-    padding: 8px 4px;
+    flex: 1; width: 100%; background: transparent; border: none; outline: none;
+    color: #ffffff; font-family: var(--font-main); font-size: 1.05rem;
+    line-height: 1.7; resize: none; padding: 8px 4px;
   }
   .note-editor-area::placeholder { color: var(--text-muted); font-style: italic; }
-
   .timer-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 10px 0; }
   .timer-ring-wrap { position: relative; width: 260px; height: 260px; display: flex; align-items: center; justify-content: center; }
   .timer-ring-svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
@@ -570,7 +419,6 @@
   .timer-ring-fg { fill: none; stroke: var(--accent-seal-bright); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 0.3s linear, stroke 0.3s; }
   .timer-ring-fg.running { stroke: var(--accent-green-bright); }
   .timer-ring-fg.done { stroke: var(--accent-red); }
-
   .timer-display {
     font-family: var(--font-main); font-size: 3.2rem; font-weight: 700;
     color: #ffffff; letter-spacing: 2px;
@@ -578,7 +426,6 @@
     z-index: 1; font-variant-numeric: tabular-nums;
   }
   .timer-label { font-family: var(--font-main); font-size: 0.8rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; font-style: italic; margin-top: -12px; }
-
   .timer-presets { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; width: 100%; max-width: 400px; }
   .timer-preset {
     background: var(--bg-card); border: 1px solid var(--border-subtle);
@@ -586,14 +433,12 @@
     padding: 10px 4px; border-radius: 6px; cursor: pointer; transition: all 0.15s; text-align: center;
   }
   .timer-preset.active { background: var(--accent-seal-dim); border-color: var(--accent-seal); color: #ffffff; }
-
   .timer-custom-row { display: flex; gap: 8px; width: 100%; max-width: 400px; align-items: stretch; }
   .timer-custom-input {
     flex: 1; background: var(--bg-card); border: 1px solid var(--border-subtle);
     color: #ffffff; font-family: var(--font-main); font-size: 1rem;
     padding: 10px 14px; border-radius: 6px; outline: none; text-align: center;
   }
-
   .timer-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; max-width: 400px; }
   .timer-ctrl-btn {
     padding: 16px 12px; border-radius: 8px; font-family: var(--font-main);
@@ -603,28 +448,23 @@
   .timer-ctrl-start { background: var(--accent-seal-dim); border-color: var(--accent-seal); color: #ffffff; }
   .timer-ctrl-start.running { background: var(--accent-green); border-color: var(--accent-green-bright); }
   .timer-ctrl-reset { background: var(--bg-card); border-color: var(--border-subtle); color: var(--text-secondary); }
-
   .timer-session-info { font-family: var(--font-main); font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.5px; font-style: italic; text-align: center; margin-top: 4px; }
   .timer-session-info .hl { color: var(--accent-seal-bright); font-weight: 700; font-style: normal; }
-
   .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
   .stat-card { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px 10px; text-align: center; }
   .stat-card .stat-val { font-family: var(--font-main); font-size: 1.7rem; font-weight: 700; color: var(--accent-seal-bright); line-height: 1; }
   .stat-card .stat-lbl { font-family: var(--font-main); font-size: 0.72rem; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-muted); margin-top: 6px; }
-
   .chart-box { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 12px 10px; margin-bottom: 14px; }
   .chart-title {
     font-family: var(--font-main); font-size: 0.78rem; letter-spacing: 0.5px;
     text-transform: uppercase; color: var(--accent-seal-bright); 
     margin-bottom: 10px; font-weight: 700;
-    display: inline-block;
-    padding: 6px 12px;
+    display: inline-block; padding: 6px 12px;
     background: var(--title-bg);
     border-left: 3px solid var(--accent-seal-bright);
     border-radius: 3px;
   }
   .chart-canvas { display: block; width: 100%; }
-
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 100; display: none; align-items: flex-end; justify-content: center; padding: 0; }
   .modal-overlay.active { display: flex; }
   .modal-sheet {
@@ -651,40 +491,23 @@
   .form-input:focus { border-color: var(--accent-seal); }
   .form-input::placeholder { color: var(--text-muted); font-style: italic; }
   .modal-actions { display: flex; gap: 8px; margin-top: 20px; }
-
   .multi-list { max-height: 300px; overflow-y: auto; margin: 0 -4px; padding: 0 4px; }
   .multi-item { display: flex; align-items: center; gap: 12px; padding: 12px 8px; border-bottom: 1px solid var(--border-subtle); cursor: pointer; font-family: var(--font-main); font-size: 1rem; color: #ffffff; user-select: none; }
   .multi-item:last-child { border-bottom: none; }
   .multi-item input[type="checkbox"] { width: 22px; height: 22px; min-width: 22px; accent-color: var(--accent-seal); cursor: pointer; }
   .multi-item .multi-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
   .site-footer {
-    text-align: center;
-    padding: 20px 16px 16px;
-    margin-top: 24px;
+    text-align: center; padding: 20px 16px 16px; margin-top: 24px;
     border-radius: 10px 10px 0 0;
     background: linear-gradient(0deg, rgba(200, 168, 75, 0.1) 0%, rgba(200, 168, 75, 0.02) 60%, transparent 100%);
-    border: 1px solid var(--accent-seal-dim);
-    border-bottom: none;
+    border: 1px solid var(--accent-seal-dim); border-bottom: none;
     box-shadow: 0 -4px 20px rgba(200, 168, 75, 0.08), inset 0 1px 0 rgba(232, 200, 107, 0.15);
     position: relative;
   }
-  .site-footer::before {
-    content: '';
-    position: absolute;
-    left: 20%; right: 20%; top: -1px; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent-seal-bright), transparent);
-  }
-  .footer-title {
-    font-family: var(--font-main); font-size: 0.8rem; letter-spacing: 2px;
-    text-transform: uppercase; color: var(--accent-seal-bright); font-weight: 700; margin-bottom: 6px;
-  }
+  .site-footer::before { content: ''; position: absolute; left: 20%; right: 20%; top: -1px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent-seal-bright), transparent); }
+  .footer-title { font-family: var(--font-main); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-seal-bright); font-weight: 700; margin-bottom: 6px; }
   .footer-copy { font-family: var(--font-main); font-size: 0.85rem; color: #ffffff; letter-spacing: 0.5px; margin-bottom: 4px; }
-  .footer-email {
-    font-family: var(--font-main); font-size: 0.9rem; color: var(--accent-seal-bright);
-    letter-spacing: 0.5px; font-weight: 700; word-break: break-all;
-  }
-
+  .footer-email { font-family: var(--font-main); font-size: 0.9rem; color: var(--accent-seal-bright); letter-spacing: 0.5px; font-weight: 700; word-break: break-all; }
   .toast {
     position: fixed; bottom: calc(var(--safe-bottom) + 80px); left: 50%;
     transform: translateX(-50%) translateY(80px);
@@ -696,16 +519,13 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   }
   .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-
   .bottom-nav {
     position: fixed; bottom: 0; left: 0; right: 0;
     background: linear-gradient(180deg, rgba(15, 22, 40, 0.95), rgba(10, 14, 26, 1));
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     border-top: 1px solid var(--accent-seal-dim);
-    display: flex;
-    justify-content: space-around;
-    padding: 6px 0 calc(var(--safe-bottom) + 6px);
-    z-index: 50;
+    display: flex; justify-content: space-around;
+    padding: 6px 0 calc(var(--safe-bottom) + 6px); z-index: 50;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
   }
   .nav-item {
@@ -713,20 +533,16 @@
     padding: 6px 4px; cursor: pointer; border: none; background: none;
     color: var(--text-muted); font-family: var(--font-main); font-size: 0.6rem;
     letter-spacing: 0.2px; text-transform: uppercase; transition: color 0.15s;
-    -webkit-tap-highlight-color: transparent; font-weight: 700;
-    flex: 1;
+    -webkit-tap-highlight-color: transparent; font-weight: 700; flex: 1;
   }
   .nav-item.active { color: var(--accent-seal-bright); }
   .nav-item .nav-icon { font-size: 1.05rem; line-height: 1; }
-
   .confirm-dialog { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; }
   .confirm-dialog.active { display: flex; }
   .confirm-box { background: var(--bg-panel); border: 1px solid var(--accent-seal-dim); border-radius: 10px; padding: 22px; max-width: 340px; width: 100%; text-align: center; box-shadow: 0 8px 40px rgba(0,0,0,0.6); }
   .confirm-box p { font-family: var(--font-main); font-size: 0.95rem; color: #ffffff; margin-bottom: 18px; line-height: 1.7; white-space: pre-line; }
   .confirm-actions { display: flex; gap: 8px; }
-
   ::-webkit-scrollbar { width: 0; }
-
   @keyframes pulse-red {
     0%, 100% { box-shadow: 0 0 0 0 rgba(224, 64, 64, 0.5); }
     50% { box-shadow: 0 0 0 10px rgba(224, 64, 64, 0); }
@@ -852,25 +668,20 @@
   </div>
 
   <div id="view-month" class="view">
-
     <div class="header">
       <div class="header-badge">Winter Arc // Lịch tháng</div>
       <h1>Tháng <span class="accent" id="monthHeaderNum">10</span></h1>
       <div class="header-sub" id="monthHeaderSub">Năm 2026</div>
     </div>
-
     <div class="month-nav">
       <button class="month-nav-btn" id="monthPrev">&#8249;</button>
       <div class="month-label" id="monthLabel">Tháng 10/2026</div>
       <button class="month-nav-btn" id="monthNext">&#8250;</button>
     </div>
-
     <div class="calendar-head">
       <div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div>T7</div><div>CN</div>
     </div>
-
     <div class="calendar-grid" id="calendarGrid"></div>
-
     <div class="legend">
       <span>0%</span>
       <div class="legend-swatch" style="background:#141d33"></div>
@@ -880,11 +691,8 @@
       <div class="legend-swatch" style="background:rgba(58,168,98,0.5)"></div>
       <span>100%</span>
     </div>
-
     <div class="summary-panel">
-      <div class="section-title-bar">
-        <span class="section-title">Tổng kết tháng</span>
-      </div>
+      <div class="section-title-bar"><span class="section-title">Tổng kết tháng</span></div>
       <div class="summary-grid">
         <div class="summary-item">
           <div class="val green" id="mDone">0</div>
@@ -904,38 +712,29 @@
         </div>
       </div>
     </div>
-
   </div>
 
   <div id="view-notes" class="view">
-
     <div class="header">
       <div class="header-badge">Winter Arc // Nhật ký</div>
       <h1>Ghi <span class="accent">Chú</span></h1>
       <div class="header-sub">Suy ngẫm &amp; bài học</div>
     </div>
-
     <div class="notes-toolbar">
       <input type="text" class="notes-search" id="notesSearch" placeholder="Tìm kiếm ghi chú...">
       <button class="notes-add-btn" id="notesAddBtn" aria-label="Thêm ghi chú">+</button>
     </div>
-
     <div class="notes-count" id="notesCount"></div>
-
     <div class="notes-list" id="notesList"></div>
-
   </div>
 
   <div id="view-timer" class="view">
-
     <div class="header">
       <div class="header-badge">Winter Arc // Tập trung</div>
       <h1>Bộ <span class="accent">Đếm</span></h1>
       <div class="header-sub">Deep work &amp; tập trung</div>
     </div>
-
     <div class="timer-wrap">
-
       <div class="timer-ring-wrap">
         <svg class="timer-ring-svg" viewBox="0 0 100 100">
           <circle class="timer-ring-bg" cx="50" cy="50" r="45"></circle>
@@ -944,9 +743,7 @@
         </svg>
         <div class="timer-display" id="timerDisplay">25:00</div>
       </div>
-
       <div class="timer-label" id="timerLabel">Sẵn sàng</div>
-
       <div class="timer-presets" id="timerPresets">
         <button class="timer-preset" data-min="5">5'</button>
         <button class="timer-preset" data-min="15">15'</button>
@@ -954,33 +751,26 @@
         <button class="timer-preset" data-min="45">45'</button>
         <button class="timer-preset" data-min="60">60'</button>
       </div>
-
       <div class="timer-custom-row">
         <input type="number" class="timer-custom-input" id="timerCustomInput" placeholder="Phút tùy chỉnh" min="1" max="1440">
         <button class="btn btn-gold" id="timerCustomSet" style="flex: 0 0 90px;">Đặt</button>
       </div>
-
       <div class="timer-controls">
         <button class="timer-ctrl-btn timer-ctrl-start" id="timerStartBtn">Bắt đầu</button>
         <button class="timer-ctrl-btn timer-ctrl-reset" id="timerResetBtn">Đặt lại</button>
       </div>
-
       <div class="timer-session-info">
         Phiên hoàn thành hôm nay: <span class="hl" id="timerSessionCount">0</span>
       </div>
-
     </div>
-
   </div>
 
   <div id="view-stats" class="view">
-
     <div class="header">
       <div class="header-badge">Winter Arc // Phân tích</div>
       <h1>Thống <span class="accent">Kê</span></h1>
       <div class="header-sub">Toàn bộ hành trình</div>
     </div>
-
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-val" id="stTotalCheckins">0</div>
@@ -999,27 +789,22 @@
         <div class="stat-lbl">Ngày hoàn hảo</div>
       </div>
     </div>
-
     <div class="chart-box">
       <div class="chart-title">7 ngày gần nhất (% hoàn thành)</div>
       <canvas id="chartBar7" class="chart-canvas" style="height:150px;"></canvas>
     </div>
-
     <div class="chart-box">
       <div class="chart-title">Xu hướng 30 ngày</div>
       <canvas id="chartLine30" class="chart-canvas" style="height:170px;"></canvas>
     </div>
-
     <div class="chart-box">
       <div class="chart-title">Hiệu suất theo thói quen (30 ngày)</div>
       <canvas id="chartHabit" class="chart-canvas" style="height:220px;"></canvas>
     </div>
-
     <div class="chart-box">
       <div class="chart-title">Tổng check-in theo ngày (toàn bộ)</div>
       <canvas id="chartLineAll" class="chart-canvas" style="height:170px;"></canvas>
     </div>
-
   </div>
 
   <footer class="site-footer">
@@ -1113,7 +898,6 @@
   const ARC_DAYS = 92;
 
   const QUOTES = [
-    { text: "Khi bộ não của bạn nói rằng bạn đã hết sức, thực ra bạn mới chỉ đi được 40 phần trăm chặng đường.", author: "David Goggins" },
     { text: "Bạn không cần cơ bụng sáu múi nếu tâm trí bạn được rèn bằng thép.", author: "David Goggins" },
     { text: "99 phần trăm công việc bạn làm đều không ai nhìn thấy.", author: "David Goggins" },
     { text: "Hầu hết các cuộc chiến đều được thắng hoặc thua trong chính tâm trí ta.", author: "David Goggins" },
@@ -1134,7 +918,6 @@
     { text: "Thoải mái là cái bẫy. Hãy chọn sự khó khăn mỗi ngày.", author: "David Goggins" },
     { text: "Những người thành công không trốn tránh nỗi đau. Họ đi xuyên qua nó.", author: "David Goggins" },
     { text: "Nếu bạn muốn có kết quả mà người khác không có, bạn phải làm những việc người khác không làm.", author: "David Goggins" },
-    { text: "Đừng đợi động lực. Hãy trở thành kỷ luật.", author: "David Goggins" },
     { text: "Cơ thể bạn có thể chịu đựng nhiều hơn bạn nghĩ. Tâm trí mới là giới hạn.", author: "David Goggins" },
     { text: "Không có ngày nghỉ. Chỉ có ngày bạn yếu đuối hơn hoặc mạnh mẽ hơn.", author: "David Goggins" },
     { text: "Bạn phải yêu thích sự đau khổ. Đó là nơi bạn trưởng thành.", author: "David Goggins" },
@@ -1274,10 +1057,7 @@
   function saveState() {
     try {
       const notesClean = state.notes.map(n => ({
-        id: n.id,
-        content: n.content,
-        createdAt: n.createdAt,
-        updatedAt: n.updatedAt
+        id: n.id, content: n.content, createdAt: n.createdAt, updatedAt: n.updatedAt
       }));
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         habits: state.habits,
@@ -1525,9 +1305,7 @@
     const now = Date.now();
     const note = {
       id: 'n-' + now + '-' + Math.random().toString(36).slice(2, 7),
-      content: '',
-      createdAt: now,
-      updatedAt: now
+      content: '', createdAt: now, updatedAt: now
     };
     state.notes.unshift(note);
     saveState();
@@ -1537,9 +1315,7 @@
     state.notes = state.notes.filter(n => n.id !== id);
     saveState();
   }
-  function getNoteById(id) {
-    return state.notes.find(n => n.id === id);
-  }
+  function getNoteById(id) { return state.notes.find(n => n.id === id); }
   function openNoteEditor(noteId) {
     editingNoteId = noteId;
     const note = getNoteById(noteId);
@@ -1583,16 +1359,13 @@
     const list = $('notesList');
     const countEl = $('notesCount');
     list.innerHTML = '';
-
     const q = notesSearchQuery.trim().toLowerCase();
     let notes = state.notes.slice();
     if (q) notes = notes.filter(n => (n.content || '').toLowerCase().includes(q));
     notes.sort((a, b) => b.updatedAt - a.updatedAt);
-
     countEl.textContent = notes.length === 0
       ? (q ? 'Không tìm thấy ghi chú nào' : 'Chưa có ghi chú nào')
       : `${notes.length} ghi chú`;
-
     if (notes.length === 0) {
       list.innerHTML = `
         <div class="notes-empty-state">
@@ -1602,11 +1375,9 @@
       `;
       return;
     }
-
     notes.forEach(note => {
       const wrap = document.createElement('div');
       wrap.className = 'note-item-wrap';
-
       const delBtn = document.createElement('div');
       delBtn.className = 'note-item-del';
       delBtn.textContent = 'Xóa';
@@ -1618,7 +1389,6 @@
           showToast('Đã xóa ghi chú');
         });
       });
-
       const item = document.createElement('div');
       item.className = 'note-item';
       const title = noteTitle(note.content);
@@ -1628,18 +1398,13 @@
         ${preview ? `<div class="note-item-preview">${escapeHtml(preview)}</div>` : ''}
         <div class="note-item-date">${formatDateTimeVN(note.updatedAt)}</div>
       `;
-
       let sx = 0, sy = 0, moved = false;
       const SNAP = 88;
       const TRIGGER = 50;
-
       item.addEventListener('touchstart', (e) => {
         if (e.touches.length !== 1) return;
-        sx = e.touches[0].clientX;
-        sy = e.touches[0].clientY;
-        moved = false;
+        sx = e.touches[0].clientX; sy = e.touches[0].clientY; moved = false;
       }, { passive: true });
-
       item.addEventListener('touchmove', (e) => {
         if (e.touches.length !== 1) return;
         const dx = e.touches[0].clientX - sx;
@@ -1653,7 +1418,6 @@
           item.style.transform = `translateX(${off}px)`;
         }
       }, { passive: false });
-
       item.addEventListener('touchend', (e) => {
         const dx = e.changedTouches[0].clientX - sx;
         item.style.transition = 'transform 0.2s ease';
@@ -1668,16 +1432,11 @@
         }
         setTimeout(() => { moved = false; }, 200);
       });
-
       item.addEventListener('click', () => {
         if (moved) return;
-        if (wrap.classList.contains('swiped-right')) {
-          closeAllNoteSwipe();
-          return;
-        }
+        if (wrap.classList.contains('swiped-right')) { closeAllNoteSwipe(); return; }
         openNoteEditor(note.id);
       });
-
       wrap.appendChild(delBtn);
       wrap.appendChild(item);
       list.appendChild(wrap);
@@ -1709,7 +1468,6 @@
     const num = dayNumberInArc(d);
     $('dayCount').textContent = num >= 1 && num <= ARC_DAYS ? `Ngày ${num}/${ARC_DAYS}` : (num < 1 ? 'Trước Winter Arc' : 'Hoàn thành Winter Arc');
   }
-
   function renderHabitsSection() {
     const section = $('habitsSection');
     const toggle = $('toggleHabits');
@@ -1783,7 +1541,6 @@
       const dx = x - startX;
       card.style.transition = 'transform 0.2s ease';
       wrap.classList.remove('swiping-right', 'swiping-left');
-
       if (dx > SWIPE_TRIGGER) {
         closeAllHabitSwipe();
         wrap.classList.add('swiped-right');
@@ -1798,7 +1555,6 @@
       }
       setTimeout(() => { moved = false; }, 200);
     }
-
     card.addEventListener('touchstart', (e) => {
       if (e.touches.length !== 1) return;
       onStart(e.touches[0].clientX, e.touches[0].clientY);
@@ -1828,7 +1584,6 @@
       wrap.classList.remove('swiping-right', 'swiping-left');
       moved = false;
     });
-
     card.addEventListener('click', () => {
       if (moved) return;
       if (wrap.classList.contains('swiped-right') || wrap.classList.contains('swiped-left')) {
@@ -1864,10 +1619,8 @@
     const dateStr = state.selectedDate || todayStr();
     state.habits.forEach(h => {
       const val = getCheckin(dateStr, h.id);
-
       const wrap = document.createElement('div');
       wrap.className = 'habit-swipe-wrap';
-
       const delBtn = document.createElement('div');
       delBtn.className = 'habit-delete-btn';
       delBtn.textContent = 'Xóa';
@@ -1884,7 +1637,6 @@
           playBeep(330, 0.15, 0.2, 'sawtooth');
         });
       });
-
       const editBtn = document.createElement('div');
       editBtn.className = 'habit-edit-btn';
       editBtn.textContent = 'Sửa';
@@ -1893,12 +1645,10 @@
         closeAllHabitSwipe();
         openEditHabitModal(h);
       });
-
       const card = document.createElement('div');
       card.className = 'habit-card';
       if (val === 2) card.classList.add('done');
       else if (val === 1) card.classList.add('partial');
-
       let streak = 0;
       let checkDate = dateStr;
       while (true) {
@@ -1907,7 +1657,6 @@
         else break;
         if (streak > 365) break;
       }
-
       const metaText = val === 2 ? 'Hoàn thành' : val === 1 ? 'Một phần' : 'Chưa làm';
       card.innerHTML = `
         <div class="habit-check">${val === 2 ? '&#10003;' : val === 1 ? '&#8212;' : ''}</div>
@@ -1920,7 +1669,6 @@
           <span class="streak-label">Chuỗi</span>
         </div>
       `;
-
       attachHabitGestures(wrap, card, h);
       wrap.appendChild(delBtn);
       wrap.appendChild(editBtn);
@@ -1950,7 +1698,6 @@
     });
     $('statDone').textContent = done;
     $('statMissed').textContent = missed;
-
     let streak = 0;
     let checkDate = dateStr;
     if (total > 0) {
@@ -1965,13 +1712,11 @@
       }
     }
     $('statStreak').textContent = streak;
-
     const trackedDays = Object.keys(state.checkins).filter(d => {
       const c = state.checkins[d];
       return c && Object.values(c).some(v => v > 0);
     }).length;
     $('statTotal').textContent = trackedDays;
-
     const missedList = $('missedList');
     missedList.innerHTML = '';
     if (total > 0 && missed > 0) {
@@ -2040,12 +1785,10 @@
     $('monthLabel').textContent = `Tháng ${month + 1}/${year}`;
     $('monthHeaderNum').textContent = month + 1;
     $('monthHeaderSub').textContent = `Năm ${year}`;
-
     const first = new Date(year, month, 1);
     const last = new Date(year, month + 1, 0);
     const daysInMonth = last.getDate();
     const startCol = (first.getDay() + 6) % 7;
-
     const grid = $('calendarGrid');
     grid.innerHTML = '';
     for (let i = 0; i < startCol; i++) {
@@ -2053,11 +1796,9 @@
       cell.className = 'cal-cell empty';
       grid.appendChild(cell);
     }
-
     const todayIso = todayStr();
     const selectedIso = state.selectedDate || todayIso;
     let tracked = 0, perfect = 0, sumPct = 0, zero = 0;
-
     for (let day = 1; day <= daysInMonth; day++) {
       const d = new Date(year, month, day);
       const iso = toISO(d);
@@ -2065,7 +1806,6 @@
       const hasData = state.checkins[iso] && Object.values(state.checkins[iso]).some(v => v > 0);
       if (hasData) { tracked++; sumPct += pct; if (pct === 100) perfect++; }
       else if (state.habits.length > 0) zero++;
-
       const cell = document.createElement('div');
       cell.className = 'cal-cell';
       if (iso === todayIso) cell.classList.add('today');
@@ -2074,7 +1814,6 @@
       else if (pct >= 67) cell.classList.add('level-3');
       else if (pct >= 34) cell.classList.add('level-2');
       else if (pct > 0) cell.classList.add('level-1');
-
       cell.innerHTML = `<span>${day}</span>${pct > 0 ? `<span class="cal-pct">${pct}%</span>` : ''}`;
       cell.addEventListener('click', () => {
         state.selectedDate = iso;
@@ -2083,7 +1822,6 @@
       });
       grid.appendChild(cell);
     }
-
     $('mDone').textContent = perfect;
     $('mAvg').textContent = tracked > 0 ? Math.round(sumPct / tracked) + '%' : '0%';
     $('mTracked').textContent = tracked;
@@ -2284,7 +2022,6 @@
     $('stAvgPct').textContent = stats.avgPct + '%';
     $('stBestStreak').textContent = stats.bestStreak;
     $('stPerfectDays').textContent = stats.perfectDays;
-
     const baseDate = state.selectedDate || todayStr();
     const bar7Vals = [], bar7Labels = [];
     for (let i = 6; i >= 0; i--) {
@@ -2294,7 +2031,6 @@
       bar7Labels.push(`${d.getDate()}/${d.getMonth() + 1}`);
     }
     drawBarChart($('chartBar7'), bar7Vals, bar7Labels, 6);
-
     const line30Vals = [], line30Labels = [];
     for (let i = 29; i >= 0; i--) {
       const ds = dateOffset(baseDate, -i);
@@ -2303,7 +2039,6 @@
       line30Labels.push(`${d.getDate()}/${d.getMonth() + 1}`);
     }
     drawLineChart($('chartLine30'), line30Vals, line30Labels);
-
     if (state.habits.length > 0) {
       const habitLabels = [], habitValues = [];
       state.habits.forEach(h => {
@@ -2319,7 +2054,6 @@
     } else {
       drawHBarChart($('chartHabit'), [], []);
     }
-
     const allDates = stats.dataDates;
     if (allDates.length > 0) {
       const minDate = parseDate(allDates[0]);
@@ -2547,13 +2281,11 @@
   function bindEvents() {
     $('prevDay').addEventListener('click', () => { state.selectedDate = dateOffset(state.selectedDate || todayStr(), -1); render(); });
     $('nextDay').addEventListener('click', () => { state.selectedDate = dateOffset(state.selectedDate || todayStr(), 1); render(); });
-
     $('toggleHabits').addEventListener('click', () => {
       state.habitsCollapsed = !state.habitsCollapsed;
       saveState();
       renderHabitsSection();
     });
-
     $('addHabitBtn').addEventListener('click', openAddHabitModal);
     $('cancelAdd').addEventListener('click', () => {
       $('addModal').classList.remove('active');
@@ -2564,10 +2296,7 @@
       if (!name) { showToast('Nhập tên thói quen'); return; }
       if (editingHabitId) {
         const habit = state.habits.find(h => h.id === editingHabitId);
-        if (habit) {
-          habit.name = name;
-          showToast('Đã sửa: ' + name);
-        }
+        if (habit) { habit.name = name; showToast('Đã sửa: ' + name); }
       } else {
         state.habits.push({ id: Date.now().toString(36), name });
         showToast('Đã thêm: ' + name);
@@ -2584,7 +2313,6 @@
         editingHabitId = null;
       }
     });
-
     $('resetDayBtn').addEventListener('click', () => {
       showConfirm('ĐẶT LẠI TẤT CẢ CHECK-IN NGÀY NÀY?', () => {
         const dateStr = state.selectedDate || todayStr();
@@ -2603,7 +2331,6 @@
         showToast('Đã xóa toàn bộ');
       });
     });
-
     $('cancelMultiDelete').addEventListener('click', () => $('multiDeleteModal').classList.remove('active'));
     $('multiDeleteModal').addEventListener('click', (e) => {
       if (e.target === $('multiDeleteModal')) $('multiDeleteModal').classList.remove('active');
@@ -2622,19 +2349,16 @@
         showToast(`Đã xóa ${ids.length} nhiệm vụ`);
       });
     });
-
     $('confirmNo').addEventListener('click', () => { $('confirmDialog').classList.remove('active'); confirmCallback = null; });
     $('confirmYes').addEventListener('click', () => {
       $('confirmDialog').classList.remove('active');
       if (confirmCallback) { confirmCallback(); confirmCallback = null; }
     });
-
     $('toggleMissed').addEventListener('click', () => {
       const el = $('missedSection');
       el.classList.toggle('visible');
       $('toggleMissed').textContent = el.classList.contains('visible') ? 'Ẩn' : 'Chi tiết';
     });
-
     $('reminderToggle').addEventListener('click', () => {
       initAudio();
       state.reminder.enabled = !state.reminder.enabled;
@@ -2662,7 +2386,6 @@
       showToast('Thử báo động');
       if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 100]);
     });
-
     $('exportBtn').addEventListener('click', () => { initAudio(); exportData(); });
     $('importBtn').addEventListener('click', () => { initAudio(); $('importFile').click(); });
     $('importFile').addEventListener('change', (e) => {
@@ -2670,7 +2393,6 @@
       if (f) handleImportFile(f);
       e.target.value = '';
     });
-
     document.querySelectorAll('.nav-item').forEach(btn => {
       btn.addEventListener('click', () => {
         initAudio();
@@ -2679,7 +2401,6 @@
         switchView(btn.dataset.view);
       });
     });
-
     $('monthPrev').addEventListener('click', () => {
       if (!monthViewDate) monthViewDate = parseDate(state.selectedDate || todayStr());
       monthViewDate.setMonth(monthViewDate.getMonth() - 1);
@@ -2690,7 +2411,6 @@
       monthViewDate.setMonth(monthViewDate.getMonth() + 1);
       renderMonthView();
     });
-
     $('notesSearch').addEventListener('input', (e) => {
       if (notesSearchDebounce) clearTimeout(notesSearchDebounce);
       notesSearchDebounce = setTimeout(() => {
@@ -2713,7 +2433,6 @@
       });
     });
     $('noteEditorArea').addEventListener('input', handleNoteEditorInput);
-
     document.querySelectorAll('.timer-preset').forEach(p => {
       p.addEventListener('click', () => {
         initAudio();
@@ -2731,7 +2450,6 @@
     });
     $('timerStartBtn').addEventListener('click', () => { initAudio(); startTimer(); });
     $('timerResetBtn').addEventListener('click', () => { initAudio(); resetTimer(); showToast('Đã đặt lại'); });
-
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         $('addModal').classList.remove('active');
@@ -2740,7 +2458,6 @@
         editingHabitId = null;
       }
     });
-
     let resizeTimer = null;
     window.addEventListener('resize', () => {
       if (resizeTimer) clearTimeout(resizeTimer);
@@ -2788,11 +2505,9 @@
         state.habits.forEach(h => { state.checkins[today][h.id] = 0; });
         saveState();
       }
-
       state.timer.intervalId = null;
       state.timer.running = false;
       state.timer.endTime = null;
-
       bindEvents();
       render();
       updateTimerUI();
@@ -2805,9 +2520,7 @@
     } catch (e) {
       console.error('Init error:', e);
     }
-
     startQuoteRotation();
-
     const initAudioOnce = () => {
       initAudio();
       document.removeEventListener('touchstart', initAudioOnce);
