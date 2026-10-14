@@ -72,7 +72,6 @@
   .view { display: none; }
   .view.active { display: block; }
 
-  /* HEADER */
   .header {
     text-align: center;
     padding: 20px 16px 20px;
@@ -101,7 +100,6 @@
   }
   .header h1 .accent { color: var(--accent-seal-bright); text-shadow: 0 0 24px rgba(232, 200, 107, 0.6); }
 
-  /* NGÀY X / 92 - NỀN NỔI BẬT */
   .header-sub {
     display: inline-block;
     font-family: var(--font-main); font-size: 0.9rem; color: #ffffff;
@@ -115,7 +113,6 @@
     text-shadow: 0 0 8px rgba(232, 200, 107, 0.4);
   }
 
-  /* QUOTE */
   .quote-box {
     background: var(--bg-panel); border: 1px solid var(--border-subtle);
     border-left: 3px solid var(--accent-seal-bright); padding: 14px 16px;
@@ -136,7 +133,6 @@
   .quote-text.fade-out { opacity: 0; }
   .quote-author { font-family: var(--font-main); font-size: 0.85rem; color: var(--accent-seal); margin-top: 8px; text-align: right; letter-spacing: 1px; font-style: italic; font-weight: 700; }
 
-  /* DATE NAV */
   .date-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; gap: 8px; }
   .date-nav-btn {
     background: var(--bg-card); border: 1px solid var(--border-active);
@@ -152,7 +148,6 @@
   .date-display .day-full { font-family: var(--font-main); font-size: 1.25rem; font-weight: 700; color: #ffffff; letter-spacing: 1px; margin-top: 4px; }
   .date-display .day-count { font-family: var(--font-main); font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px; font-style: italic; }
 
-  /* PROGRESS */
   .progress-section { margin-bottom: 14px; }
   .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
   .progress-label { font-family: var(--font-main); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; }
@@ -164,7 +159,6 @@
     box-shadow: 0 0 8px rgba(232, 200, 107, 0.4);
   }
 
-  /* SECTION TITLE BAR - NỀN VÀNG NỔI BẬT */
   .section-title-bar {
     display: flex; justify-content: space-between; align-items: center;
     padding: 10px 14px;
@@ -195,7 +189,6 @@
   }
   .section-title-bar .toggle-btn:active { background: rgba(0, 0, 0, 0.5); }
 
-  /* HABITS SECTION */
   .habits-section { margin-bottom: 16px; }
   .habits-section.collapsed .habits-list { display: none; }
   .habits-section.collapsed .section-title-bar { margin-bottom: 0; }
@@ -293,7 +286,6 @@
   .habit-streak { font-family: var(--font-main); font-size: 1.05rem; color: var(--accent-seal-bright); font-weight: 700; text-align: center; min-width: 44px; }
   .habit-streak .streak-label { font-size: 0.68rem; color: var(--text-muted); display: block; letter-spacing: 0.5px; font-style: italic; font-weight: 400; }
 
-  /* PANELS */
   .summary-panel { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px; margin-bottom: 14px; }
 
   .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -304,7 +296,6 @@
   .summary-item .val.gold { color: var(--accent-seal-bright); }
   .summary-item .lbl { font-family: var(--font-main); font-size: 0.72rem; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-muted); margin-top: 6px; }
 
-  /* MISSED */
   .missed-section { margin-top: 10px; display: none; }
   .missed-section.visible { display: block; }
   .missed-item {
@@ -315,7 +306,6 @@
   .missed-item:last-child { border-bottom: none; }
   .missed-item .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-red); flex-shrink: 0; }
 
-  /* CONTROLS */
   .controls { display: flex; gap: 8px; margin-bottom: 14px; }
   .btn {
     flex: 1; font-family: var(--font-main); font-size: 0.82rem; letter-spacing: 0.5px;
@@ -331,12 +321,10 @@
   .btn-gold { border-color: var(--accent-seal); color: var(--accent-seal-bright); }
   .btn-green { border-color: var(--accent-green); color: var(--accent-green-bright); }
 
-  /* DATA PANEL */
   .data-section { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px; margin-bottom: 14px; }
   .data-info { font-family: var(--font-main); font-size: 0.85rem; color: var(--text-secondary); letter-spacing: 0.5px; line-height: 1.7; margin-bottom: 10px; font-style: italic; }
   .data-info .hl { color: var(--accent-seal-bright); font-weight: 700; font-style: normal; }
 
-  /* REMINDER */
   .reminder-section { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px; margin-bottom: 14px; }
   .reminder-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--border-subtle); }
   .reminder-row:last-child { border-bottom: none; }
@@ -358,7 +346,6 @@
   }
   .toggle-switch.on::after { transform: translateX(20px); background: #ffffff; }
 
-  /* MONTH VIEW */
   .month-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; }
   .month-nav-btn {
     background: var(--bg-card); border: 1px solid var(--border-active);
@@ -389,7 +376,6 @@
   .legend { display: flex; align-items: center; justify-content: center; gap: 6px; font-family: var(--font-main); font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 14px; font-style: italic; }
   .legend-swatch { width: 13px; height: 13px; border-radius: 2px; border: 1px solid var(--border-subtle); }
 
-  /* NOTES */
   .notes-toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
   .notes-search {
     flex: 1;
@@ -517,7 +503,6 @@
   .notes-empty-state .big { font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 6px; font-weight: 700; }
   .notes-empty-state .small { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
 
-  /* NOTE EDITOR OVERLAY */
   .note-editor-overlay {
     position: fixed;
     inset: 0;
@@ -578,7 +563,6 @@
   }
   .note-editor-area::placeholder { color: var(--text-muted); font-style: italic; }
 
-  /* TIMER VIEW */
   .timer-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 10px 0; }
   .timer-ring-wrap { position: relative; width: 260px; height: 260px; display: flex; align-items: center; justify-content: center; }
   .timer-ring-svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
@@ -623,7 +607,6 @@
   .timer-session-info { font-family: var(--font-main); font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.5px; font-style: italic; text-align: center; margin-top: 4px; }
   .timer-session-info .hl { color: var(--accent-seal-bright); font-weight: 700; font-style: normal; }
 
-  /* STATS */
   .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
   .stat-card { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px 10px; text-align: center; }
   .stat-card .stat-val { font-family: var(--font-main); font-size: 1.7rem; font-weight: 700; color: var(--accent-seal-bright); line-height: 1; }
@@ -642,7 +625,6 @@
   }
   .chart-canvas { display: block; width: 100%; }
 
-  /* MODAL / CONFIRM */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 100; display: none; align-items: flex-end; justify-content: center; padding: 0; }
   .modal-overlay.active { display: flex; }
   .modal-sheet {
@@ -676,7 +658,6 @@
   .multi-item input[type="checkbox"] { width: 22px; height: 22px; min-width: 22px; accent-color: var(--accent-seal); cursor: pointer; }
   .multi-item .multi-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* FOOTER - Ở CUỐI TRANG */
   .site-footer {
     text-align: center;
     padding: 20px 16px 16px;
@@ -704,7 +685,6 @@
     letter-spacing: 0.5px; font-weight: 700; word-break: break-all;
   }
 
-  /* TOAST */
   .toast {
     position: fixed; bottom: calc(var(--safe-bottom) + 80px); left: 50%;
     transform: translateX(-50%) translateY(80px);
@@ -717,7 +697,6 @@
   }
   .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-  /* BOTTOM NAV */
   .bottom-nav {
     position: fixed; bottom: 0; left: 0; right: 0;
     background: linear-gradient(180deg, rgba(15, 22, 40, 0.95), rgba(10, 14, 26, 1));
@@ -740,7 +719,6 @@
   .nav-item.active { color: var(--accent-seal-bright); }
   .nav-item .nav-icon { font-size: 1.05rem; line-height: 1; }
 
-  /* CONFIRM */
   .confirm-dialog { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; }
   .confirm-dialog.active { display: flex; }
   .confirm-box { background: var(--bg-panel); border: 1px solid var(--accent-seal-dim); border-radius: 10px; padding: 22px; max-width: 340px; width: 100%; text-align: center; box-shadow: 0 8px 40px rgba(0,0,0,0.6); }
@@ -760,7 +738,6 @@
 
 <div class="container">
 
-  <!-- VIEW: TODAY -->
   <div id="view-today" class="view active">
 
     <div class="header">
@@ -874,7 +851,6 @@
 
   </div>
 
-  <!-- VIEW: MONTH -->
   <div id="view-month" class="view">
 
     <div class="header">
@@ -931,7 +907,6 @@
 
   </div>
 
-  <!-- VIEW: NOTES -->
   <div id="view-notes" class="view">
 
     <div class="header">
@@ -951,7 +926,6 @@
 
   </div>
 
-  <!-- VIEW: TIMER -->
   <div id="view-timer" class="view">
 
     <div class="header">
@@ -999,7 +973,6 @@
 
   </div>
 
-  <!-- VIEW: STATS -->
   <div id="view-stats" class="view">
 
     <div class="header">
@@ -1049,7 +1022,6 @@
 
   </div>
 
-  <!-- FOOTER -->
   <footer class="site-footer">
     <div class="footer-title">Winter Arc // Locked In</div>
     <div class="footer-copy">&copy; 2026 Bản quyền thuộc về</div>
@@ -1058,7 +1030,6 @@
 
 </div>
 
-<!-- BOTTOM NAV -->
 <div class="bottom-nav">
   <button class="nav-item active" data-view="today">
     <span class="nav-icon">&#9632;</span>
@@ -1082,7 +1053,6 @@
   </button>
 </div>
 
-<!-- NOTE EDITOR OVERLAY -->
 <div class="note-editor-overlay" id="noteEditorOverlay">
   <div class="note-editor-header">
     <button class="note-editor-back" id="noteEditorBack">&#8249; Quay lại</button>
@@ -1095,7 +1065,6 @@
   <textarea class="note-editor-area" id="noteEditorArea" placeholder="Bắt đầu viết..."></textarea>
 </div>
 
-<!-- ADD / EDIT MODAL -->
 <div class="modal-overlay" id="addModal">
   <div class="modal-sheet">
     <div class="modal-title" id="addModalTitle">Thêm mục tiêu bắt buộc</div>
@@ -1110,7 +1079,6 @@
   </div>
 </div>
 
-<!-- MULTI DELETE MODAL -->
 <div class="modal-overlay" id="multiDeleteModal">
   <div class="modal-sheet">
     <div class="modal-title">Chọn nhiệm vụ để xóa</div>
@@ -1122,7 +1090,6 @@
   </div>
 </div>
 
-<!-- CONFIRM DIALOG -->
 <div class="confirm-dialog" id="confirmDialog">
   <div class="confirm-box">
     <p id="confirmMsg">Bạn chắc chắn?</p>
@@ -1175,7 +1142,16 @@
     { text: "Thành công không đến từ những gì bạn làm khi có hứng. Nó đến từ những gì bạn làm khi không có hứng.", author: "David Goggins" },
     { text: "Hãy tự hỏi mỗi ngày: Hôm nay mình đã làm gì để trở nên tốt hơn?", author: "David Goggins" },
     { text: "Không có đường tắt. Chỉ có con đường dài và sự kiên trì.", author: "David Goggins" },
-    { text: "Bạn sẽ không bao giờ biết giới hạn của mình nếu bạn không bao giờ cố vượt qua nó.", author: "David Goggins" }
+    { text: "Bạn sẽ không bao giờ biết giới hạn của mình nếu bạn không bao giờ cố vượt qua nó.", author: "David Goggins" },
+    { text: "Tôi không bao giờ đặt ra một mục tiêu mà tôi có thể đạt được.", author: "David Goggins" },
+    { text: "Bạn đang gặp nguy hiểm khi sống một cuộc đời quá thoải mái và yếu ớt, đến mức bạn sẽ chết mà không bao giờ nhận ra tiềm năng thực sự của mình.", author: "David Goggins" },
+    { text: "Không ai quan tâm bạn đã làm gì ngày hôm qua. Hôm nay bạn đã làm gì để trở nên tốt hơn?", author: "David Goggins" },
+    { text: "Nỗi sợ hãi là người dẫn đường tối thượng của tôi.", author: "David Goggins" },
+    { text: "Khi bạn nghĩ rằng mình đã xong, bạn chỉ mới sử dụng 40% những gì cơ thể bạn có thể làm. Đó chỉ là những giới hạn mà chúng ta tự đặt ra cho bản thân.", author: "David Goggins" },
+    { text: "Hãy trở nên hơn cả động lực, hơn cả sự thúc đẩy, hãy trở nên ám ảnh đến mức người khác nghĩ bạn điên.", author: "David Goggins" },
+    { text: "Khi bạn được thúc đẩy, bất cứ điều gì trước mặt bạn, dù là phân biệt chủng tộc, phân biệt giới tính, chấn thương, ly hôn, trầm cảm, béo phì, bi kịch, hay nghèo đói, đều trở thành nhiên liệu cho sự biến đổi của bạn.", author: "David Goggins" },
+    { text: "Khi bạn ngừng đổ lỗi cho người khác về những vấn đề của mình... khi bạn ngừng trì hoãn, than vãn và phàn nàn về sự bất công của cuộc sống... thì thật đáng kinh ngạc những gì bạn có thể đạt được trong cuộc đời mình!", author: "David Goggins" },
+    { text: "Nỗi đau mở ra một cánh cửa bí mật trong tâm trí, cánh cửa dẫn đến cả hiệu suất đỉnh cao và sự tĩnh lặng tuyệt đẹp.", author: "David Goggins" }
   ];
 
   const DAYS_VN = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
