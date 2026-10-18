@@ -1826,10 +1826,11 @@
   'use strict';
 
   const STORAGE_KEY = 'winter_arc_data_v1';
-  const EXPORT_VERSION = 9;
+  const EXPORT_VERSION = 10;
   const ARC_START = '2026-10-01';
   const ARC_END = '2026-12-31';
   const ARC_DAYS = 92;
+  const TIMER_NOTIFICATION_TAG = 'winter-arc-timer-running';
 
   const QUOTES = [
     { text: "Bạn không cần cơ bụng sáu múi nếu tâm trí bạn được rèn bằng thép.", author: "David Goggins" },
@@ -1895,6 +1896,11 @@
   let notesSearchDebounce = null;
   let editingFolderId = null;
   let reminderCheckInterval = null;
+
+  // Timer notification state
+  let timerNotificationActive = false;
+  let lastNotificationSecBucket = -1;
+  let lastBadgeMinute = -1;
 
   const $ = id => document.getElementById(id);
 
@@ -2173,6 +2179,84 @@
     setTimeout(checkReminderTime, 2000);
   }
 
+  // ============================================================
+  // TIMER NOTIFICATION (ongoing notification when tab hidden)
+  // ============================================================
+  function formatTimerNotifBody(remainingSec) {
+    const m = Math.floor(remainingSec / 60);
+    const s = remainingSec % 60;
+    return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} còn lại · Deep focus`;
+  }
+
+  function withTimeout(promise, ms) {
+    return Promise.race([
+      promise,
+      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))
+    ]);
+  }
+
+  async function showTimerNotification(remainingSec) {
+    if (!('Notification' in window)) return;
+    if (Notification.permission !== 'granted') return;
+    const body = formatTimerNotifBody(remainingSec);
+    const opts = {
+      body,
+      tag: TIMER_NOTIFICATION_TAG,
+      icon: './icon-192.png',
+      badge: './icon-192.png',
+      silent: true,
+      renotify: false,
+      ongoing: true,
+      requireInteraction: false,
+      data: { url: './winter-arc.html', view: 'timer' }
+    };
+    try {
+      if ('serviceWorker' in navigator) {
+        const reg = await withTimeout(navigator.serviceWorker.ready, 2500);
+        await reg.showNotification('Đang tập trung', opts);
+        timerNotificationActive = true;
+        return;
+      }
+    } catch (e) { console.warn('SW showNotification failed, fallback', e); }
+    try {
+      new Notification('Đang tập trung', opts);
+      timerNotificationActive = true;
+    } catch (e) { console.warn('Notification fallback failed', e); }
+  }
+
+  async function hideTimerNotification() {
+    timerNotificationActive = false;
+    lastNotificationSecBucket = -1;
+    if (!('serviceWorker' in navigator)) return;
+    try {
+      const reg = await withTimeout(navigator.serviceWorker.ready, 2000);
+      const notifications = await reg.getNotifications({ tag: TIMER_NOTIFICATION_TAG });
+      notifications.forEach(n => n.close());
+    } catch (e) {}
+  }
+
+  function updateAppBadge(remainingSec) {
+    if (!navigator.setAppBadge) return;
+    const minutes = Math.ceil(remainingSec / 60);
+    if (minutes === lastBadgeMinute) return;
+    lastBadgeMinute = minutes;
+    try {
+      if (minutes > 0 && minutes <= 1440) {
+        navigator.setAppBadge(minutes).catch(() => {});
+      } else {
+        navigator.clearAppBadge().catch(() => {});
+      }
+    } catch (e) {}
+  }
+  function clearAppBadge() {
+    lastBadgeMinute = -1;
+    if (!navigator.clearAppBadge) return;
+    try { navigator.clearAppBadge().catch(() => {}); } catch (e) {}
+  }
+
+  // ============================================================
+  // TIMER LOGIC
+  // ============================================================
   function formatTime(totalSec) {
     const m = Math.floor(totalSec / 60);
     const s = totalSec % 60;
@@ -2195,16 +2279,29 @@
   function startTimer() {
     initAudio();
     if (state.timer.running) {
+      // Pause
       state.timer.running = false;
       state.timer.remainingSec = Math.max(0, Math.round((state.timer.endTime - Date.now()) / 1000));
       if (state.timer.intervalId) { clearInterval(state.timer.intervalId); state.timer.intervalId = null; }
+      hideTimerNotification();
+      clearAppBadge();
       updateTimerUI();
       return;
+    }
+    // Request permission if needed
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission().catch(() => {});
     }
     if (state.timer.remainingSec <= 0) state.timer.remainingSec = state.timer.totalSec;
     state.timer.endTime = Date.now() + state.timer.remainingSec * 1000;
     state.timer.running = true;
     state.timer.intervalId = setInterval(tickTimer, 250);
+    // If user starts timer while app already hidden - show notification immediately
+    if (document.hidden) {
+      showTimerNotification(state.timer.remainingSec);
+      lastNotificationSecBucket = Math.floor(state.timer.remainingSec / 10) * 10;
+    }
+    updateAppBadge(state.timer.remainingSec);
     updateTimerUI();
   }
   function tickTimer() {
@@ -2214,18 +2311,45 @@
       state.timer.running = false;
       if (state.timer.intervalId) { clearInterval(state.timer.intervalId); state.timer.intervalId = null; }
       onTimerDone();
+    } else {
+      // Update notification only when tab hidden, throttle to every 10 seconds bucket
+      if (document.hidden && timerNotificationActive) {
+        const bucket = Math.floor(remain / 10) * 10;
+        if (bucket !== lastNotificationSecBucket) {
+          lastNotificationSecBucket = bucket;
+          showTimerNotification(remain);
+        }
+      } else if (document.hidden && !timerNotificationActive) {
+        // Safety: if somehow notification got dismissed but timer still running
+        showTimerNotification(remain);
+        lastNotificationSecBucket = Math.floor(remain / 10) * 10;
+      }
+      updateAppBadge(remain);
     }
     updateTimerUI();
   }
   function onTimerDone() {
     playTimerEndAlarm();
     if (navigator.vibrate) navigator.vibrate([300, 100, 300, 100, 300, 100, 300]);
+    hideTimerNotification();
+    clearAppBadge();
     if ('Notification' in window && Notification.permission === 'granted') {
       try {
-        new Notification('WINTER ARC // HẾT GIỜ', {
-          body: 'Phiên tập trung hoàn thành.',
-          tag: 'winter-arc-timer'
-        });
+        if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+          navigator.serviceWorker.ready.then(reg => {
+            reg.showNotification('WINTER ARC // HẾT GIỜ', {
+              body: 'Phiên tập trung hoàn thành.',
+              tag: 'winter-arc-timer-done',
+              icon: './icon-192.png',
+              vibrate: [300, 100, 300, 100, 300],
+              data: { url: './winter-arc.html', view: 'timer' }
+            });
+          }).catch(() => {
+            try { new Notification('WINTER ARC // HẾT GIỜ', { body: 'Phiên tập trung hoàn thành.', tag: 'winter-arc-timer-done' }); } catch (e) {}
+          });
+        } else {
+          new Notification('WINTER ARC // HẾT GIỜ', { body: 'Phiên tập trung hoàn thành.', tag: 'winter-arc-timer-done' });
+        }
       } catch (e) {}
     }
     const today = todayStr();
@@ -2243,6 +2367,8 @@
     if (state.timer.intervalId) { clearInterval(state.timer.intervalId); state.timer.intervalId = null; }
     state.timer.remainingSec = state.timer.totalSec;
     state.timer.endTime = null;
+    hideTimerNotification();
+    clearAppBadge();
     updateTimerUI();
   }
   function updateTimerUI() {
@@ -3507,6 +3633,19 @@
             }
           })
           .catch((err) => console.warn('SW registration failed:', err));
+
+        // Listen for SW messages (e.g., SWITCH_VIEW from notification click)
+        navigator.serviceWorker.addEventListener('message', (event) => {
+          const data = event.data || {};
+          if (data.type === 'SWITCH_VIEW' && data.view) {
+            const btn = document.querySelector(`.nav-item[data-view="${data.view}"]`);
+            if (btn) {
+              document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+              btn.classList.add('active');
+            }
+            switchView(data.view);
+          }
+        });
       });
     }
   }
@@ -3748,7 +3887,25 @@
       setupChartInteractions(document.getElementById(id));
     });
     document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
+      if (document.hidden) {
+        // Going to background - show ongoing timer notification if running
+        if (state.timer.running) {
+          showTimerNotification(state.timer.remainingSec);
+          lastNotificationSecBucket = Math.floor(state.timer.remainingSec / 10) * 10;
+        }
+      } else {
+        // Coming back to foreground - hide ongoing notification
+        hideTimerNotification();
+        // Check if timer completed while away
+        if (state.timer.running && state.timer.endTime && Date.now() >= state.timer.endTime) {
+          state.timer.remainingSec = 0;
+          state.timer.running = false;
+          if (state.timer.intervalId) { clearInterval(state.timer.intervalId); state.timer.intervalId = null; }
+          onTimerDone();
+          updateTimerUI();
+        } else if (!state.timer.running) {
+          clearAppBadge();
+        }
         checkReminderTime();
         syncReminderStateToCache();
       }
@@ -3801,6 +3958,9 @@
       state.timer.intervalId = null;
       state.timer.running = false;
       state.timer.endTime = null;
+      // Clear any stale badge/notification from previous session
+      clearAppBadge();
+      hideTimerNotification();
       bindEvents();
       render();
       updateTimerUI();
