@@ -64,7 +64,6 @@
   .view { display: none; }
   .view.active { display: block; }
 
-  /* HERO */
   .hero {
     padding: 24px 12px 18px;
     text-align: center;
@@ -87,10 +86,7 @@
     line-height: 1.02;
     color: #ffffff;
   }
-  .hero-title em {
-    color: var(--accent-seal-bright);
-    font-style: normal;
-  }
+  .hero-title em { color: var(--accent-seal-bright); font-style: normal; }
   .hero-day-pill {
     display: inline-block;
     margin-top: 12px;
@@ -110,21 +106,34 @@
     background: var(--bg-panel);
     border: 1px solid var(--border-subtle);
     border-radius: 12px;
-    padding: 18px 18px 14px;
+    padding: 20px 20px 16px;
     margin-bottom: 14px;
     position: relative;
+    overflow: hidden;
+  }
+  .quote-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--accent-seal-bright), var(--accent-seal-dim));
+    opacity: 0.7;
   }
   .quote-mark {
     position: absolute;
-    top: -12px;
-    left: 16px;
-    font-size: 3rem;
+    top: -22px;
+    right: 12px;
+    font-size: 6.5rem;
     color: var(--accent-seal-bright);
     font-family: Georgia, 'Times New Roman', serif;
     line-height: 1;
-    background: var(--bg-panel);
-    padding: 0 6px;
     font-weight: 700;
+    opacity: 0.07;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
   }
   .quote-text {
     font-family: var(--font-main);
@@ -132,6 +141,8 @@
     line-height: 1.62;
     color: #ffffff;
     font-style: italic;
+    position: relative;
+    z-index: 1;
     min-height: 4em;
     transition: opacity 0.4s ease;
   }
@@ -144,6 +155,8 @@
     text-align: right;
     font-weight: 700;
     letter-spacing: 0.6px;
+    position: relative;
+    z-index: 1;
   }
 
   /* DATE NAV */
@@ -263,11 +276,7 @@
     color: var(--text-muted);
     font-weight: 700;
   }
-  .section-head-title .count {
-    color: var(--accent-seal-bright);
-    margin-left: 4px;
-    font-style: normal;
-  }
+  .section-head-title .count { color: var(--accent-seal-bright); margin-left: 4px; font-style: normal; }
   .section-head-actions { display: flex; gap: 6px; flex-shrink: 0; }
 
   .btn-ghost {
@@ -290,7 +299,6 @@
     color: var(--accent-seal-bright);
   }
 
-  /* CARD */
   .card {
     background: var(--bg-panel);
     border: 1px solid var(--border-subtle);
@@ -334,9 +342,7 @@
     user-select: none;
     transition: background 0.15s;
   }
-  .folder-section:not(.collapsed) .folder-header {
-    border-bottom: 1px solid var(--border-subtle);
-  }
+  .folder-section:not(.collapsed) .folder-header { border-bottom: 1px solid var(--border-subtle); }
   .folder-header:active { background: var(--bg-card); }
   .folder-toggle-arrow {
     display: inline-block;
@@ -477,7 +483,7 @@
     flex-shrink: 0;
   }
 
-  /* HABIT ACTION MENU */
+  /* HABIT ACTION */
   .habit-action-info {
     padding: 12px 14px;
     background: rgba(200,168,75,0.06);
@@ -531,7 +537,7 @@
   .habit-folder-btn:active:not(:disabled) { background: var(--bg-card-hover); border-color: var(--accent-seal); }
   .habit-folder-btn:disabled { opacity: 0.55; cursor: not-allowed; border-color: var(--accent-green); }
 
-  /* SUMMARY ROW */
+  /* SUMMARY */
   .summary-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -541,11 +547,8 @@
     border-radius: 8px;
     overflow: hidden;
   }
-  .summary-cell {
-    background: var(--bg-card);
-    padding: 12px 6px;
-    text-align: center;
-  }
+  .summary-row.cols-2 { grid-template-columns: 1fr 1fr; }
+  .summary-cell { background: var(--bg-card); padding: 12px 6px; text-align: center; }
   .summary-val {
     font-size: 1.35rem;
     font-weight: 800;
@@ -593,17 +596,8 @@
     gap: 10px;
   }
   .reminder-row:last-child { border-bottom: none; }
-  .reminder-label {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    letter-spacing: 0.2px;
-  }
-  .reminder-time {
-    font-size: 0.88rem;
-    color: var(--accent-seal-bright);
-    font-weight: 700;
-    text-align: right;
-  }
+  .reminder-label { font-size: 0.85rem; color: var(--text-secondary); letter-spacing: 0.2px; }
+  .reminder-time { font-size: 0.88rem; color: var(--accent-seal-bright); font-weight: 700; text-align: right; }
   .reminder-input-num {
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
@@ -657,15 +651,7 @@
     transition: background 0.15s, border-color 0.15s;
   }
   .month-nav-btn:active { background: var(--bg-card-hover); border-color: var(--accent-seal); }
-  .month-label {
-    font-size: 1.05rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: #ffffff;
-    text-align: center;
-    flex: 1;
-  }
+  .month-label { font-size: 1.05rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #ffffff; text-align: center; flex: 1; }
   .calendar-head { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-bottom: 8px; }
   .calendar-head div {
     text-align: center;
@@ -708,12 +694,7 @@
     color: var(--text-muted);
     line-height: 1;
   }
-  .cal-cell .cal-cell-pct {
-    font-size: 0.88rem;
-    font-weight: 700;
-    color: #ffffff;
-    line-height: 1;
-  }
+  .cal-cell .cal-cell-pct { font-size: 0.88rem; font-weight: 700; color: #ffffff; line-height: 1; }
   .cal-cell.level-1 { background: linear-gradient(135deg, rgba(232,200,107,0.16), rgba(232,200,107,0.05)); border-color: rgba(232,200,107,0.28); }
   .cal-cell.level-2 { background: linear-gradient(135deg, rgba(232,200,107,0.3), rgba(232,200,107,0.14)); border-color: rgba(232,200,107,0.42); }
   .cal-cell.level-3 { background: linear-gradient(135deg, rgba(232,200,107,0.5), rgba(232,200,107,0.26)); border-color: rgba(232,200,107,0.6); }
@@ -735,11 +716,7 @@
   }
   .legend-swatch { width: 14px; height: 14px; border-radius: 3px; border: 1px solid var(--border-subtle); }
   .legend-label { padding: 0 3px; }
-  .month-summary-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
+  .month-summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .month-summary-item {
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
@@ -887,22 +864,9 @@
     color: var(--accent-red);
     border-color: rgba(224,64,64,0.35);
   }
-  .notes-empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    font-family: var(--font-main);
-  }
-  .notes-empty-state .big {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    margin-bottom: 6px;
-    font-weight: 700;
-  }
-  .notes-empty-state .small {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    font-style: italic;
-  }
+  .notes-empty-state { text-align: center; padding: 60px 20px; font-family: var(--font-main); }
+  .notes-empty-state .big { font-size: 1rem; color: var(--text-secondary); margin-bottom: 6px; font-weight: 700; }
+  .notes-empty-state .small { font-size: 0.82rem; color: var(--text-muted); font-style: italic; }
   .fab {
     position: fixed;
     bottom: calc(var(--safe-bottom) + 78px);
@@ -927,7 +891,6 @@
   }
   .fab:active { transform: scale(0.94); }
 
-  /* NOTE EDITOR */
   .note-editor-overlay {
     position: fixed;
     inset: 0;
@@ -939,13 +902,7 @@
     overflow: hidden;
   }
   .note-editor-overlay.active { display: flex; }
-  .note-editor-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-    padding: 4px 0;
-  }
+  .note-editor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 4px 0; }
   .note-editor-back {
     background: none;
     border: none;
@@ -982,13 +939,7 @@
     justify-content: space-between;
     align-items: center;
   }
-  .note-editor-meta .save-ind {
-    color: var(--accent-green-bright);
-    font-style: normal;
-    font-weight: 700;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
+  .note-editor-meta .save-ind { color: var(--accent-green-bright); font-style: normal; font-weight: 700; opacity: 0; transition: opacity 0.3s; }
   .note-editor-meta .save-ind.show { opacity: 1; }
   .note-editor-area {
     flex: 1;
@@ -1006,17 +957,17 @@
   .note-editor-area::placeholder { color: var(--text-muted); font-style: italic; }
 
   /* TIMER */
-  .timer-wrap {
+  .timer-main-card {
+    padding: 24px 18px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
-    padding: 10px 0;
+    gap: 20px;
   }
   .timer-ring-wrap {
     position: relative;
-    width: 260px;
-    height: 260px;
+    width: 220px;
+    height: 220px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1028,40 +979,83 @@
     height: 100%;
     transform: rotate(-90deg);
   }
-  .timer-ring-bg { fill: none; stroke: rgba(30, 45, 74, 0.8); stroke-width: 8; }
+  .timer-ring-bg { fill: none; stroke: rgba(30, 45, 74, 0.5); stroke-width: 4; }
   .timer-ring-fg {
     fill: none;
     stroke: var(--accent-seal-bright);
-    stroke-width: 8;
+    stroke-width: 4;
     stroke-linecap: round;
     transition: stroke-dashoffset 0.3s linear, stroke 0.3s;
   }
   .timer-ring-fg.running { stroke: var(--accent-green-bright); }
   .timer-ring-fg.done { stroke: var(--accent-red); }
+  .timer-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+  }
   .timer-display {
     font-family: var(--font-main);
-    font-size: 3.2rem;
-    font-weight: 700;
+    font-size: 2.8rem;
+    font-weight: 800;
     color: #ffffff;
-    letter-spacing: 2px;
-    text-shadow: 0 0 20px rgba(232, 200, 107, 0.3);
-    z-index: 1;
+    letter-spacing: 0.5px;
+    line-height: 1;
     font-variant-numeric: tabular-nums;
   }
   .timer-label {
-    font-size: 0.78rem;
+    font-size: 0.68rem;
     color: var(--text-muted);
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
-    font-style: italic;
-    margin-top: -12px;
+    font-weight: 700;
+    margin-top: 8px;
   }
+  .timer-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    max-width: 320px;
+  }
+  .timer-ctrl-btn {
+    padding: 14px 12px;
+    border-radius: 10px;
+    font-family: var(--font-main);
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 1px solid;
+    transition: all 0.15s;
+  }
+  .timer-ctrl-btn:active { transform: scale(0.97); }
+  .timer-ctrl-start {
+    background: linear-gradient(135deg, var(--accent-seal-bright), var(--accent-seal));
+    border-color: var(--accent-seal);
+    color: #0a0e1a;
+    box-shadow: 0 4px 16px rgba(200,168,75,0.25);
+  }
+  .timer-ctrl-start.running {
+    background: linear-gradient(135deg, var(--accent-green-bright), var(--accent-green));
+    border-color: var(--accent-green);
+    color: #0a0e1a;
+    box-shadow: 0 4px 16px rgba(58,168,98,0.3);
+  }
+  .timer-ctrl-reset {
+    background: var(--bg-card);
+    border-color: var(--border-subtle);
+    color: var(--text-secondary);
+  }
+  .timer-ctrl-reset:active { background: var(--bg-card-hover); border-color: var(--border-active); }
+
   .timer-presets {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 6px;
-    width: 100%;
-    max-width: 400px;
+    margin-bottom: 12px;
   }
   .timer-preset {
     background: var(--bg-card);
@@ -1077,75 +1071,27 @@
     text-align: center;
   }
   .timer-preset.active {
-    background: var(--accent-seal-dim);
+    background: linear-gradient(135deg, var(--accent-seal-bright), var(--accent-seal));
     border-color: var(--accent-seal);
-    color: #ffffff;
+    color: #0a0e1a;
+    box-shadow: 0 2px 10px rgba(200,168,75,0.25);
   }
-  .timer-custom-row {
-    display: flex;
-    gap: 8px;
-    width: 100%;
-    max-width: 400px;
-    align-items: stretch;
-  }
+  .timer-preset:active:not(.active) { background: var(--bg-card-hover); border-color: var(--border-active); }
+  .timer-custom-row { display: flex; gap: 8px; align-items: stretch; }
   .timer-custom-input {
     flex: 1;
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
     color: #ffffff;
     font-family: var(--font-main);
-    font-size: 1rem;
-    padding: 10px 14px;
+    font-size: 0.92rem;
+    padding: 11px 14px;
     border-radius: 8px;
     outline: none;
     text-align: center;
   }
-  .timer-controls {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    width: 100%;
-    max-width: 400px;
-  }
-  .timer-ctrl-btn {
-    padding: 16px 12px;
-    border-radius: 10px;
-    font-family: var(--font-main);
-    font-size: 0.95rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    cursor: pointer;
-    border: 1px solid;
-    transition: all 0.15s;
-  }
-  .timer-ctrl-start {
-    background: var(--accent-seal-dim);
-    border-color: var(--accent-seal);
-    color: #ffffff;
-  }
-  .timer-ctrl-start.running {
-    background: var(--accent-green);
-    border-color: var(--accent-green-bright);
-  }
-  .timer-ctrl-reset {
-    background: var(--bg-card);
-    border-color: var(--border-subtle);
-    color: var(--text-secondary);
-  }
-  .timer-session-info {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    letter-spacing: 0.5px;
-    font-style: italic;
-    text-align: center;
-    margin-top: 4px;
-  }
-  .timer-session-info .hl {
-    color: var(--accent-seal-bright);
-    font-weight: 700;
-    font-style: normal;
-  }
+  .timer-custom-input:focus { border-color: var(--accent-seal); }
+  .timer-custom-input::placeholder { color: var(--text-muted); font-style: italic; }
 
   /* BUTTONS */
   .btn {
@@ -1188,19 +1134,10 @@
     margin-bottom: 12px;
     font-style: italic;
   }
-  .data-info .hl {
-    color: var(--accent-seal-bright);
-    font-weight: 700;
-    font-style: normal;
-  }
+  .data-info .hl { color: var(--accent-seal-bright); font-weight: 700; font-style: normal; }
 
   /* STATS */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 14px;
-  }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
   .stat-card {
     background: var(--bg-panel);
     border: 1px solid var(--border-subtle);
@@ -1400,27 +1337,9 @@
     border-top: 1px solid var(--border-subtle);
     position: relative;
   }
-  .footer-title {
-    font-size: 0.72rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--accent-seal-bright);
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  .footer-copy {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    letter-spacing: 0.3px;
-    margin-bottom: 4px;
-  }
-  .footer-email {
-    font-size: 0.82rem;
-    color: var(--accent-seal);
-    letter-spacing: 0.3px;
-    font-weight: 700;
-    word-break: break-all;
-  }
+  .footer-title { font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-seal-bright); font-weight: 700; margin-bottom: 6px; }
+  .footer-copy { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.3px; margin-bottom: 4px; }
+  .footer-email { font-size: 0.82rem; color: var(--accent-seal); letter-spacing: 0.3px; font-weight: 700; word-break: break-all; }
 
   .toast {
     position: fixed;
@@ -1531,7 +1450,7 @@
     </div>
 
     <div class="quote-card">
-      <div class="quote-mark">"</div>
+      <div class="quote-mark" aria-hidden="true">&ldquo;</div>
       <div class="quote-text" id="quoteText"></div>
       <div class="quote-author" id="quoteAuthor"></div>
     </div>
@@ -1689,19 +1608,32 @@
     <div class="hero">
       <div class="hero-eyebrow">Winter Arc · Focus</div>
       <h1 class="hero-title">Bộ <em>Đếm</em></h1>
-      <div class="hero-day-pill">Deep work &amp; tập trung</div>
+      <div class="hero-day-pill" id="timerHeaderPill">25 phút · Sẵn sàng</div>
     </div>
-    <div class="timer-wrap">
+
+    <div class="card timer-main-card">
       <div class="timer-ring-wrap">
         <svg class="timer-ring-svg" viewBox="0 0 100 100">
           <circle class="timer-ring-bg" cx="50" cy="50" r="45"></circle>
           <circle class="timer-ring-fg" id="timerRing" cx="50" cy="50" r="45"
                   stroke-dasharray="282.74" stroke-dashoffset="0"></circle>
         </svg>
-        <div class="timer-display" id="timerDisplay">25:00</div>
+        <div class="timer-center">
+          <div class="timer-display" id="timerDisplay">25:00</div>
+          <div class="timer-label" id="timerLabel">Sẵn sàng</div>
+        </div>
       </div>
-      <div class="timer-label" id="timerLabel">Sẵn sàng</div>
-      <div class="timer-presets" id="timerPresets">
+      <div class="timer-controls">
+        <button class="timer-ctrl-btn timer-ctrl-start" id="timerStartBtn">Bắt đầu</button>
+        <button class="timer-ctrl-btn timer-ctrl-reset" id="timerResetBtn">Đặt lại</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Thời lượng</div>
+      </div>
+      <div class="timer-presets">
         <button class="timer-preset" data-min="5">5'</button>
         <button class="timer-preset" data-min="15">15'</button>
         <button class="timer-preset active" data-min="25">25'</button>
@@ -1709,15 +1641,24 @@
         <button class="timer-preset" data-min="60">60'</button>
       </div>
       <div class="timer-custom-row">
-        <input type="number" class="timer-custom-input" id="timerCustomInput" placeholder="Phút tùy chỉnh" min="1" max="1440">
-        <button class="btn btn-gold" id="timerCustomSet" style="flex: 0 0 90px;">Đặt</button>
+        <input type="number" class="timer-custom-input" id="timerCustomInput" placeholder="Phút tùy chỉnh" min="1" max="1440" inputmode="numeric">
+        <button class="btn btn-gold" id="timerCustomSet" style="flex: 0 0 80px;">Đặt</button>
       </div>
-      <div class="timer-controls">
-        <button class="timer-ctrl-btn timer-ctrl-start" id="timerStartBtn">Bắt đầu</button>
-        <button class="timer-ctrl-btn timer-ctrl-reset" id="timerResetBtn">Đặt lại</button>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Phiên hôm nay</div>
       </div>
-      <div class="timer-session-info">
-        Phiên hôm nay: <span class="hl" id="timerSessionCount">0</span>
+      <div class="summary-row cols-2">
+        <div class="summary-cell">
+          <div class="summary-val gold" id="timerSessionCount">0</div>
+          <div class="summary-lbl">Phiên hoàn thành</div>
+        </div>
+        <div class="summary-cell">
+          <div class="summary-val" id="timerTotalMin">0</div>
+          <div class="summary-lbl">Phút tập trung</div>
+        </div>
       </div>
     </div>
   </div>
@@ -1885,7 +1826,7 @@
   'use strict';
 
   const STORAGE_KEY = 'winter_arc_data_v1';
-  const EXPORT_VERSION = 8;
+  const EXPORT_VERSION = 9;
   const ARC_START = '2026-10-01';
   const ARC_END = '2026-12-31';
   const ARC_DAYS = 92;
@@ -1941,7 +1882,8 @@
     habitsCollapsed: false,
     reminder: { enabled: false, intervalMin: 120, lastNotifiedTimestamp: null, lastReminder: null },
     timer: { totalSec: 1500, remainingSec: 1500, running: false, endTime: null, intervalId: null },
-    timerSessions: {}
+    timerSessions: {},
+    timerMinutes: {}
   };
 
   let monthViewDate = null;
@@ -1997,9 +1939,7 @@
   }
 
   function getFolderById(id) { return state.folders.find(f => f.id === id); }
-  function getHabitsInFolder(folderId) {
-    return state.habits.filter(h => h.folderId === folderId);
-  }
+  function getHabitsInFolder(folderId) { return state.habits.filter(h => h.folderId === folderId); }
 
   function loadState() {
     try {
@@ -2010,6 +1950,7 @@
         if (!state.checkins) state.checkins = {};
         if (!state.notes) state.notes = [];
         if (!state.timerSessions) state.timerSessions = {};
+        if (!state.timerMinutes || typeof state.timerMinutes !== 'object') state.timerMinutes = {};
         if (typeof state.habitsCollapsed !== 'boolean') state.habitsCollapsed = false;
         if (!state.folders) state.folders = [];
         if (!state.reminder) state.reminder = {};
@@ -2041,6 +1982,7 @@
         checkins: state.checkins,
         notes: notesClean,
         timerSessions: state.timerSessions,
+        timerMinutes: state.timerMinutes,
         habitsCollapsed: state.habitsCollapsed,
         reminder: {
           enabled: state.reminder.enabled,
@@ -2241,7 +2183,14 @@
     const sec = Math.max(1, Math.min(1440, Math.floor(minutes))) * 60;
     state.timer.totalSec = sec;
     state.timer.remainingSec = sec;
+    updatePresetActiveState();
     updateTimerUI();
+  }
+  function updatePresetActiveState() {
+    const minutes = Math.round(state.timer.totalSec / 60);
+    document.querySelectorAll('.timer-preset').forEach(p => {
+      p.classList.toggle('active', parseInt(p.dataset.min, 10) === minutes);
+    });
   }
   function startTimer() {
     initAudio();
@@ -2281,6 +2230,8 @@
     }
     const today = todayStr();
     state.timerSessions[today] = (state.timerSessions[today] || 0) + 1;
+    const mins = Math.round(state.timer.totalSec / 60);
+    state.timerMinutes[today] = (state.timerMinutes[today] || 0) + mins;
     saveState();
     showToast('Hết giờ! Phiên tập trung hoàn thành.');
     document.body.classList.add('alarm-active');
@@ -2299,6 +2250,7 @@
     const ring = $('timerRing');
     const startBtn = $('timerStartBtn');
     const label = $('timerLabel');
+    const pill = $('timerHeaderPill');
     if (!disp) return;
     disp.textContent = formatTime(state.timer.remainingSec);
     const circumference = 2 * Math.PI * 45;
@@ -2308,30 +2260,40 @@
     ring.setAttribute('stroke-dashoffset', offset.toFixed(2));
     ring.classList.toggle('running', state.timer.running);
     ring.classList.toggle('done', state.timer.remainingSec <= 0 && state.timer.totalSec > 0);
+
+    let statusText = 'Sẵn sàng';
     if (state.timer.running) {
       startBtn.textContent = 'Tạm dừng';
       startBtn.classList.add('running');
       label.textContent = 'Đang tập trung';
+      statusText = 'Đang chạy';
     } else if (state.timer.remainingSec <= 0) {
       startBtn.textContent = 'Bắt đầu lại';
       startBtn.classList.remove('running');
       label.textContent = 'Hoàn thành';
+      statusText = 'Hoàn thành';
     } else if (state.timer.remainingSec < state.timer.totalSec) {
       startBtn.textContent = 'Tiếp tục';
       startBtn.classList.remove('running');
       label.textContent = 'Tạm dừng';
+      statusText = 'Tạm dừng';
     } else {
       startBtn.textContent = 'Bắt đầu';
       startBtn.classList.remove('running');
       label.textContent = 'Sẵn sàng';
+      statusText = 'Sẵn sàng';
     }
-    const minutes = Math.round(state.timer.totalSec / 60);
-    document.querySelectorAll('.timer-preset').forEach(p => {
-      p.classList.toggle('active', parseInt(p.dataset.min, 10) === minutes);
-    });
+
+    if (pill) {
+      const mins = Math.round(state.timer.totalSec / 60);
+      pill.textContent = `${mins} phút · ${statusText}`;
+    }
+
     const today = todayStr();
     const cntEl = $('timerSessionCount');
     if (cntEl) cntEl.textContent = state.timerSessions[today] || 0;
+    const minEl = $('timerTotalMin');
+    if (minEl) minEl.textContent = state.timerMinutes[today] || 0;
   }
 
   function noteTitle(content) {
@@ -2372,11 +2334,8 @@
     if (editingNoteId) {
       const note = getNoteById(editingNoteId);
       if (note) {
-        if (!note.content.trim()) {
-          deleteNote(note.id);
-        } else {
-          saveState();
-        }
+        if (!note.content.trim()) deleteNote(note.id);
+        else saveState();
       }
     }
     editingNoteId = null;
@@ -2410,7 +2369,6 @@
     const weekAgoMs = now.getTime() - 7 * 86400000;
     const groups = [];
     const map = {};
-
     notes.forEach(note => {
       const d = new Date(note.updatedAt);
       const dIso = toISO(d);
@@ -2438,11 +2396,9 @@
     let notes = state.notes.slice();
     if (q) notes = notes.filter(n => (n.content || '').toLowerCase().includes(q));
     notes.sort((a, b) => b.updatedAt - a.updatedAt);
-
     countEl.textContent = notes.length === 0
       ? (q ? 'Không tìm thấy ghi chú nào' : 'Chưa có ghi chú nào')
       : `${notes.length} ghi chú`;
-
     if (notes.length === 0) {
       list.innerHTML = `
         <div class="notes-empty-state">
@@ -2452,7 +2408,6 @@
       `;
       return;
     }
-
     const groups = groupNotesForRender(notes);
     groups.forEach(group => {
       const groupEl = document.createElement('div');
@@ -2461,7 +2416,6 @@
       headerEl.className = 'notes-group-header';
       headerEl.textContent = group.label;
       groupEl.appendChild(headerEl);
-
       group.notes.forEach(note => {
         const item = document.createElement('div');
         item.className = 'note-card';
@@ -2565,7 +2519,6 @@
         }
       }, LONG_PRESS_MS);
     });
-
     card.addEventListener('pointermove', (e) => {
       if (!pointerDown) return;
       const dx = e.clientX - startX;
@@ -2575,7 +2528,6 @@
         if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
       }
     });
-
     const endPointer = () => {
       pointerDown = false;
       if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
@@ -2583,7 +2535,6 @@
     card.addEventListener('pointerup', endPointer);
     card.addEventListener('pointercancel', endPointer);
     card.addEventListener('contextmenu', (e) => e.preventDefault());
-
     card.addEventListener('click', () => {
       if (Date.now() - longPressFiredAt < 600) return;
       if (hasMoved) { hasMoved = false; return; }
@@ -2610,21 +2561,17 @@
     const list = $('habitsList');
     list.innerHTML = '';
     const dateStr = state.selectedDate || todayStr();
-
     if (state.habits.length === 0) {
       list.innerHTML = '<div style="text-align:center;padding:32px 12px;font-family:var(--font-main);font-size:0.88rem;color:var(--text-muted);letter-spacing:0.3px;font-style:italic;line-height:1.7;background:var(--bg-panel);border:1px dashed var(--border-subtle);border-radius:12px;">Chưa có nhiệm vụ nào.<br>Nhấn "+ Folder" để tạo đề mục,<br>sau đó nhấn ⋮ trong folder để thêm nhiệm vụ.</div>';
       return;
     }
-
     state.folders.forEach(folder => {
       const habitsInFolder = getHabitsInFolder(folder.id);
       const folderEl = document.createElement('div');
       folderEl.className = 'folder-section' + (folder.collapsed ? ' collapsed' : '');
       folderEl.dataset.folderId = folder.id;
-
       let doneCount = 0;
       habitsInFolder.forEach(h => { if (getCheckin(dateStr, h.id) === 2) doneCount++; });
-
       const header = document.createElement('div');
       header.className = 'folder-header';
       header.innerHTML = `
@@ -2645,10 +2592,8 @@
         openFolderMenu(folder, menuBtn);
       });
       folderEl.appendChild(header);
-
       const body = document.createElement('div');
       body.className = 'folder-body';
-
       if (habitsInFolder.length === 0) {
         const empty = document.createElement('div');
         empty.className = 'folder-empty';
@@ -2662,7 +2607,6 @@
           card.dataset.habitId = h.id;
           if (val === 2) card.classList.add('done');
           else if (val === 1) card.classList.add('partial');
-
           let streak = 0;
           let checkDate = dateStr;
           while (true) {
@@ -2695,17 +2639,14 @@
     const idx = siblings.findIndex(h => h.id === habit.id);
     const isFirst = idx <= 0;
     const isLast = idx >= siblings.length - 1;
-
     $('habitActionInfo').innerHTML = `
       <div style="font-weight:700;color:#fff;font-size:0.96rem;margin-bottom:6px;letter-spacing:0.2px;word-break:break-word;">${escapeHtml(habit.name)}</div>
       <div style="font-size:0.74rem;color:var(--text-muted);font-style:italic;">
         ${escapeHtml(folder ? folder.name : '--')} · Vị trí ${idx + 1}/${siblings.length}
       </div>
     `;
-
     const list = $('habitActionList');
     list.innerHTML = '';
-
     const upBtn = document.createElement('button');
     upBtn.className = 'habit-action-btn';
     upBtn.disabled = isFirst;
@@ -2719,7 +2660,6 @@
       playBeep(660, 0.08, 0.15, 'sine');
     });
     list.appendChild(upBtn);
-
     const downBtn = document.createElement('button');
     downBtn.className = 'habit-action-btn';
     downBtn.disabled = isLast;
@@ -2733,14 +2673,12 @@
       playBeep(660, 0.08, 0.15, 'sine');
     });
     list.appendChild(downBtn);
-
     const folderLabel = document.createElement('div');
     folderLabel.className = 'form-label';
     folderLabel.style.marginTop = '14px';
     folderLabel.style.marginBottom = '8px';
     folderLabel.textContent = 'Chuyển vào folder';
     list.appendChild(folderLabel);
-
     state.folders.forEach(f => {
       const btn = document.createElement('button');
       btn.className = 'habit-folder-btn';
@@ -2757,13 +2695,11 @@
       });
       list.appendChild(btn);
     });
-
     const div = document.createElement('div');
     div.style.height = '1px';
     div.style.background = 'var(--border-subtle)';
     div.style.margin = '14px 0 12px';
     list.appendChild(div);
-
     const renameBtn = document.createElement('button');
     renameBtn.className = 'habit-action-btn';
     renameBtn.innerHTML = '<span class="habit-action-icon">&#9998;</span> Đổi tên nhiệm vụ';
@@ -2772,7 +2708,6 @@
       setTimeout(() => openEditHabitModal(habit), 150);
     });
     list.appendChild(renameBtn);
-
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'habit-action-btn danger';
     deleteBtn.innerHTML = '<span class="habit-action-icon">&#10005;</span> Xóa nhiệm vụ';
@@ -2792,7 +2727,6 @@
       }, 150);
     });
     list.appendChild(deleteBtn);
-
     $('habitActionModal').classList.add('active');
   }
 
@@ -2853,9 +2787,7 @@
     }
   }
 
-  function renderReminder() {
-    updateReminderUI();
-  }
+  function renderReminder() { updateReminderUI(); }
 
   function escapeHtml(str) {
     const div = document.createElement('div');
@@ -2987,10 +2919,7 @@
       else if (pct >= 34) cell.classList.add('level-2');
       else if (pct > 0) cell.classList.add('level-1');
       const pctDisplay = pct > 0 ? `${pct}%` : '&#8212;';
-      cell.innerHTML = `
-        <span class="cal-day-num">${day}</span>
-        <span class="cal-cell-pct">${pctDisplay}</span>
-      `;
+      cell.innerHTML = `<span class="cal-day-num">${day}</span><span class="cal-cell-pct">${pctDisplay}</span>`;
       cell.addEventListener('click', () => {
         state.selectedDate = iso;
         monthViewDate = parseDate(iso);
@@ -3069,11 +2998,7 @@
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
       ctx.fillText(labels[i], x + barW / 2, pad.top + plotH + 6);
-      canvas._hitboxes.push({
-        x, y: pad.top, w: barW, h: plotH,
-        index: i, value: v, label: labels[i],
-        meta: meta ? meta[i] : null
-      });
+      canvas._hitboxes.push({ x, y: pad.top, w: barW, h: plotH, index: i, value: v, label: labels[i], meta: meta ? meta[i] : null });
     });
   }
   function drawLineChart(canvas, values, labels, opts) {
@@ -3175,11 +3100,7 @@
       ctx.textAlign = 'left';
       ctx.textBaseline = 'middle';
       ctx.fillText(v + '', pad.left + barW + 4, y + barH / 2);
-      canvas._hitboxes.push({
-        x: pad.left, y: y - rowH / 2, w: plotW + 40, h: rowH,
-        index: i, value: v, label: labels[i],
-        meta: meta ? meta[i] : null
-      });
+      canvas._hitboxes.push({ x: pad.left, y: y - rowH / 2, w: plotW + 40, h: rowH, index: i, value: v, label: labels[i], meta: meta ? meta[i] : null });
     });
   }
 
@@ -3245,11 +3166,9 @@
     if (!canvas) return;
     canvas.style.touchAction = 'pan-y';
     canvas.addEventListener('contextmenu', (e) => e.preventDefault());
-
     let pressTimer = null;
     let startX = 0, startY = 0;
     let longPressed = false;
-
     canvas.addEventListener('pointerdown', (e) => {
       if (e.pointerType === 'mouse' && e.button !== 0) return;
       startX = e.clientX;
@@ -3266,7 +3185,6 @@
         }
       }, 300);
     });
-
     canvas.addEventListener('pointermove', (e) => {
       if (pressTimer) {
         const dx = e.clientX - startX;
@@ -3277,7 +3195,6 @@
         }
       }
     });
-
     const endPress = () => {
       if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
       if (longPressed) {
@@ -3324,7 +3241,6 @@
     $('stAvgPct').textContent = stats.avgPct + '%';
     $('stBestStreak').textContent = stats.bestStreak;
     $('stPerfectDays').textContent = stats.perfectDays;
-
     const baseDate = state.selectedDate || todayStr();
     const bar7Vals = [], bar7Labels = [], bar7Meta = [];
     for (let i = 6; i >= 0; i--) {
@@ -3335,7 +3251,6 @@
       bar7Meta.push({ date: ds });
     }
     drawBarChart($('chartBar7'), bar7Vals, bar7Labels, 6, bar7Meta);
-
     const line30Vals = [], line30Labels = [], line30Meta = [];
     for (let i = 29; i >= 0; i--) {
       const ds = dateOffset(baseDate, -i);
@@ -3345,7 +3260,6 @@
       line30Meta.push({ date: ds });
     }
     drawLineChart($('chartLine30'), line30Vals, line30Labels, { meta: line30Meta });
-
     if (state.habits.length > 0) {
       const habitLabels = [], habitValues = [], habitMeta = [];
       state.habits.forEach(h => {
@@ -3362,7 +3276,6 @@
     } else {
       drawHBarChart($('chartHabit'), [], []);
     }
-
     updateDataInfo();
   }
 
@@ -3377,6 +3290,7 @@
     } else if (view === 'notes') {
       renderNotesView();
     } else if (view === 'timer') {
+      updatePresetActiveState();
       updateTimerUI();
     } else {
       render();
@@ -3390,7 +3304,7 @@
     const authorEl = $('quoteAuthor');
     if (!el || !authorEl) return;
     const q = QUOTES[idx % QUOTES.length];
-    el.textContent = '"' + q.text + '"';
+    el.textContent = q.text;
     authorEl.textContent = '— ' + q.author;
   }
   function rotateQuote() {
@@ -3441,6 +3355,7 @@
       checkins: state.checkins,
       notes: state.notes.map(n => ({ id: n.id, content: n.content, createdAt: n.createdAt, updatedAt: n.updatedAt })),
       timerSessions: state.timerSessions,
+      timerMinutes: state.timerMinutes,
       reminder: {
         enabled: state.reminder.enabled,
         intervalMin: state.reminder.intervalMin,
@@ -3517,6 +3432,7 @@
       updatedAt: n.updatedAt || Date.now()
     })) : [];
     state.timerSessions = (data.timerSessions && typeof data.timerSessions === 'object') ? data.timerSessions : {};
+    state.timerMinutes = (data.timerMinutes && typeof data.timerMinutes === 'object') ? data.timerMinutes : {};
     state.reminder = {};
     if (data.reminder && typeof data.reminder === 'object') {
       state.reminder.enabled = !!data.reminder.enabled;
@@ -3647,7 +3563,6 @@
       render();
       playBeep(660, 0.1, 0.2, 'sine');
     });
-
     $('cancelAdd').addEventListener('click', () => {
       $('addModal').classList.remove('active');
       editingHabitId = null;
@@ -3686,14 +3601,12 @@
       render();
       playBeep(660, 0.1, 0.2, 'sine');
     });
-
     $('closeHabitAction').addEventListener('click', () => {
       $('habitActionModal').classList.remove('active');
     });
     $('habitActionModal').addEventListener('click', (e) => {
       if (e.target === $('habitActionModal')) $('habitActionModal').classList.remove('active');
     });
-
     $('resetDayBtn').addEventListener('click', () => {
       showConfirm('ĐẶT LẠI TẤT CẢ CHECK-IN NGÀY NÀY?', () => {
         const dateStr = state.selectedDate || todayStr();
@@ -3705,7 +3618,7 @@
     $('resetAllBtn').addEventListener('click', () => {
       showConfirm('XÓA TOÀN BỘ DỮ LIỆU?\nHành động này không thể hoàn tác.', () => {
         state.habits = []; state.checkins = {}; state.notes = [];
-        state.timerSessions = {};
+        state.timerSessions = {}; state.timerMinutes = {};
         state.folders = [{ id: 'default', name: 'Nhiệm vụ chung', collapsed: false }];
         state.reminder.lastNotifiedTimestamp = null;
         state.reminder.enabled = false;
@@ -3715,19 +3628,16 @@
         showToast('Đã xóa toàn bộ');
       });
     });
-
     $('confirmNo').addEventListener('click', () => { $('confirmDialog').classList.remove('active'); confirmCallback = null; });
     $('confirmYes').addEventListener('click', () => {
       $('confirmDialog').classList.remove('active');
       if (confirmCallback) { confirmCallback(); confirmCallback = null; }
     });
-
     $('toggleMissed').addEventListener('click', () => {
       const el = $('missedSection');
       el.classList.toggle('visible');
       $('toggleMissed').textContent = el.classList.contains('visible') ? 'Ẩn' : 'Chi tiết';
     });
-
     $('reminderToggle').addEventListener('click', () => {
       initAudio();
       state.reminder.enabled = !state.reminder.enabled;
@@ -3768,7 +3678,6 @@
         try { new Notification('WINTER ARC', { body: `${incomplete} nhiệm vụ chưa hoàn thành`, tag: 'winter-arc-test' }); } catch (e) {}
       }
     });
-
     $('exportBtn').addEventListener('click', () => { initAudio(); exportData(); });
     $('importBtn').addEventListener('click', () => { initAudio(); $('importFile').click(); });
     $('importFile').addEventListener('change', (e) => {
@@ -3776,7 +3685,6 @@
       if (f) handleImportFile(f);
       e.target.value = '';
     });
-
     document.querySelectorAll('.nav-item').forEach(btn => {
       btn.addEventListener('click', () => {
         initAudio();
@@ -3785,7 +3693,6 @@
         switchView(btn.dataset.view);
       });
     });
-
     $('monthPrev').addEventListener('click', () => {
       if (!monthViewDate) monthViewDate = parseDate(state.selectedDate || todayStr());
       monthViewDate.setMonth(monthViewDate.getMonth() - 1);
@@ -3796,7 +3703,6 @@
       monthViewDate.setMonth(monthViewDate.getMonth() + 1);
       renderMonthView();
     });
-
     $('notesSearch').addEventListener('input', (e) => {
       if (notesSearchDebounce) clearTimeout(notesSearchDebounce);
       notesSearchDebounce = setTimeout(() => {
@@ -3821,7 +3727,6 @@
       });
     });
     $('noteEditorArea').addEventListener('input', handleNoteEditorInput);
-
     document.querySelectorAll('.timer-preset').forEach(p => {
       p.addEventListener('click', () => {
         initAudio();
@@ -3839,18 +3744,15 @@
     });
     $('timerStartBtn').addEventListener('click', () => { initAudio(); startTimer(); });
     $('timerResetBtn').addEventListener('click', () => { initAudio(); resetTimer(); showToast('Đã đặt lại'); });
-
     ['chartBar7', 'chartLine30', 'chartHabit'].forEach(id => {
       setupChartInteractions(document.getElementById(id));
     });
-
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) {
         checkReminderTime();
         syncReminderStateToCache();
       }
     });
-
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         $('addModal').classList.remove('active');
@@ -3863,7 +3765,6 @@
         editingFolderId = null;
       }
     });
-
     let resizeTimer = null;
     window.addEventListener('resize', () => {
       if (resizeTimer) clearTimeout(resizeTimer);
