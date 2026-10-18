@@ -188,10 +188,6 @@
     overflow: hidden;
     transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .folder-section.drop-target {
-    border-color: var(--accent-seal-bright);
-    box-shadow: 0 0 16px rgba(232, 200, 107, 0.35), inset 0 0 20px rgba(200, 168, 75, 0.08);
-  }
   .folder-header {
     display: flex; align-items: center; gap: 8px;
     padding: 11px 12px;
@@ -251,34 +247,12 @@
     color: var(--text-muted);
     font-family: var(--font-main);
     font-style: italic;
-    font-size: 0.84rem;
+    font-size: 0.82rem;
     letter-spacing: 0.3px;
+    line-height: 1.6;
   }
 
   /* HABIT CARD */
-  .habit-swipe-wrap { position: relative; overflow: hidden; border-radius: 6px; background: var(--bg-card); }
-  .habit-delete-btn {
-    position: absolute; left: 0; top: 0; bottom: 0; width: 88px;
-    background: linear-gradient(90deg, #b83232, #e04040);
-    color: #ffffff; display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-main); font-size: 0.9rem; font-weight: 700;
-    letter-spacing: 1px; text-transform: uppercase;
-    cursor: pointer; user-select: none; z-index: 0;
-    border-radius: 6px 0 0 6px; opacity: 0; transition: opacity 0.2s; pointer-events: none;
-  }
-  .habit-edit-btn {
-    position: absolute; right: 0; top: 0; bottom: 0; width: 88px;
-    background: linear-gradient(90deg, #3a6ea5, #4a86c5);
-    color: #ffffff; display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-main); font-size: 0.9rem; font-weight: 700;
-    letter-spacing: 1px; text-transform: uppercase;
-    cursor: pointer; user-select: none; z-index: 0;
-    border-radius: 0 6px 6px 0; opacity: 0; transition: opacity 0.2s; pointer-events: none;
-  }
-  .habit-swipe-wrap.swiping-right .habit-delete-btn,
-  .habit-swipe-wrap.swiped-right .habit-delete-btn { opacity: 1; pointer-events: auto; }
-  .habit-swipe-wrap.swiping-left .habit-edit-btn,
-  .habit-swipe-wrap.swiped-left .habit-edit-btn { opacity: 1; pointer-events: auto; }
   .habit-card {
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
@@ -286,15 +260,12 @@
     padding: 12px 14px;
     display: flex; align-items: center; gap: 12px;
     cursor: pointer;
-    transition: background 0.2s, border-color 0.2s, transform 0.2s ease, opacity 0.2s;
-    position: relative; z-index: 1;
-    will-change: transform;
+    transition: background 0.2s, border-color 0.2s;
+    position: relative;
     user-select: none;
+    -webkit-touch-callout: none;
     touch-action: manipulation;
-    transform: translateX(0);
   }
-  .habit-swipe-wrap.swiped-right .habit-card { transform: translateX(88px); }
-  .habit-swipe-wrap.swiped-left .habit-card { transform: translateX(-88px); }
   .habit-card::before {
     content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
     background: var(--border-subtle); transition: background 0.2s;
@@ -311,11 +282,6 @@
   .habit-card.done .habit-name { color: var(--card-done-text); }
   .habit-card.done .habit-check { background: var(--card-done-border); border-color: var(--card-done-border); color: #ffffff; }
   .habit-card.done .habit-meta { color: var(--card-done-text); }
-  .habit-swipe-wrap.dragging-source { opacity: 0.25; }
-  .habit-swipe-wrap.dragging-source .habit-card {
-    border-color: var(--accent-seal-bright);
-    border-style: dashed;
-  }
   .habit-check {
     width: 30px; height: 30px; min-width: 30px; border: 2px solid var(--border-active);
     border-radius: 5px; display: flex; align-items: center; justify-content: center;
@@ -328,31 +294,59 @@
   .habit-streak { font-family: var(--font-main); font-size: 1.05rem; color: var(--accent-seal-bright); font-weight: 700; text-align: center; min-width: 44px; }
   .habit-streak .streak-label { font-size: 0.68rem; color: var(--text-muted); display: block; letter-spacing: 0.5px; font-style: italic; font-weight: 400; }
 
-  /* DRAG GHOST + DROP INDICATOR */
-  .drag-ghost {
-    position: fixed;
-    pointer-events: none;
-    z-index: 2000;
+  /* HABIT ACTION MENU */
+  .habit-action-info {
+    padding: 12px 14px;
+    background: var(--title-bg);
+    border: 1px solid var(--accent-seal-dim);
+    border-left: 3px solid var(--accent-seal-bright);
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 14px;
+  }
+  .habit-action-btn {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-family: var(--font-main);
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 13px 16px;
     border-radius: 6px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.7), 0 0 0 2px var(--accent-seal-bright);
-    opacity: 0.95;
-    transform: rotate(1.5deg) scale(1.02);
-    transition: none;
+    cursor: pointer;
+    text-align: left;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.15s, border-color 0.15s;
+    letter-spacing: 0.3px;
   }
-  .drop-indicator {
-    position: fixed;
-    height: 3px;
-    background: var(--accent-seal-bright);
-    border-radius: 2px;
-    box-shadow: 0 0 10px rgba(232,200,107,0.9);
-    z-index: 1500;
-    pointer-events: none;
-    animation: dropPulse 1s ease-in-out infinite;
+  .habit-action-btn:active:not(:disabled) { background: var(--bg-card-hover); border-color: var(--accent-seal); }
+  .habit-action-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .habit-action-btn.danger { color: var(--accent-red); border-color: rgba(224,64,64,0.3); }
+  .habit-action-btn.danger:active:not(:disabled) { background: rgba(224,64,64,0.12); border-color: var(--accent-red); }
+  .habit-action-icon { width: 18px; text-align: center; font-size: 0.9rem; }
+  .habit-folder-btn {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-family: var(--font-main);
+    font-size: 0.92rem;
+    font-weight: 600;
+    padding: 11px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.15s, border-color 0.15s;
+    letter-spacing: 0.3px;
   }
-  @keyframes dropPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
+  .habit-folder-btn:active:not(:disabled) { background: var(--bg-card-hover); border-color: var(--accent-seal); }
+  .habit-folder-btn:disabled { opacity: 0.55; cursor: not-allowed; border-color: var(--accent-green); }
 
   .summary-panel { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px; margin-bottom: 14px; }
   .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -467,29 +461,18 @@
   .notes-add-btn:active { background: var(--accent-seal); }
   .notes-count { font-family: var(--font-main); font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 10px; font-style: italic; }
   .notes-list { display: flex; flex-direction: column; gap: 8px; }
-  .note-item-wrap { position: relative; overflow: hidden; border-radius: 8px; background: var(--bg-card); }
-  .note-item-del {
-    position: absolute; left: 0; top: 0; bottom: 0; width: 88px;
-    background: linear-gradient(90deg, #b83232, #e04040);
-    color: #ffffff; display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-main); font-size: 0.85rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer;
-    opacity: 0; transition: opacity 0.2s; border-radius: 8px 0 0 8px; pointer-events: none;
-  }
-  .note-item-wrap.swiping .note-item-del,
-  .note-item-wrap.swiped-right .note-item-del { opacity: 1; pointer-events: auto; }
   .note-item {
     background: var(--bg-card); border: 1px solid var(--border-subtle);
     border-radius: 8px; padding: 12px 14px; cursor: pointer;
-    transition: transform 0.2s ease, background 0.15s;
-    position: relative; z-index: 1; will-change: transform; transform: translateX(0);
+    transition: background 0.15s;
+    position: relative;
   }
-  .note-item-wrap.swiped-right .note-item { transform: translateX(88px); }
   .note-item:active { background: var(--bg-card-hover); }
   .note-item-title {
     font-family: var(--font-main); font-size: 1rem; font-weight: 700;
     color: #ffffff; margin-bottom: 4px; white-space: nowrap;
     overflow: hidden; text-overflow: ellipsis;
+    padding-right: 34px;
   }
   .note-item-title.empty { color: var(--text-muted); font-style: italic; }
   .note-item-preview {
@@ -499,6 +482,26 @@
     word-break: break-word; margin-bottom: 6px;
   }
   .note-item-date { font-family: var(--font-main); font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.3px; }
+  .note-item-del-x {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(224, 64, 64, 0.12);
+    color: var(--accent-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid rgba(224, 64, 64, 0.25);
+    z-index: 2;
+    line-height: 1;
+  }
+  .note-item-del-x:active { background: rgba(224, 64, 64, 0.3); }
   .notes-empty-state { text-align: center; padding: 50px 20px; font-family: var(--font-main); }
   .notes-empty-state .big { font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 6px; font-weight: 700; }
   .notes-empty-state .small { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
@@ -572,8 +575,6 @@
   .timer-ctrl-reset { background: var(--bg-card); border-color: var(--border-subtle); color: var(--text-secondary); }
   .timer-session-info { font-family: var(--font-main); font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.5px; font-style: italic; text-align: center; margin-top: 4px; }
   .timer-session-info .hl { color: var(--accent-seal-bright); font-weight: 700; font-style: normal; }
-
-  /* STATS */
   .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
   .stat-card { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px 10px; text-align: center; transition: border-color 0.2s; }
   .stat-card:active { border-color: var(--accent-seal); }
@@ -627,7 +628,6 @@
   .chart-detail .detail-habit.done { background: rgba(58,168,98,0.2); color: var(--accent-green-bright); }
   .chart-detail .detail-habit.partial { background: rgba(232,200,107,0.2); color: var(--card-partial-text); }
   .chart-detail .detail-habit.missed { background: rgba(224,64,64,0.18); color: var(--accent-red); }
-
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 100; display: none; align-items: flex-end; justify-content: center; padding: 0; }
   .modal-overlay.active { display: flex; }
   .modal-sheet {
@@ -667,7 +667,6 @@
     color: #ffffff;
   }
   .modal-actions { display: flex; gap: 8px; margin-top: 20px; }
-
   .folder-menu-popup {
     position: fixed;
     background: var(--bg-panel);
@@ -690,7 +689,6 @@
   }
   .folder-menu-item:hover, .folder-menu-item:active { background: var(--bg-card); color: #ffffff; }
   .folder-menu-item.danger { color: var(--accent-red); }
-
   .site-footer {
     text-align: center; padding: 20px 16px 16px; margin-top: 24px;
     border-radius: 10px 10px 0 0;
@@ -1088,6 +1086,17 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="habitActionModal">
+  <div class="modal-sheet">
+    <div class="modal-title">Thao tác nhiệm vụ</div>
+    <div class="habit-action-info" id="habitActionInfo"></div>
+    <div id="habitActionList"></div>
+    <div class="modal-actions">
+      <button class="btn" id="closeHabitAction">Đóng</button>
+    </div>
+  </div>
+</div>
+
 <div class="confirm-dialog" id="confirmDialog">
   <div class="confirm-box">
     <p id="confirmMsg">Bạn chắc chắn?</p>
@@ -1105,7 +1114,7 @@
   'use strict';
 
   const STORAGE_KEY = 'winter_arc_data_v1';
-  const EXPORT_VERSION = 5;
+  const EXPORT_VERSION = 6;
   const ARC_START = '2026-10-01';
   const ARC_END = '2026-12-31';
   const ARC_DAYS = 92;
@@ -1173,10 +1182,7 @@
   let editingHabitId = null;
   let notesSearchDebounce = null;
   let editingFolderId = null;
-  let editingFolderForNew = null;
   let reminderCheckInterval = null;
-  let activeGesture = null;
-  let dragState = null;
 
   const $ = id => document.getElementById(id);
 
@@ -1239,14 +1245,12 @@
         if (!state.reminder) state.reminder = { enabled: false, time: '20:00', lastNotifiedDate: null, lastReminder: null };
         if (typeof state.reminder.time !== 'string') state.reminder.time = '20:00';
         if (!('lastNotifiedDate' in state.reminder)) state.reminder.lastNotifiedDate = null;
-        // Migration: ensure folders exist, assign folderId to legacy habits
         if (state.folders.length === 0) {
           state.folders.push({ id: 'default', name: 'Nhiệm vụ chung', collapsed: false });
         }
         state.habits.forEach(h => {
           if (!h.folderId || !getFolderById(h.folderId)) h.folderId = state.folders[0].id;
         });
-        // Legacy dayNotes / monthNotes migration
         if (parsed.dayNotes && typeof parsed.dayNotes === 'object') {
           Object.keys(parsed.dayNotes).forEach(k => {
             const content = (parsed.dayNotes[k] || '').trim();
@@ -1307,6 +1311,23 @@
         }
       }));
     } catch (e) { console.warn('Save state failed', e); }
+    syncReminderStateToCache();
+  }
+
+  async function syncReminderStateToCache() {
+    if (!('caches' in window)) return;
+    try {
+      const cache = await caches.open('winter-arc-meta');
+      const today = todayStr();
+      const incompleteCount = state.habits.filter(h => getCheckin(today, h.id) !== 2).length;
+      await cache.put('/__reminder-state', new Response(JSON.stringify({
+        enabled: state.reminder.enabled,
+        time: state.reminder.time,
+        lastNotifiedDate: state.reminder.lastNotifiedDate,
+        incompleteCount,
+        today
+      }), { headers: { 'Content-Type': 'application/json' } }));
+    } catch (e) { console.warn('Sync reminder state failed', e); }
   }
 
   function getCheckin(dateStr, habitId) {
@@ -1325,7 +1346,6 @@
     return Math.round((done / total) * 100);
   }
 
-  // Reorder / move habit
   function reorderHabit(habitId, targetFolderId, targetIndex) {
     const habit = state.habits.find(h => h.id === habitId);
     if (!habit) return;
@@ -1397,7 +1417,6 @@
     pattern();
   }
 
-  // === REMINDER ===
   function updateReminderUI() {
     const statusEl = $('reminderStatus');
     const lastEl = $('lastReminder');
@@ -1420,7 +1439,7 @@
     if ('Notification' in window && Notification.permission === 'default') {
       return Notification.requestPermission();
     }
-    return Promise.resolve(Notification.permission);
+    return Promise.resolve('Notification' in window ? Notification.permission : 'denied');
   }
   function fireReminderNotification() {
     const today = todayStr();
@@ -1473,7 +1492,6 @@
     setTimeout(checkReminderTime, 2000);
   }
 
-  // === TIMER ===
   function formatTime(totalSec) {
     const m = Math.floor(totalSec / 60);
     const s = totalSec % 60;
@@ -1577,7 +1595,6 @@
     if (cntEl) cntEl.textContent = state.timerSessions[today] || 0;
   }
 
-  // === NOTES ===
   function noteTitle(content) {
     const firstLine = (content || '').split('\n').find(l => l.trim()) || '';
     return firstLine.trim();
@@ -1615,7 +1632,13 @@
     $('noteEditorOverlay').classList.remove('active');
     if (editingNoteId) {
       const note = getNoteById(editingNoteId);
-      if (note && !note.content.trim()) deleteNote(note.id);
+      if (note) {
+        if (!note.content.trim()) {
+          deleteNote(note.id);
+        } else {
+          saveState();
+        }
+      }
     }
     editingNoteId = null;
     renderNotesView();
@@ -1641,14 +1664,6 @@
     $('noteEditorDate').textContent = 'Đã sửa: ' + formatDateTimeVN(note.updatedAt);
   }
 
-  function closeAllNoteSwipe() {
-    document.querySelectorAll('.note-item-wrap.swiped-right, .note-item-wrap.swiping').forEach(w => {
-      w.classList.remove('swiped-right', 'swiping');
-      const it = w.querySelector('.note-item');
-      if (it) it.style.transform = '';
-    });
-  }
-
   function renderNotesView() {
     const list = $('notesList');
     const countEl = $('notesCount');
@@ -1670,12 +1685,18 @@
       return;
     }
     notes.forEach(note => {
-      const wrap = document.createElement('div');
-      wrap.className = 'note-item-wrap';
-      const delBtn = document.createElement('div');
-      delBtn.className = 'note-item-del';
-      delBtn.textContent = 'Xóa';
-      delBtn.addEventListener('click', (e) => {
+      const item = document.createElement('div');
+      item.className = 'note-item';
+      const title = noteTitle(note.content);
+      const preview = notePreview(note.content);
+      item.innerHTML = `
+        <div class="note-item-del-x" aria-label="Xóa ghi chú">&#10005;</div>
+        <div class="note-item-title${title ? '' : ' empty'}">${escapeHtml(title || 'Ghi chú mới')}</div>
+        ${preview ? `<div class="note-item-preview">${escapeHtml(preview)}</div>` : ''}
+        <div class="note-item-date">${formatDateTimeVN(note.updatedAt)}</div>
+      `;
+      const delX = item.querySelector('.note-item-del-x');
+      delX.addEventListener('click', (e) => {
         e.stopPropagation();
         showConfirm('XÓA GHI CHÚ NÀY?\nHành động không thể hoàn tác.', () => {
           deleteNote(note.id);
@@ -1683,65 +1704,11 @@
           showToast('Đã xóa ghi chú');
         });
       });
-      const item = document.createElement('div');
-      item.className = 'note-item';
-      const title = noteTitle(note.content);
-      const preview = notePreview(note.content);
-      item.innerHTML = `
-        <div class="note-item-title${title ? '' : ' empty'}">${escapeHtml(title || 'Ghi chú mới')}</div>
-        ${preview ? `<div class="note-item-preview">${escapeHtml(preview)}</div>` : ''}
-        <div class="note-item-date">${formatDateTimeVN(note.updatedAt)}</div>
-      `;
-      let sx = 0, sy = 0, moved = false;
-      const SNAP = 88;
-      const TRIGGER = 50;
-      let notePointerId = null;
-      item.addEventListener('pointerdown', (e) => {
-        if (e.pointerType === 'mouse' && e.button !== 0) return;
-        notePointerId = e.pointerId;
-        sx = e.clientX; sy = e.clientY; moved = false;
-      });
-      item.addEventListener('pointermove', (e) => {
-        if (e.pointerId !== notePointerId) return;
-        const dx = e.clientX - sx;
-        const dy = e.clientY - sy;
-        if (!moved && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) moved = true;
-        if (Math.abs(dx) > Math.abs(dy) && dx > 0) {
-          if (e.cancelable) e.preventDefault();
-          wrap.classList.add('swiping');
-          const off = Math.min(dx, SNAP);
-          item.style.transition = 'none';
-          item.style.transform = `translateX(${off}px)`;
-        }
-      });
-      item.addEventListener('pointerup', (e) => {
-        if (e.pointerId !== notePointerId) return;
-        notePointerId = null;
-        const dx = e.clientX - sx;
-        item.style.transition = 'transform 0.2s ease';
-        wrap.classList.remove('swiping');
-        if (dx > TRIGGER) {
-          closeAllNoteSwipe();
-          wrap.classList.add('swiped-right');
-          item.style.transform = '';
-        } else {
-          wrap.classList.remove('swiped-right');
-          item.style.transform = '';
-        }
-        setTimeout(() => { moved = false; }, 200);
-      });
-      item.addEventListener('click', () => {
-        if (moved) return;
-        if (wrap.classList.contains('swiped-right')) { closeAllNoteSwipe(); return; }
-        openNoteEditor(note.id);
-      });
-      wrap.appendChild(delBtn);
-      wrap.appendChild(item);
-      list.appendChild(wrap);
+      item.addEventListener('click', () => openNoteEditor(note.id));
+      list.appendChild(item);
     });
   }
 
-  // === RENDER ===
   function render() {
     renderHeader();
     renderDate();
@@ -1785,214 +1752,61 @@
     count.textContent = `(${done}/${state.habits.length})`;
   }
 
-  function closeAllHabitSwipe() {
-    document.querySelectorAll('.habit-swipe-wrap.swiped-right, .habit-swipe-wrap.swiped-left, .habit-swipe-wrap.swiping-right, .habit-swipe-wrap.swiping-left').forEach(w => {
-      w.classList.remove('swiped-right', 'swiped-left', 'swiping-right', 'swiping-left');
-      const c = w.querySelector('.habit-card');
-      if (c) c.style.transform = '';
-    });
-  }
-
-  // === DRAG & DROP ===
-  function startDrag(habitId, clientX, clientY, cardEl) {
-    const habit = state.habits.find(h => h.id === habitId);
-    if (!habit) return;
-    const rect = cardEl.getBoundingClientRect();
-    const ghost = cardEl.cloneNode(true);
-    ghost.classList.add('drag-ghost');
-    ghost.style.left = rect.left + 'px';
-    ghost.style.top = rect.top + 'px';
-    ghost.style.width = rect.width + 'px';
-    ghost.style.height = rect.height + 'px';
-    document.body.appendChild(ghost);
-    dragState = {
-      habitId,
-      offsetX: clientX - rect.left,
-      offsetY: clientY - rect.top,
-      ghostEl: ghost,
-      sourceCard: cardEl,
-      dropTarget: null
-    };
-    cardEl.closest('.habit-swipe-wrap').classList.add('dragging-source');
-    if (navigator.vibrate) navigator.vibrate(20);
-  }
-  function updateDrag(clientX, clientY) {
-    if (!dragState) return;
-    const ghost = dragState.ghostEl;
-    ghost.style.left = (clientX - dragState.offsetX) + 'px';
-    ghost.style.top = (clientY - dragState.offsetY) + 'px';
-    const target = hitTest(clientX, clientY);
-    dragState.dropTarget = target;
-    updateDropIndicator(target);
-  }
-  function hitTest(x, y) {
-    const headers = document.querySelectorAll('.folder-header');
-    for (const h of headers) {
-      const r = h.getBoundingClientRect();
-      if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) {
-        return { type: 'folder', folderId: h.closest('.folder-section').dataset.folderId };
-      }
-    }
-    const cards = document.querySelectorAll('.habit-card');
-    for (const c of cards) {
-      if (dragState && c.dataset.habitId === dragState.habitId) continue;
-      const r = c.getBoundingClientRect();
-      if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) {
-        const folderId = c.closest('.folder-section').dataset.folderId;
-        const habitId = c.dataset.habitId;
-        const siblings = state.habits.filter(hb => hb.folderId === folderId && hb.id !== (dragState ? dragState.habitId : ''));
-        const idx = siblings.findIndex(hb => hb.id === habitId);
-        const midY = r.top + r.height / 2;
-        const insertIdx = y < midY ? idx : idx + 1;
-        return { type: 'position', folderId, index: insertIdx, targetCard: c, targetRect: r };
-      }
-    }
-    return null;
-  }
-  function updateDropIndicator(target) {
-    document.querySelectorAll('.drop-indicator').forEach(el => el.remove());
-    document.querySelectorAll('.folder-section.drop-target').forEach(el => el.classList.remove('drop-target'));
-    if (!target) return;
-    if (target.type === 'folder') {
-      const sec = document.querySelector(`.folder-section[data-folder-id="${target.folderId}"]`);
-      if (sec) sec.classList.add('drop-target');
-    } else if (target.type === 'position') {
-      const r = target.targetRect;
-      const line = document.createElement('div');
-      line.className = 'drop-indicator';
-      line.style.left = r.left + 'px';
-      line.style.width = r.width + 'px';
-      if (target.index === 0) line.style.top = (r.top - 4) + 'px';
-      else line.style.top = (r.bottom + 1) + 'px';
-      document.body.appendChild(line);
-    }
-  }
-  function endDrag() {
-    if (!dragState) return;
-    const target = dragState.dropTarget;
-    const habitId = dragState.habitId;
-    if (dragState.ghostEl) dragState.ghostEl.remove();
-    if (dragState.sourceCard) {
-      const w = dragState.sourceCard.closest('.habit-swipe-wrap');
-      if (w) w.classList.remove('dragging-source');
-    }
-    document.querySelectorAll('.drop-indicator').forEach(el => el.remove());
-    document.querySelectorAll('.folder-section.drop-target').forEach(el => el.classList.remove('drop-target'));
-    dragState = null;
-    if (target) {
-      if (target.type === 'folder') {
-        reorderHabit(habitId, target.folderId, 9999);
-        const folder = getFolderById(target.folderId);
-        showToast('Đã chuyển vào folder: ' + (folder ? folder.name : ''));
-      } else {
-        reorderHabit(habitId, target.folderId, target.index);
-      }
-      render();
-    }
-  }
-
-  function attachHabitGestures(wrap, card, habit) {
+  function attachHabitGestures(card, habit) {
     let startX = 0, startY = 0;
-    let hasMoved = false;
-    let mode = 'idle';
     let longPressTimer = null;
-    let pointerId = null;
-    const SWIPE_TRIGGER = 50;
-    const SNAP = 88;
-    const LONG_PRESS_MS = 400;
-    const MOVE_THRESHOLD = 8;
-
-    function onDown(x, y) {
-      startX = x; startY = y;
-      hasMoved = false;
-      mode = 'idle';
-      if (longPressTimer) clearTimeout(longPressTimer);
-      longPressTimer = setTimeout(() => {
-        if (mode === 'idle' && !hasMoved) {
-          mode = 'dragging';
-          startDrag(habit.id, x, y, card);
-        }
-      }, LONG_PRESS_MS);
-    }
-    function onMove(x, y, e) {
-      const dx = x - startX;
-      const dy = y - startY;
-      const dist = Math.hypot(dx, dy);
-      if (mode === 'idle' && dist > MOVE_THRESHOLD) {
-        hasMoved = true;
-        if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
-        mode = 'swiping';
-      }
-      if (mode === 'swiping') {
-        if (Math.abs(dx) > Math.abs(dy)) {
-          if (e && e.cancelable) e.preventDefault();
-          if (dx > 0) {
-            wrap.classList.add('swiping-right');
-            wrap.classList.remove('swiping-left');
-            card.style.transition = 'none';
-            card.style.transform = `translateX(${Math.min(dx, SNAP)}px)`;
-          } else {
-            wrap.classList.add('swiping-left');
-            wrap.classList.remove('swiping-right');
-            card.style.transition = 'none';
-            card.style.transform = `translateX(${Math.max(dx, -SNAP)}px)`;
-          }
-        }
-      } else if (mode === 'dragging') {
-        if (e && e.cancelable) e.preventDefault();
-        updateDrag(x, y);
-      }
-    }
-    function onUp(x, y) {
-      if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
-      if (mode === 'swiping') {
-        const dx = x - startX;
-        card.style.transition = 'transform 0.2s ease';
-        wrap.classList.remove('swiping-right', 'swiping-left');
-        if (dx > SWIPE_TRIGGER) {
-          closeAllHabitSwipe();
-          wrap.classList.add('swiped-right');
-          card.style.transform = '';
-        } else if (dx < -SWIPE_TRIGGER) {
-          closeAllHabitSwipe();
-          wrap.classList.add('swiped-left');
-          card.style.transform = '';
-        } else {
-          wrap.classList.remove('swiped-right', 'swiped-left');
-          card.style.transform = '';
-        }
-      } else if (mode === 'dragging') {
-        endDrag();
-      }
-      mode = 'idle';
-      setTimeout(() => { hasMoved = false; }, 200);
-    }
-    function onCancel() {
-      if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
-      if (mode === 'dragging') endDrag();
-      mode = 'idle';
-    }
+    let pointerDown = false;
+    let hasMoved = false;
+    let longPressFiredAt = 0;
+    const LONG_PRESS_MS = 500;
+    const MOVE_THRESHOLD = 10;
 
     card.addEventListener('pointerdown', (e) => {
       if (e.pointerType === 'mouse' && e.button !== 0) return;
       if (e.target.closest('button')) return;
-      if (activeGesture) return;
-      pointerId = e.pointerId;
-      activeGesture = {
-        pointerId,
-        onMove: (x, y, ev) => onMove(x, y, ev),
-        onUp: (x, y) => onUp(x, y),
-        onCancel: () => onCancel()
-      };
-      onDown(e.clientX, e.clientY);
+      pointerDown = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      hasMoved = false;
+      if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
+      longPressTimer = setTimeout(() => {
+        if (!hasMoved && pointerDown) {
+          longPressFiredAt = Date.now();
+          if (navigator.vibrate) navigator.vibrate(30);
+          initAudio();
+          playBeep(880, 0.06, 0.15, 'sine');
+          openHabitActionMenu(habit);
+        }
+      }, LONG_PRESS_MS);
+    });
+
+    card.addEventListener('pointermove', (e) => {
+      if (!pointerDown) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (Math.hypot(dx, dy) > MOVE_THRESHOLD) {
+        hasMoved = true;
+        if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
+      }
+    });
+
+    card.addEventListener('pointerup', () => {
+      pointerDown = false;
+      if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
+    });
+
+    card.addEventListener('pointercancel', () => {
+      pointerDown = false;
+      if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
+    });
+
+    card.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
     });
 
     card.addEventListener('click', () => {
-      if (hasMoved) return;
-      if (wrap.classList.contains('swiped-right') || wrap.classList.contains('swiped-left')) {
-        closeAllHabitSwipe();
-        return;
-      }
+      if (Date.now() - longPressFiredAt < 600) return;
+      if (hasMoved) { hasMoved = false; return; }
       initAudio();
       const dateStr = state.selectedDate || todayStr();
       const cur = getCheckin(dateStr, habit.id);
@@ -2018,7 +1832,7 @@
     const dateStr = state.selectedDate || todayStr();
 
     if (state.habits.length === 0) {
-      list.innerHTML = '<div style="text-align:center;padding:30px 0;font-family:var(--font-main);font-size:0.95rem;color:var(--text-muted);letter-spacing:0.5px;font-style:italic;">Chưa có nhiệm vụ nào. Nhấn "+ Folder" để tạo đề mục, sau đó "+ Thêm" để thêm nhiệm vụ.</div>';
+      list.innerHTML = '<div style="text-align:center;padding:30px 0;font-family:var(--font-main);font-size:0.95rem;color:var(--text-muted);letter-spacing:0.5px;font-style:italic;line-height:1.7;">Chưa có nhiệm vụ nào.<br>Nhấn "+ Folder" để tạo đề mục, sau đó "+ Thêm" để thêm nhiệm vụ.</div>';
       return;
     }
 
@@ -2058,40 +1872,11 @@
       if (habitsInFolder.length === 0) {
         const empty = document.createElement('div');
         empty.className = 'folder-empty';
-        empty.textContent = 'Kéo nhiệm vụ vào đây hoặc nhấn giữ để kéo';
+        empty.textContent = 'Chưa có nhiệm vụ. Nhấn ⋮ ở trên để thêm, hoặc nhấn giữ nhiệm vụ ở folder khác để chuyển vào đây.';
         body.appendChild(empty);
       } else {
         habitsInFolder.forEach(h => {
           const val = getCheckin(dateStr, h.id);
-          const wrap = document.createElement('div');
-          wrap.className = 'habit-swipe-wrap';
-
-          const delBtn = document.createElement('div');
-          delBtn.className = 'habit-delete-btn';
-          delBtn.textContent = 'Xóa';
-          delBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            showConfirm(`XÓA "${h.name.toUpperCase()}"?\nHành động này không thể hoàn tác.`, () => {
-              state.habits = state.habits.filter(x => x.id !== h.id);
-              Object.keys(state.checkins).forEach(d => {
-                if (state.checkins[d]) delete state.checkins[d][h.id];
-              });
-              saveState();
-              render();
-              showToast('Đã xóa nhiệm vụ');
-              playBeep(330, 0.15, 0.2, 'sawtooth');
-            });
-          });
-
-          const editBtn = document.createElement('div');
-          editBtn.className = 'habit-edit-btn';
-          editBtn.textContent = 'Sửa';
-          editBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            closeAllHabitSwipe();
-            openEditHabitModal(h);
-          });
-
           const card = document.createElement('div');
           card.className = 'habit-card';
           card.dataset.habitId = h.id;
@@ -2118,16 +1903,120 @@
               <span class="streak-label">Chuỗi</span>
             </div>
           `;
-          attachHabitGestures(wrap, card, h);
-          wrap.appendChild(delBtn);
-          wrap.appendChild(editBtn);
-          wrap.appendChild(card);
-          body.appendChild(wrap);
+          attachHabitGestures(card, h);
+          body.appendChild(card);
         });
       }
       folderEl.appendChild(body);
       list.appendChild(folderEl);
     });
+  }
+
+  function openHabitActionMenu(habit) {
+    const folder = getFolderById(habit.folderId);
+    const siblings = getHabitsInFolder(habit.folderId);
+    const idx = siblings.findIndex(h => h.id === habit.id);
+    const isFirst = idx <= 0;
+    const isLast = idx >= siblings.length - 1;
+
+    $('habitActionInfo').innerHTML = `
+      <div style="font-weight:700;color:#fff;font-size:1rem;margin-bottom:6px;letter-spacing:0.3px;word-break:break-word;">${escapeHtml(habit.name)}</div>
+      <div style="font-size:0.78rem;color:var(--text-muted);font-style:italic;">
+        ${escapeHtml(folder ? folder.name : '--')} · Vị trí ${idx + 1}/${siblings.length}
+      </div>
+    `;
+
+    const list = $('habitActionList');
+    list.innerHTML = '';
+
+    const upBtn = document.createElement('button');
+    upBtn.className = 'habit-action-btn';
+    upBtn.disabled = isFirst;
+    upBtn.innerHTML = '<span class="habit-action-icon">&#9650;</span> Di chuyển lên';
+    upBtn.addEventListener('click', () => {
+      if (isFirst) return;
+      reorderHabit(habit.id, habit.folderId, idx - 1);
+      $('habitActionModal').classList.remove('active');
+      render();
+      showToast('Đã di chuyển lên');
+      playBeep(660, 0.08, 0.15, 'sine');
+    });
+    list.appendChild(upBtn);
+
+    const downBtn = document.createElement('button');
+    downBtn.className = 'habit-action-btn';
+    downBtn.disabled = isLast;
+    downBtn.innerHTML = '<span class="habit-action-icon">&#9660;</span> Di chuyển xuống';
+    downBtn.addEventListener('click', () => {
+      if (isLast) return;
+      reorderHabit(habit.id, habit.folderId, idx + 1);
+      $('habitActionModal').classList.remove('active');
+      render();
+      showToast('Đã di chuyển xuống');
+      playBeep(660, 0.08, 0.15, 'sine');
+    });
+    list.appendChild(downBtn);
+
+    const folderLabel = document.createElement('div');
+    folderLabel.className = 'form-label';
+    folderLabel.style.marginTop = '14px';
+    folderLabel.style.marginBottom = '8px';
+    folderLabel.textContent = 'Chuyển vào folder';
+    list.appendChild(folderLabel);
+
+    state.folders.forEach(f => {
+      const btn = document.createElement('button');
+      btn.className = 'habit-folder-btn';
+      btn.disabled = f.id === habit.folderId;
+      btn.innerHTML = `<span style="flex:1;text-align:left;">${escapeHtml(f.name)}</span>` +
+                      (f.id === habit.folderId ? '<span style="color:var(--accent-green-bright);font-size:0.7rem;font-weight:700;">Hiện tại</span>' : '');
+      btn.addEventListener('click', () => {
+        if (f.id === habit.folderId) return;
+        reorderHabit(habit.id, f.id, 9999);
+        $('habitActionModal').classList.remove('active');
+        render();
+        showToast('Đã chuyển vào: ' + f.name);
+        playBeep(660, 0.08, 0.15, 'sine');
+      });
+      list.appendChild(btn);
+    });
+
+    const div = document.createElement('div');
+    div.style.height = '1px';
+    div.style.background = 'var(--border-subtle)';
+    div.style.margin = '14px 0 12px';
+    list.appendChild(div);
+
+    const renameBtn = document.createElement('button');
+    renameBtn.className = 'habit-action-btn';
+    renameBtn.innerHTML = '<span class="habit-action-icon">&#9998;</span> Đổi tên nhiệm vụ';
+    renameBtn.addEventListener('click', () => {
+      $('habitActionModal').classList.remove('active');
+      setTimeout(() => openEditHabitModal(habit), 150);
+    });
+    list.appendChild(renameBtn);
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'habit-action-btn danger';
+    deleteBtn.innerHTML = '<span class="habit-action-icon">&#10005;</span> Xóa nhiệm vụ';
+    deleteBtn.addEventListener('click', () => {
+      $('habitActionModal').classList.remove('active');
+      setTimeout(() => {
+        showConfirm(`XÓA "${habit.name.toUpperCase()}"?\nHành động này không thể hoàn tác.`, () => {
+          state.habits = state.habits.filter(x => x.id !== habit.id);
+          Object.keys(state.checkins).forEach(d => {
+            if (state.checkins[d]) delete state.checkins[d][habit.id];
+          });
+          saveState();
+          render();
+          showToast('Đã xóa nhiệm vụ');
+          playBeep(330, 0.15, 0.2, 'sawtooth');
+        });
+      }, 150);
+    });
+    list.appendChild(deleteBtn);
+
+    $('habitActionModal').classList.add('active');
   }
 
   function renderProgress() {
@@ -2197,7 +2086,6 @@
     return div.innerHTML;
   }
 
-  // === FOLDER MENU ===
   function openFolderMenu(folder, anchorBtn) {
     document.querySelectorAll('.folder-menu-popup').forEach(el => el.remove());
     const popup = document.createElement('div');
@@ -2225,7 +2113,7 @@
         const action = item.dataset.action;
         popup.remove();
         if (action === 'rename') openRenameFolder(folder);
-        else if (action === 'add') openAddHabitToFolder(folder);
+        else if (action === 'add') openAddHabitModal(folder.id);
         else if (action === 'delete') confirmDeleteFolder(folder);
       });
     });
@@ -2256,11 +2144,7 @@
       }
     );
   }
-  function openAddHabitToFolder(folder) {
-    openAddHabitModal(folder.id);
-  }
 
-  // === MODAL ===
   function populateFolderSelect(selectedId) {
     const sel = $('habitFolderInput');
     sel.innerHTML = '';
@@ -2289,7 +2173,6 @@
     setTimeout(() => { $('habitNameInput').focus(); $('habitNameInput').select(); }, 300);
   }
 
-  // === MONTH ===
   function renderMonthView() {
     if (!monthViewDate) monthViewDate = parseDate(state.selectedDate || todayStr());
     const year = monthViewDate.getFullYear();
@@ -2341,7 +2224,6 @@
     $('mZero').textContent = zero;
   }
 
-  // === CHART DRAWING ===
   function getCtx(canvas) {
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
@@ -2427,7 +2309,6 @@
     drawGrid(ctx, pad, plotW, plotH);
     const n = values.length;
     canvas._hitboxes = [];
-    canvas._points = [];
     if (n === 0) return;
     const maxVal = opts.max || 100;
     const stepX = n > 1 ? plotW / (n - 1) : 0;
@@ -2435,7 +2316,6 @@
       x: pad.left + i * stepX,
       y: pad.top + plotH * (1 - Math.min(v, maxVal) / maxVal)
     }));
-    canvas._points = points;
     ctx.beginPath();
     ctx.moveTo(points[0].x, pad.top + plotH);
     points.forEach(p => ctx.lineTo(p.x, p.y));
@@ -2524,7 +2404,6 @@
     });
   }
 
-  // === CHART CLICK DETAIL ===
   function handleChartClick(e) {
     const canvas = e.currentTarget;
     const hitboxes = canvas._hitboxes;
@@ -2572,8 +2451,7 @@
       html += `<div class="detail-line">Hoàn thành: <strong>${count}</strong>/30 ngày (${pct}%)</div>`;
       if (habit) {
         let streak = 0;
-        const today = todayStr();
-        let d = today;
+        let d = todayStr();
         while (getCheckin(d, habit.id) === 2) { streak++; d = dateOffset(d, -1); if (streak > 365) break; }
         html += `<div class="detail-line">Chuỗi hiện tại: <strong>${streak}</strong> ngày</div>`;
       }
@@ -2590,7 +2468,6 @@
     el.classList.add('visible');
   }
 
-  // === STATS ===
   function computeStats() {
     let totalCheckins = 0;
     Object.values(state.checkins).forEach(day => {
@@ -2692,7 +2569,6 @@
     document.getElementById('detailChartLineAll').classList.remove('visible');
   }
 
-  // === VIEW SWITCH ===
   function switchView(view) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     const el = document.getElementById('view-' + view);
@@ -2756,7 +2632,6 @@
     $('confirmDialog').classList.add('active');
   }
 
-  // === IMPORT / EXPORT ===
   function buildExportObject() {
     return {
       _meta: {
@@ -2904,14 +2779,12 @@
     }
   }
 
-  // === SERVICE WORKER ===
   function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
           .then((reg) => {
             console.log('SW registered:', reg.scope);
-            // Optional: request periodic background sync if available
             if ('periodicSync' in reg) {
               reg.periodicSync.register('winter-arc-daily-check', {
                 minInterval: 12 * 60 * 60 * 1000
@@ -2930,7 +2803,6 @@
     }
   }
 
-  // === EVENTS ===
   function bindEvents() {
     $('prevDay').addEventListener('click', () => { state.selectedDate = dateOffset(state.selectedDate || todayStr(), -1); render(); });
     $('nextDay').addEventListener('click', () => { state.selectedDate = dateOffset(state.selectedDate || todayStr(), 1); render(); });
@@ -2999,8 +2871,7 @@
           habit.name = name;
           if (habit.folderId !== folderId) {
             const siblings = state.habits.filter(h => h.folderId === folderId);
-            const targetIndex = siblings.length;
-            reorderHabit(habit.id, folderId, targetIndex);
+            reorderHabit(habit.id, folderId, siblings.length);
           }
           showToast('Đã sửa: ' + name);
         }
@@ -3016,6 +2887,13 @@
       editingHabitId = null;
       render();
       playBeep(660, 0.1, 0.2, 'sine');
+    });
+
+    $('closeHabitAction').addEventListener('click', () => {
+      $('habitActionModal').classList.remove('active');
+    });
+    $('habitActionModal').addEventListener('click', (e) => {
+      if (e.target === $('habitActionModal')) $('habitActionModal').classList.remove('active');
     });
 
     $('resetDayBtn').addEventListener('click', () => {
@@ -3066,7 +2944,7 @@
       saveState(); updateReminderUI();
     });
     $('reminderTime').addEventListener('change', (e) => {
-      let v = e.target.value;
+      const v = e.target.value;
       if (!/^\d{2}:\d{2}$/.test(v)) return;
       state.reminder.time = v;
       state.reminder.lastNotifiedDate = null;
@@ -3162,35 +3040,18 @@
       if (c) c.addEventListener('click', handleChartClick);
     });
 
-    // Global pointer move/up for active gesture and drag
-    document.addEventListener('pointermove', (e) => {
-      if (activeGesture && activeGesture.pointerId === e.pointerId) {
-        activeGesture.onMove(e.clientX, e.clientY, e);
-      }
-    }, { passive: false });
-    document.addEventListener('pointerup', (e) => {
-      if (activeGesture && activeGesture.pointerId === e.pointerId) {
-        const g = activeGesture;
-        activeGesture = null;
-        g.onUp(e.clientX, e.clientY);
-      }
-    });
-    document.addEventListener('pointercancel', (e) => {
-      if (activeGesture && activeGesture.pointerId === e.pointerId) {
-        const g = activeGesture;
-        activeGesture = null;
-        if (g.onCancel) g.onCancel();
-      }
-    });
-
     document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) checkReminderTime();
+      if (!document.hidden) {
+        checkReminderTime();
+        syncReminderStateToCache();
+      }
     });
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         $('addModal').classList.remove('active');
         $('folderModal').classList.remove('active');
+        $('habitActionModal').classList.remove('active');
         $('confirmDialog').classList.remove('active');
         document.querySelectorAll('.folder-menu-popup').forEach(el => el.remove());
         editingHabitId = null;
@@ -3238,6 +3099,7 @@
       render();
       updateTimerUI();
       startReminderChecker();
+      syncReminderStateToCache();
       registerServiceWorker();
       requestPersistentStorage();
     } catch (e) {
