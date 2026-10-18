@@ -1,11 +1,10 @@
 // sw.js
 // Service Worker cho Winter Arc PWA
-// - Network-first cho HTML
-// - Cache-first cho asset tĩnh
-// - Hỗ trợ notification click, periodic sync, push
-// - Chia sẻ state nhắc nhở qua Cache API (key /__reminder-state)
+// - Network-first cho HTML, cache-first cho asset tĩnh
+// - Hỗ trợ notification, periodic sync, push
+// - Nhắc nhở theo khoảng phút (intervalMin)
 
-const CACHE_NAME = 'winter-arc-v2';
+const CACHE_NAME = 'winter-arc-v3';
 const META_CACHE = 'winter-arc-meta';
 const REMINDER_STATE_PATH = '/__reminder-state';
 const PERIODIC_TAG = 'winter-arc-daily-check';
@@ -16,7 +15,6 @@ const APP_SHELL = [
   './icon-512.png'
 ];
 
-// ===== LIFECYCLE =====
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -38,12 +36,10 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// ===== FETCH =====
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
   if (!req.url.startsWith('http')) return;
-
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
   if (url.pathname === REMINDER_STATE_PATH) return;
@@ -87,7 +83,6 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// ===== REMINDER HELPERS =====
 async function readReminderState() {
   try {
     const cache = await caches.open(META_CACHE);
@@ -108,14 +103,10 @@ async function writeReminderState(state) {
   } catch (e) {}
 }
 
-function formatLocalDate(d) {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-}
-
 async function showArcNotification(count) {
   await self.registration.showNotification('WINTER ARC', {
     body: `${count} nhiệm vụ chưa hoàn thành`,
-    tag: 'winter-arc-daily',
+    tag: 'winter-arc-reminder',
     icon: './icon-192.png',
     badge: './icon-192.png',
     vibrate: [200, 100, 200],
@@ -127,24 +118,18 @@ async function runReminderCheck(force) {
   const state = await readReminderState();
   if (!state) return;
   if (!state.enabled) return;
-  if (!state.time || !/^\d{2}:\d{2}$/.test(state.time)) return;
+  if (!state.intervalMin || state.intervalMin < 1) return;
 
-  const now = new Date();
-  const today = formatLocalDate(now);
-  if (state.lastNotifiedDate === today) return;
-
-  const [hh, mm] = state.time.split(':').map(Number);
-  const target = new Date(now);
-  target.setHours(hh, mm, 0, 0);
-  if (!force && now < target) return;
+  const now = Date.now();
+  const intervalMs = state.intervalMin * 60 * 1000;
+  if (!force && state.lastNotifiedTimestamp && (now - state.lastNotifiedTimestamp) < intervalMs) return;
   if (!force && state.incompleteCount <= 0) return;
 
   await showArcNotification(state.incompleteCount || 0);
-  state.lastNotifiedDate = today;
+  state.lastNotifiedTimestamp = now;
   await writeReminderState(state);
 }
 
-// ===== BACKGROUND EVENTS =====
 self.addEventListener('periodicsync', (event) => {
   if (event.tag !== PERIODIC_TAG) return;
   event.waitUntil(runReminderCheck(false));
@@ -175,7 +160,6 @@ self.addEventListener('push', (event) => {
   );
 });
 
-// ===== NOTIFICATION INTERACTION =====
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   const targetUrl = (event.notification.data && event.notification.data.url) || './winter-arc.html';
@@ -192,11 +176,6 @@ self.addEventListener('notificationclick', (event) => {
   );
 });
 
-self.addEventListener('notificationclose', (event) => {
-  // Hook cho analytics nếu cần. Hiện tại no-op.
-});
-
-// ===== MESSAGE HANDLING =====
 self.addEventListener('message', (event) => {
   const data = event.data || {};
 
