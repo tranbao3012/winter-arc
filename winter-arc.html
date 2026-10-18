@@ -180,7 +180,6 @@
   .habits-section.collapsed .section-title-bar { margin-bottom: 0; }
   .habits-list { display: flex; flex-direction: column; gap: 10px; }
 
-  /* FOLDER */
   .folder-section {
     background: var(--bg-panel);
     border: 1px solid var(--border-subtle);
@@ -252,7 +251,6 @@
     line-height: 1.6;
   }
 
-  /* HABIT CARD */
   .habit-card {
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
@@ -294,7 +292,6 @@
   .habit-streak { font-family: var(--font-main); font-size: 1.05rem; color: var(--accent-seal-bright); font-weight: 700; text-align: center; min-width: 44px; }
   .habit-streak .streak-label { font-size: 0.68rem; color: var(--text-muted); display: block; letter-spacing: 0.5px; font-style: italic; font-weight: 400; }
 
-  /* HABIT ACTION MENU */
   .habit-action-info {
     padding: 12px 14px;
     background: var(--title-bg);
@@ -413,34 +410,151 @@
     border-radius: 50%; background: var(--text-muted); transition: transform 0.2s, background 0.2s;
   }
   .toggle-switch.on::after { transform: translateX(20px); background: #ffffff; }
-  .month-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; }
+
+  /* MONTH VIEW - REDESIGNED */
+  .month-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; gap: 8px; }
   .month-nav-btn {
     background: var(--bg-card); border: 1px solid var(--border-active);
     color: var(--accent-seal-bright); font-family: var(--font-main); font-size: 1.5rem;
-    width: 44px; height: 44px; border-radius: 6px; font-weight: 700;
+    width: 44px; height: 44px; border-radius: 8px; font-weight: 700;
     display: flex; align-items: center; justify-content: center; cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
   }
-  .month-label { font-family: var(--font-main); font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #ffffff; text-align: center; flex: 1; }
-  .calendar-head { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 6px; }
-  .calendar-head div { text-align: center; font-family: var(--font-main); font-size: 0.75rem; letter-spacing: 0.5px; color: var(--text-secondary); padding: 4px 0; font-weight: 700; }
-  .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 12px; }
+  .month-nav-btn:active { background: var(--bg-card-hover); border-color: var(--accent-seal); }
+  .month-label { font-family: var(--font-main); font-size: 1.15rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #ffffff; text-align: center; flex: 1; }
+  .calendar-head { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-bottom: 8px; }
+  .calendar-head div {
+    text-align: center;
+    font-family: var(--font-main);
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    padding: 5px 0;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .calendar-head div:last-child,
+  .calendar-head div:nth-child(6),
+  .calendar-head div:nth-child(7) { color: var(--accent-seal-bright); }
+  .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-bottom: 14px; }
   .cal-cell {
-    aspect-ratio: 1 / 1; background: var(--bg-card); border: 1px solid var(--border-subtle);
-    border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    cursor: pointer; font-family: var(--font-main); font-size: 0.88rem; color: var(--text-secondary);
-    transition: transform 0.1s, border-color 0.15s; position: relative; padding: 2px;
+    aspect-ratio: 1 / 1;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: var(--font-main);
+    color: var(--text-secondary);
+    transition: transform 0.12s, border-color 0.15s, box-shadow 0.15s;
+    position: relative;
+    padding: 4px 2px;
+    overflow: hidden;
   }
   .cal-cell.empty { background: transparent; border-color: transparent; cursor: default; }
   .cal-cell:not(.empty):active { transform: scale(0.94); }
-  .cal-cell.today { border-color: var(--accent-seal-bright); border-width: 2px; }
-  .cal-cell.selected { outline: 1px solid var(--accent-seal-bright); outline-offset: -3px; }
-  .cal-cell .cal-pct { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; font-style: italic; }
-  .cal-cell.level-1 { background: rgba(232, 200, 107, 0.18); }
-  .cal-cell.level-2 { background: rgba(232, 200, 107, 0.32); }
-  .cal-cell.level-3 { background: rgba(232, 200, 107, 0.5); color: #ffffff; }
-  .cal-cell.level-4 { background: rgba(58, 168, 98, 0.5); border-color: var(--accent-green); color: #ffffff; }
-  .legend { display: flex; align-items: center; justify-content: center; gap: 6px; font-family: var(--font-main); font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 14px; font-style: italic; }
-  .legend-swatch { width: 13px; height: 13px; border-radius: 2px; border: 1px solid var(--border-subtle); }
+  .cal-cell.today { border: 2px solid var(--accent-seal-bright); box-shadow: 0 0 12px rgba(232,200,107,0.25); }
+  .cal-cell.selected { box-shadow: inset 0 0 0 2px rgba(232,200,107,0.55); }
+  .cal-cell .cal-day-num {
+    position: absolute;
+    top: 3px;
+    left: 5px;
+    font-size: 0.66rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    line-height: 1;
+    letter-spacing: 0;
+  }
+  .cal-cell .cal-cell-pct {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1;
+    letter-spacing: 0.2px;
+  }
+  .cal-cell .cal-cell-dash {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1;
+  }
+  .cal-cell.level-1 { background: linear-gradient(135deg, rgba(232,200,107,0.18), rgba(232,200,107,0.06)); border-color: rgba(232,200,107,0.28); }
+  .cal-cell.level-2 { background: linear-gradient(135deg, rgba(232,200,107,0.32), rgba(232,200,107,0.15)); border-color: rgba(232,200,107,0.42); }
+  .cal-cell.level-3 { background: linear-gradient(135deg, rgba(232,200,107,0.52), rgba(232,200,107,0.28)); border-color: rgba(232,200,107,0.6); }
+  .cal-cell.level-4 { background: linear-gradient(135deg, rgba(58,168,98,0.58), rgba(58,168,98,0.34)); border-color: var(--accent-green); }
+  .cal-cell.level-1 .cal-day-num,
+  .cal-cell.level-2 .cal-day-num,
+  .cal-cell.level-3 .cal-day-num,
+  .cal-cell.level-4 .cal-day-num { color: rgba(255,255,255,0.88); }
+  .legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: var(--font-main);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    letter-spacing: 0.3px;
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+  .legend-swatch { width: 14px; height: 14px; border-radius: 3px; border: 1px solid var(--border-subtle); }
+  .legend-label { padding: 0 3px; }
+  .month-summary-panel {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  .month-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .month-summary-item {
+    background: linear-gradient(180deg, rgba(200,168,75,0.08), transparent);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 14px 12px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .month-summary-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent-seal);
+    opacity: 0.6;
+  }
+  .month-summary-item.green::before { background: var(--accent-green); }
+  .month-summary-item.red::before { background: var(--accent-red); }
+  .month-summary-item.gold::before { background: var(--accent-seal-bright); }
+  .month-summary-item .m-val {
+    font-family: var(--font-main);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1;
+    letter-spacing: 0.5px;
+  }
+  .month-summary-item.green .m-val { color: var(--accent-green-bright); }
+  .month-summary-item.gold .m-val { color: var(--accent-seal-bright); }
+  .month-summary-item.red .m-val { color: var(--accent-red); }
+  .month-summary-item .m-lbl {
+    font-family: var(--font-main);
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 8px;
+    line-height: 1.3;
+  }
+
   .notes-toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
   .notes-search {
     flex: 1; background: var(--bg-card); border: 1px solid var(--border-subtle);
@@ -575,6 +689,8 @@
   .timer-ctrl-reset { background: var(--bg-card); border-color: var(--border-subtle); color: var(--text-secondary); }
   .timer-session-info { font-family: var(--font-main); font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.5px; font-style: italic; text-align: center; margin-top: 4px; }
   .timer-session-info .hl { color: var(--accent-seal-bright); font-weight: 700; font-style: normal; }
+
+  /* STATS */
   .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
   .stat-card { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px 10px; text-align: center; transition: border-color 0.2s; }
   .stat-card:active { border-color: var(--accent-seal); }
@@ -599,22 +715,32 @@
     letter-spacing: 0.3px;
     padding-top: 8px;
   }
-  .chart-canvas { display: block; width: 100%; cursor: pointer; }
+  .chart-canvas { display: block; width: 100%; cursor: pointer; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+
+  /* FLOATING CHART DETAIL */
   .chart-detail {
-    margin-top: 10px;
-    padding: 11px 13px;
-    background: var(--bg-card);
-    border: 1px solid var(--accent-seal-dim);
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: calc(var(--safe-bottom) + 78px);
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--bg-panel);
+    border: 1px solid var(--accent-seal);
     border-left: 3px solid var(--accent-seal-bright);
-    border-radius: 0 5px 5px 0;
+    border-radius: 8px;
+    padding: 12px 14px;
     font-family: var(--font-main);
     font-size: 0.86rem;
     color: var(--text-secondary);
     display: none;
-    line-height: 1.6;
+    line-height: 1.55;
+    z-index: 200;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(232, 200, 107, 0.15);
+    pointer-events: none;
   }
-  .chart-detail.visible { display: block; animation: fadeIn 0.2s ease; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+  .chart-detail.visible { display: block; animation: fadeIn 0.15s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   .chart-detail .detail-line { padding: 2px 0; }
   .chart-detail strong { color: var(--accent-seal-bright); }
   .chart-detail .detail-habit {
@@ -628,6 +754,7 @@
   .chart-detail .detail-habit.done { background: rgba(58,168,98,0.2); color: var(--accent-green-bright); }
   .chart-detail .detail-habit.partial { background: rgba(232,200,107,0.2); color: var(--card-partial-text); }
   .chart-detail .detail-habit.missed { background: rgba(224,64,64,0.18); color: var(--accent-red); }
+
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 100; display: none; align-items: flex-end; justify-content: center; padding: 0; }
   .modal-overlay.active { display: flex; }
   .modal-sheet {
@@ -662,10 +789,7 @@
     padding-right: 36px;
     cursor: pointer;
   }
-  select.form-input option {
-    background: var(--bg-panel);
-    color: #ffffff;
-  }
+  select.form-input option { background: var(--bg-panel); color: #ffffff; }
   .modal-actions { display: flex; gap: 8px; margin-top: 20px; }
   .folder-menu-popup {
     position: fixed;
@@ -820,24 +944,6 @@
       </div>
     </div>
 
-    <div class="controls">
-      <button class="btn btn-primary" id="addHabitBtn">+ Thêm</button>
-      <button class="btn" id="resetDayBtn">Đặt lại ngày</button>
-      <button class="btn btn-danger" id="resetAllBtn">Xóa hết</button>
-    </div>
-
-    <div class="data-section">
-      <div class="section-title-bar">
-        <span class="section-title">Dữ liệu</span>
-      </div>
-      <div class="data-info" id="dataInfo">Đang tải thông tin...</div>
-      <div class="controls" style="margin-bottom:0;">
-        <button class="btn btn-gold" id="exportBtn">Xuất JSON</button>
-        <button class="btn btn-gold" id="importBtn">Nhập JSON</button>
-      </div>
-      <input type="file" id="importFile" accept=".json,application/json" style="display:none">
-    </div>
-
     <div class="reminder-section">
       <div class="section-title-bar">
         <span class="section-title">Nhắc nhở</span>
@@ -870,41 +976,40 @@
       <div class="header-sub" id="monthHeaderSub">Năm 2026</div>
     </div>
     <div class="month-nav">
-      <button class="month-nav-btn" id="monthPrev">&#8249;</button>
+      <button class="month-nav-btn" id="monthPrev" aria-label="Tháng trước">&#8249;</button>
       <div class="month-label" id="monthLabel">Tháng 10/2026</div>
-      <button class="month-nav-btn" id="monthNext">&#8250;</button>
+      <button class="month-nav-btn" id="monthNext" aria-label="Tháng sau">&#8250;</button>
     </div>
     <div class="calendar-head">
       <div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div>T7</div><div>CN</div>
     </div>
     <div class="calendar-grid" id="calendarGrid"></div>
     <div class="legend">
-      <span>0%</span>
-      <div class="legend-swatch" style="background:#141d33"></div>
-      <div class="legend-swatch" style="background:rgba(232,200,107,0.18)"></div>
-      <div class="legend-swatch" style="background:rgba(232,200,107,0.32)"></div>
-      <div class="legend-swatch" style="background:rgba(232,200,107,0.5)"></div>
-      <div class="legend-swatch" style="background:rgba(58,168,98,0.5)"></div>
-      <span>100%</span>
+      <span class="legend-label">0%</span>
+      <div class="legend-swatch" style="background:linear-gradient(135deg,rgba(232,200,107,0.18),rgba(232,200,107,0.06))"></div>
+      <div class="legend-swatch" style="background:linear-gradient(135deg,rgba(232,200,107,0.32),rgba(232,200,107,0.15))"></div>
+      <div class="legend-swatch" style="background:linear-gradient(135deg,rgba(232,200,107,0.52),rgba(232,200,107,0.28))"></div>
+      <div class="legend-swatch" style="background:linear-gradient(135deg,rgba(58,168,98,0.58),rgba(58,168,98,0.34))"></div>
+      <span class="legend-label">100%</span>
     </div>
-    <div class="summary-panel">
+    <div class="month-summary-panel">
       <div class="section-title-bar"><span class="section-title">Tổng kết tháng</span></div>
-      <div class="summary-grid">
-        <div class="summary-item">
-          <div class="val green" id="mDone">0</div>
-          <div class="lbl">Ngày hoàn hảo</div>
+      <div class="month-summary-grid">
+        <div class="month-summary-item green">
+          <div class="m-val" id="mDone">0</div>
+          <div class="m-lbl">Ngày hoàn hảo</div>
         </div>
-        <div class="summary-item">
-          <div class="val gold" id="mAvg">0%</div>
-          <div class="lbl">TB hoàn thành</div>
+        <div class="month-summary-item gold">
+          <div class="m-val" id="mAvg">0%</div>
+          <div class="m-lbl">TB hoàn thành</div>
         </div>
-        <div class="summary-item">
-          <div class="val" id="mTracked">0</div>
-          <div class="lbl">Ngày có dữ liệu</div>
+        <div class="month-summary-item">
+          <div class="m-val" id="mTracked">0</div>
+          <div class="m-lbl">Ngày có dữ liệu</div>
         </div>
-        <div class="summary-item">
-          <div class="val red" id="mZero">0</div>
-          <div class="lbl">Ngày bỏ trống</div>
+        <div class="month-summary-item red">
+          <div class="m-val" id="mZero">0</div>
+          <div class="m-lbl">Ngày bỏ trống</div>
         </div>
       </div>
     </div>
@@ -986,28 +1091,38 @@
       </div>
     </div>
     <div class="chart-box">
-      <span class="chart-title">7 ngày gần nhất (% hoàn thành)</span>
-      <span class="chart-hint">Chạm cột xem chi tiết</span>
+      <span class="chart-title">7 ngày gần nhất</span>
+      <span class="chart-hint">Nhấn giữ để xem</span>
       <canvas id="chartBar7" class="chart-canvas" style="height:150px;"></canvas>
       <div class="chart-detail" id="detailChartBar7"></div>
     </div>
     <div class="chart-box">
       <span class="chart-title">Xu hướng 30 ngày</span>
-      <span class="chart-hint">Chạm điểm xem chi tiết</span>
+      <span class="chart-hint">Nhấn giữ để xem</span>
       <canvas id="chartLine30" class="chart-canvas" style="height:170px;"></canvas>
       <div class="chart-detail" id="detailChartLine30"></div>
     </div>
     <div class="chart-box">
       <span class="chart-title">Hiệu suất theo nhiệm vụ (30 ngày)</span>
-      <span class="chart-hint">Chạm thanh xem chi tiết</span>
+      <span class="chart-hint">Nhấn giữ để xem</span>
       <canvas id="chartHabit" class="chart-canvas" style="height:220px;"></canvas>
       <div class="chart-detail" id="detailChartHabit"></div>
     </div>
-    <div class="chart-box">
-      <span class="chart-title">Tổng check-in theo ngày (toàn bộ)</span>
-      <span class="chart-hint">Chạm điểm xem chi tiết</span>
-      <canvas id="chartLineAll" class="chart-canvas" style="height:170px;"></canvas>
-      <div class="chart-detail" id="detailChartLineAll"></div>
+
+    <div class="data-section">
+      <div class="section-title-bar">
+        <span class="section-title">Dữ liệu</span>
+      </div>
+      <div class="data-info" id="dataInfo">Đang tải thông tin...</div>
+      <div class="controls" style="margin-bottom:8px;">
+        <button class="btn btn-gold" id="exportBtn">Xuất JSON</button>
+        <button class="btn btn-gold" id="importBtn">Nhập JSON</button>
+      </div>
+      <input type="file" id="importFile" accept=".json,application/json" style="display:none">
+      <div class="controls" style="margin-bottom:0;">
+        <button class="btn" id="resetDayBtn">Đặt lại ngày</button>
+        <button class="btn btn-danger" id="resetAllBtn">Xóa toàn bộ</button>
+      </div>
     </div>
   </div>
 
@@ -1114,7 +1229,7 @@
   'use strict';
 
   const STORAGE_KEY = 'winter_arc_data_v1';
-  const EXPORT_VERSION = 6;
+  const EXPORT_VERSION = 7;
   const ARC_START = '2026-10-01';
   const ARC_END = '2026-12-31';
   const ARC_DAYS = 92;
@@ -1251,43 +1366,6 @@
         state.habits.forEach(h => {
           if (!h.folderId || !getFolderById(h.folderId)) h.folderId = state.folders[0].id;
         });
-        if (parsed.dayNotes && typeof parsed.dayNotes === 'object') {
-          Object.keys(parsed.dayNotes).forEach(k => {
-            const content = (parsed.dayNotes[k] || '').trim();
-            if (content) {
-              const already = state.notes.find(n => n._migratedKey === 'day-' + k);
-              if (!already) {
-                const dt = parseDate(k);
-                state.notes.push({
-                  id: 'n-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
-                  content: 'Ghi chú ngày ' + formatDateVN(k) + '\n\n' + content,
-                  createdAt: dt.getTime(),
-                  updatedAt: dt.getTime(),
-                  _migratedKey: 'day-' + k
-                });
-              }
-            }
-          });
-        }
-        if (parsed.monthNotes && typeof parsed.monthNotes === 'object') {
-          Object.keys(parsed.monthNotes).forEach(k => {
-            const content = (parsed.monthNotes[k] || '').trim();
-            if (content) {
-              const already = state.notes.find(n => n._migratedKey === 'month-' + k);
-              if (!already) {
-                const [y, m] = k.split('-').map(Number);
-                const dt = new Date(y, m-1, 1);
-                state.notes.push({
-                  id: 'n-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
-                  content: 'Ghi chú ' + MONTH_NAMES_VN[m-1] + '/' + y + '\n\n' + content,
-                  createdAt: dt.getTime(),
-                  updatedAt: dt.getTime(),
-                  _migratedKey: 'month-' + k
-                });
-              }
-            }
-          });
-        }
       }
     } catch (e) { console.warn('Load state failed', e); }
   }
@@ -1800,9 +1878,7 @@
       if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
     });
 
-    card.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-    });
+    card.addEventListener('contextmenu', (e) => e.preventDefault());
 
     card.addEventListener('click', () => {
       if (Date.now() - longPressFiredAt < 600) return;
@@ -1832,7 +1908,7 @@
     const dateStr = state.selectedDate || todayStr();
 
     if (state.habits.length === 0) {
-      list.innerHTML = '<div style="text-align:center;padding:30px 0;font-family:var(--font-main);font-size:0.95rem;color:var(--text-muted);letter-spacing:0.5px;font-style:italic;line-height:1.7;">Chưa có nhiệm vụ nào.<br>Nhấn "+ Folder" để tạo đề mục, sau đó "+ Thêm" để thêm nhiệm vụ.</div>';
+      list.innerHTML = '<div style="text-align:center;padding:30px 0;font-family:var(--font-main);font-size:0.95rem;color:var(--text-muted);letter-spacing:0.5px;font-style:italic;line-height:1.7;">Chưa có nhiệm vụ nào.<br>Nhấn "+ Folder" để tạo đề mục, sau đó nhấn ⋮ trong folder để thêm nhiệm vụ.</div>';
       return;
     }
 
@@ -1872,7 +1948,7 @@
       if (habitsInFolder.length === 0) {
         const empty = document.createElement('div');
         empty.className = 'folder-empty';
-        empty.textContent = 'Chưa có nhiệm vụ. Nhấn ⋮ ở trên để thêm, hoặc nhấn giữ nhiệm vụ ở folder khác để chuyển vào đây.';
+        empty.textContent = 'Chưa có nhiệm vụ. Nhấn ⋮ để thêm vào folder này.';
         body.appendChild(empty);
       } else {
         habitsInFolder.forEach(h => {
@@ -2209,7 +2285,11 @@
       else if (pct >= 67) cell.classList.add('level-3');
       else if (pct >= 34) cell.classList.add('level-2');
       else if (pct > 0) cell.classList.add('level-1');
-      cell.innerHTML = `<span>${day}</span>${pct > 0 ? `<span class="cal-pct">${pct}%</span>` : ''}`;
+      const pctDisplay = pct > 0 ? `${pct}%` : '&#8212;';
+      cell.innerHTML = `
+        <span class="cal-day-num">${day}</span>
+        <span class="cal-cell-pct">${pctDisplay}</span>
+      `;
       cell.addEventListener('click', () => {
         state.selectedDate = iso;
         monthViewDate = parseDate(iso);
@@ -2290,9 +2370,7 @@
       ctx.fillText(labels[i], x + barW / 2, pad.top + plotH + 6);
       canvas._hitboxes.push({
         x, y: pad.top, w: barW, h: plotH,
-        index: i,
-        value: v,
-        label: labels[i],
+        index: i, value: v, label: labels[i],
         meta: meta ? meta[i] : null
       });
     });
@@ -2404,16 +2482,18 @@
     });
   }
 
-  function handleChartClick(e) {
-    const canvas = e.currentTarget;
+  function getChartHit(canvas, clientX, clientY) {
     const hitboxes = canvas._hitboxes;
-    if (!hitboxes || hitboxes.length === 0) return;
+    if (!hitboxes || hitboxes.length === 0) return null;
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const hit = hitboxes.find(h => x >= h.x && x <= h.x + h.w && y >= h.y && y <= h.y + h.h);
-    if (!hit) return;
-    showChartDetail(canvas.id, hit);
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    return hitboxes.find(h => x >= h.x && x <= h.x + h.w && y >= h.y && y <= h.y + h.h) || null;
+  }
+  function hideChartDetail(canvasId) {
+    const detailId = 'detail' + canvasId.charAt(0).toUpperCase() + canvasId.slice(1);
+    const el = document.getElementById(detailId);
+    if (el) el.classList.remove('visible');
   }
   function showChartDetail(canvasId, hit) {
     const detailId = 'detail' + canvasId.charAt(0).toUpperCase() + canvasId.slice(1);
@@ -2455,17 +2535,58 @@
         while (getCheckin(d, habit.id) === 2) { streak++; d = dateOffset(d, -1); if (streak > 365) break; }
         html += `<div class="detail-line">Chuỗi hiện tại: <strong>${streak}</strong> ngày</div>`;
       }
-    } else if (canvasId === 'chartLineAll') {
-      const dateStr = hit.meta && hit.meta.date;
-      html = `<div class="detail-line"><strong>Ngày ${hit.label}</strong></div>`;
-      html += `<div class="detail-line">Tổng check-in: <strong>${hit.value}</strong></div>`;
-      if (dateStr) {
-        const pct = completionPct(dateStr);
-        html += `<div class="detail-line">Hoàn thành: <strong>${pct}%</strong></div>`;
-      }
     }
     el.innerHTML = html;
     el.classList.add('visible');
+  }
+
+  function setupChartInteractions(canvas) {
+    if (!canvas) return;
+    canvas.style.touchAction = 'pan-y';
+    canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+
+    let pressTimer = null;
+    let startX = 0, startY = 0;
+    let longPressed = false;
+
+    canvas.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      startX = e.clientX;
+      startY = e.clientY;
+      longPressed = false;
+      if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+      pressTimer = setTimeout(() => {
+        pressTimer = null;
+        const hit = getChartHit(canvas, startX, startY);
+        if (hit) {
+          longPressed = true;
+          if (navigator.vibrate) navigator.vibrate(20);
+          showChartDetail(canvas.id, hit);
+        }
+      }, 300);
+    });
+
+    canvas.addEventListener('pointermove', (e) => {
+      if (pressTimer) {
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        if (Math.hypot(dx, dy) > 10) {
+          clearTimeout(pressTimer);
+          pressTimer = null;
+        }
+      }
+    });
+
+    const endPress = () => {
+      if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+      if (longPressed) {
+        hideChartDetail(canvas.id);
+        longPressed = false;
+      }
+    };
+    canvas.addEventListener('pointerup', endPress);
+    canvas.addEventListener('pointercancel', endPress);
+    canvas.addEventListener('pointerleave', endPress);
   }
 
   function computeStats() {
@@ -2513,7 +2634,6 @@
       bar7Meta.push({ date: ds });
     }
     drawBarChart($('chartBar7'), bar7Vals, bar7Labels, 6, bar7Meta);
-    document.getElementById('detailChartBar7').classList.remove('visible');
 
     const line30Vals = [], line30Labels = [], line30Meta = [];
     for (let i = 29; i >= 0; i--) {
@@ -2524,7 +2644,6 @@
       line30Meta.push({ date: ds });
     }
     drawLineChart($('chartLine30'), line30Vals, line30Labels, { meta: line30Meta });
-    document.getElementById('detailChartLine30').classList.remove('visible');
 
     if (state.habits.length > 0) {
       const habitLabels = [], habitValues = [], habitMeta = [];
@@ -2542,31 +2661,8 @@
     } else {
       drawHBarChart($('chartHabit'), [], []);
     }
-    document.getElementById('detailChartHabit').classList.remove('visible');
 
-    const allDates = stats.dataDates;
-    if (allDates.length > 0) {
-      const minDate = parseDate(allDates[0]);
-      const maxDate = parseDate(allDates[allDates.length - 1]);
-      const spanDays = Math.floor((maxDate - minDate) / 86400000) + 1;
-      const step = Math.max(1, Math.ceil(spanDays / 120));
-      const lineVals = [], lineLabels = [], lineMeta = [];
-      for (let i = 0; i <= spanDays; i += step) {
-        const d = new Date(minDate);
-        d.setDate(d.getDate() + i);
-        const ds = toISO(d);
-        let c = 0;
-        if (state.checkins[ds]) Object.values(state.checkins[ds]).forEach(v => { if (v > 0) c++; });
-        lineVals.push(c);
-        lineLabels.push(`${d.getDate()}/${d.getMonth() + 1}`);
-        lineMeta.push({ date: ds });
-      }
-      const maxC = Math.max(1, ...lineVals);
-      drawLineChart($('chartLineAll'), lineVals, lineLabels, { max: maxC, meta: lineMeta });
-    } else {
-      drawLineChart($('chartLineAll'), [], []);
-    }
-    document.getElementById('detailChartLineAll').classList.remove('visible');
+    updateDataInfo();
   }
 
   function switchView(view) {
@@ -2849,7 +2945,6 @@
       playBeep(660, 0.1, 0.2, 'sine');
     });
 
-    $('addHabitBtn').addEventListener('click', () => openAddHabitModal());
     $('cancelAdd').addEventListener('click', () => {
       $('addModal').classList.remove('active');
       editingHabitId = null;
@@ -3035,9 +3130,8 @@
     $('timerStartBtn').addEventListener('click', () => { initAudio(); startTimer(); });
     $('timerResetBtn').addEventListener('click', () => { initAudio(); resetTimer(); showToast('Đã đặt lại'); });
 
-    ['chartBar7', 'chartLine30', 'chartHabit', 'chartLineAll'].forEach(id => {
-      const c = document.getElementById(id);
-      if (c) c.addEventListener('click', handleChartClick);
+    ['chartBar7', 'chartLine30', 'chartHabit'].forEach(id => {
+      setupChartInteractions(document.getElementById(id));
     });
 
     document.addEventListener('visibilitychange', () => {
@@ -3054,6 +3148,7 @@
         $('habitActionModal').classList.remove('active');
         $('confirmDialog').classList.remove('active');
         document.querySelectorAll('.folder-menu-popup').forEach(el => el.remove());
+        document.querySelectorAll('.chart-detail.visible').forEach(el => el.classList.remove('visible'));
         editingHabitId = null;
         editingFolderId = null;
       }
