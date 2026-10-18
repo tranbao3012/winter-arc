@@ -1,71 +1,3262 @@
-// sw.js
-const CACHE_NAME = 'winter-arc-v5';
-const SHELL = ['./', './index.html', './manifest.json', './icon-192.png'];
+<!-- winter-arc.html -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a0e1a">
+<meta name="description" content="Theo dõi tiến độ Winter Arc theo phong cách Navy SEAL">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<title>WINTER ARC // LOCKED IN</title>
+<style>
+  :root {
+    --bg-deep: #0a0e1a;
+    --bg-panel: #0f1628;
+    --bg-card: #141d33;
+    --bg-card-hover: #1a2542;
+    --border-subtle: #1e2d4a;
+    --border-active: #2a3f66;
+    --text-primary: #ffffff;
+    --text-secondary: #d0d8e8;
+    --text-muted: #8a9bb8;
+    --accent-seal: #c8a84b;
+    --accent-seal-bright: #e8c86b;
+    --accent-seal-dim: #8a7433;
+    --accent-red: #e04040;
+    --accent-green: #3aa862;
+    --accent-green-bright: #7ee0a3;
+    --accent-blue: #4a86c5;
+    --accent-blue-bright: #6aa8e8;
+    --title-bg: linear-gradient(90deg, rgba(200,168,75,0.28) 0%, rgba(200,168,75,0.10) 60%, rgba(200,168,75,0.02) 100%);
+    --title-bg-strong: linear-gradient(90deg, rgba(200,168,75,0.35) 0%, rgba(200,168,75,0.15) 70%, rgba(200,168,75,0.05) 100%);
+    --card-partial-bg: #2e2818;
+    --card-partial-border: #e8c86b;
+    --card-partial-text: #f5d989;
+    --card-done-bg: #163a25;
+    --card-done-border: #3aa862;
+    --card-done-text: #7ee0a3;
+    --font-main: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: calc(var(--safe-top) + 8px) 10px calc(var(--safe-bottom) + 80px);
+    line-height: 1.5;
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200, 168, 75, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200, 168, 75, 0.025) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .container { position: relative; z-index: 1; max-width: 500px; margin: 0 auto; }
+  .view { display: none; }
+  .view.active { display: block; }
+  .header {
+    text-align: center;
+    padding: 20px 16px 20px;
+    margin-bottom: 16px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, rgba(200, 168, 75, 0.12) 0%, rgba(200, 168, 75, 0.03) 60%, transparent 100%);
+    border: 1px solid var(--accent-seal-dim);
+    box-shadow: 0 0 24px rgba(200, 168, 75, 0.12), inset 0 1px 0 rgba(232, 200, 107, 0.15);
+    position: relative;
+  }
+  .header::after {
+    content: ''; position: absolute;
+    left: 20%; right: 20%; bottom: -1px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-seal-bright), transparent);
+  }
+  .header-badge {
+    display: inline-block; font-family: var(--font-main); font-size: 0.72rem;
+    letter-spacing: 3px; text-transform: uppercase; color: var(--accent-seal-bright);
+    border: 1px solid var(--accent-seal); padding: 4px 14px; border-radius: 3px; margin-bottom: 12px;
+    font-weight: 700; background: rgba(200, 168, 75, 0.08);
+  }
+  .header h1 {
+    font-family: var(--font-main); font-size: 1.8rem; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase; color: #ffffff; line-height: 1.15;
+    text-shadow: 0 0 20px rgba(200, 168, 75, 0.3);
+  }
+  .header h1 .accent { color: var(--accent-seal-bright); text-shadow: 0 0 24px rgba(232, 200, 107, 0.6); }
+  .header-sub {
+    display: inline-block;
+    font-family: var(--font-main); font-size: 0.9rem; color: #ffffff;
+    letter-spacing: 2px; margin-top: 12px; text-transform: uppercase;
+    font-style: italic; font-weight: 700;
+    background: var(--title-bg-strong);
+    border: 1px solid var(--accent-seal);
+    border-radius: 5px;
+    padding: 7px 20px;
+    box-shadow: 0 0 16px rgba(200, 168, 75, 0.3), inset 0 1px 0 rgba(232, 200, 107, 0.25);
+    text-shadow: 0 0 8px rgba(232, 200, 107, 0.4);
+  }
+  .quote-box {
+    background: var(--bg-panel); border: 1px solid var(--border-subtle);
+    border-left: 3px solid var(--accent-seal-bright); padding: 14px 16px;
+    margin-bottom: 14px; border-radius: 0 6px 6px 0;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  }
+  .quote-label {
+    display: inline-block;
+    font-family: var(--font-main); font-size: 0.72rem; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--accent-seal-bright);
+    margin-bottom: 10px; font-weight: 700;
+    padding: 5px 12px;
+    background: var(--title-bg);
+    border-left: 3px solid var(--accent-seal-bright);
+    border-radius: 3px;
+  }
+  .quote-text { font-family: var(--font-main); font-size: 1rem; color: #ffffff; font-style: italic; line-height: 1.6; min-height: 4em; transition: opacity 0.4s ease; }
+  .quote-text.fade-out { opacity: 0; }
+  .quote-author { font-family: var(--font-main); font-size: 0.85rem; color: var(--accent-seal); margin-top: 8px; text-align: right; letter-spacing: 1px; font-style: italic; font-weight: 700; }
+  .date-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; gap: 8px; }
+  .date-nav-btn {
+    background: var(--bg-card); border: 1px solid var(--border-active);
+    color: var(--accent-seal-bright); font-family: var(--font-main); font-size: 1.5rem;
+    width: 44px; height: 44px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; user-select: none; transition: background 0.15s, border-color 0.15s;
+    font-weight: 700;
+  }
+  .date-nav-btn:active { background: var(--bg-card-hover); border-color: var(--accent-seal); }
+  .date-display { text-align: center; flex: 1; }
+  .date-display .day-name { font-family: var(--font-main); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-seal); font-weight: 700; }
+  .date-display .day-full { font-family: var(--font-main); font-size: 1.25rem; font-weight: 700; color: #ffffff; letter-spacing: 1px; margin-top: 4px; }
+  .date-display .day-count { font-family: var(--font-main); font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px; font-style: italic; }
+  .progress-section { margin-bottom: 14px; }
+  .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .progress-label { font-family: var(--font-main); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; }
+  .progress-pct { font-family: var(--font-main); font-size: 1.05rem; font-weight: 700; color: var(--accent-seal-bright); }
+  .progress-track { height: 10px; background: var(--bg-panel); border-radius: 5px; overflow: hidden; border: 1px solid var(--border-subtle); }
+  .progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--accent-seal-dim), var(--accent-seal-bright));
+    border-radius: 5px; width: 0%; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 8px rgba(232, 200, 107, 0.4);
+  }
+  .section-title-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 14px;
+    background: var(--title-bg);
+    border: 1px solid var(--accent-seal);
+    border-left: 3px solid var(--accent-seal-bright);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(232, 200, 107, 0.15);
+  }
+  .section-title-bar .section-title {
+    font-family: var(--font-main); font-size: 0.85rem;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--accent-seal-bright); font-weight: 700;
+    text-shadow: 0 0 6px rgba(232, 200, 107, 0.35);
+  }
+  .section-title-bar .section-title .count { color: #ffffff; font-style: normal; text-shadow: none; }
+  .section-title-bar .toggle-btn {
+    font-size: 0.72rem; color: #ffffff;
+    border: 1px solid var(--accent-seal);
+    padding: 4px 12px; border-radius: 3px; cursor: pointer;
+    letter-spacing: 0.5px; font-style: italic; font-weight: 700;
+    background: rgba(0, 0, 0, 0.25);
+    margin-left: 6px;
+  }
+  .section-title-bar .toggle-btn:active { background: rgba(0, 0, 0, 0.5); }
+  .habits-section { margin-bottom: 16px; }
+  .habits-section.collapsed .habits-list { display: none; }
+  .habits-section.collapsed .section-title-bar { margin-bottom: 0; }
+  .habits-list { display: flex; flex-direction: column; gap: 10px; }
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(SHELL).catch(() => {})));
-  self.skipWaiting();
-});
+  /* FOLDER */
+  .folder-section {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .folder-section.drop-target {
+    border-color: var(--accent-seal-bright);
+    box-shadow: 0 0 16px rgba(232, 200, 107, 0.35), inset 0 0 20px rgba(200, 168, 75, 0.08);
+  }
+  .folder-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 11px 12px;
+    background: linear-gradient(90deg, rgba(200, 168, 75, 0.1) 0%, rgba(200, 168, 75, 0.02) 60%, transparent 100%);
+    border-bottom: 1px solid var(--border-subtle);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .folder-section.collapsed .folder-header { border-bottom-color: transparent; }
+  .folder-header:active { background: rgba(200, 168, 75, 0.18); }
+  .folder-toggle-arrow {
+    display: inline-block;
+    width: 16px; text-align: center;
+    color: var(--accent-seal-bright);
+    font-size: 0.7rem;
+    transition: transform 0.2s;
+    font-weight: 700;
+  }
+  .folder-section.collapsed .folder-toggle-arrow { transform: rotate(-90deg); }
+  .folder-name {
+    flex: 1;
+    font-family: var(--font-main);
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--accent-seal-bright);
+    letter-spacing: 0.5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .folder-count {
+    font-family: var(--font-main);
+    font-size: 0.74rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    letter-spacing: 0.3px;
+  }
+  .folder-menu-btn {
+    background: none; border: none;
+    color: var(--text-muted);
+    font-size: 1.15rem;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    font-weight: 700;
+  }
+  .folder-menu-btn:active { color: var(--accent-seal-bright); }
+  .folder-body {
+    display: flex; flex-direction: column; gap: 8px;
+    padding: 8px;
+  }
+  .folder-section.collapsed .folder-body { display: none; }
+  .folder-empty {
+    padding: 14px 8px;
+    text-align: center;
+    color: var(--text-muted);
+    font-family: var(--font-main);
+    font-style: italic;
+    font-size: 0.84rem;
+    letter-spacing: 0.3px;
+  }
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(caches.keys().then(keys =>
-    Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-  ));
-  self.clients.claim();
-});
+  /* HABIT CARD */
+  .habit-swipe-wrap { position: relative; overflow: hidden; border-radius: 6px; background: var(--bg-card); }
+  .habit-delete-btn {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 88px;
+    background: linear-gradient(90deg, #b83232, #e04040);
+    color: #ffffff; display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-main); font-size: 0.9rem; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    cursor: pointer; user-select: none; z-index: 0;
+    border-radius: 6px 0 0 6px; opacity: 0; transition: opacity 0.2s; pointer-events: none;
+  }
+  .habit-edit-btn {
+    position: absolute; right: 0; top: 0; bottom: 0; width: 88px;
+    background: linear-gradient(90deg, #3a6ea5, #4a86c5);
+    color: #ffffff; display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-main); font-size: 0.9rem; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    cursor: pointer; user-select: none; z-index: 0;
+    border-radius: 0 6px 6px 0; opacity: 0; transition: opacity 0.2s; pointer-events: none;
+  }
+  .habit-swipe-wrap.swiping-right .habit-delete-btn,
+  .habit-swipe-wrap.swiped-right .habit-delete-btn { opacity: 1; pointer-events: auto; }
+  .habit-swipe-wrap.swiping-left .habit-edit-btn,
+  .habit-swipe-wrap.swiped-left .habit-edit-btn { opacity: 1; pointer-events: auto; }
+  .habit-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 12px 14px;
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.2s ease, opacity 0.2s;
+    position: relative; z-index: 1;
+    will-change: transform;
+    user-select: none;
+    touch-action: manipulation;
+    transform: translateX(0);
+  }
+  .habit-swipe-wrap.swiped-right .habit-card { transform: translateX(88px); }
+  .habit-swipe-wrap.swiped-left .habit-card { transform: translateX(-88px); }
+  .habit-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--border-subtle); transition: background 0.2s;
+    border-radius: 6px 0 0 6px;
+  }
+  .habit-card:active { background: var(--bg-card-hover); }
+  .habit-card.partial { border-color: var(--card-partial-border); background: var(--card-partial-bg); }
+  .habit-card.partial::before { background: var(--card-partial-border); }
+  .habit-card.partial .habit-name { color: var(--card-partial-text); }
+  .habit-card.partial .habit-check { background: var(--card-partial-border); border-color: var(--card-partial-border); color: #0a0e1a; }
+  .habit-card.partial .habit-meta { color: var(--card-partial-text); }
+  .habit-card.done { border-color: var(--card-done-border); background: var(--card-done-bg); }
+  .habit-card.done::before { background: var(--card-done-border); }
+  .habit-card.done .habit-name { color: var(--card-done-text); }
+  .habit-card.done .habit-check { background: var(--card-done-border); border-color: var(--card-done-border); color: #ffffff; }
+  .habit-card.done .habit-meta { color: var(--card-done-text); }
+  .habit-swipe-wrap.dragging-source { opacity: 0.25; }
+  .habit-swipe-wrap.dragging-source .habit-card {
+    border-color: var(--accent-seal-bright);
+    border-style: dashed;
+  }
+  .habit-check {
+    width: 30px; height: 30px; min-width: 30px; border: 2px solid var(--border-active);
+    border-radius: 5px; display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-main); font-size: 1.05rem; font-weight: 700;
+    color: transparent; transition: all 0.2s;
+  }
+  .habit-info { flex: 1; min-width: 0; }
+  .habit-name { font-size: 1rem; font-weight: 700; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .habit-meta { font-family: var(--font-main); font-size: 0.78rem; color: var(--text-muted); margin-top: 3px; letter-spacing: 0.5px; font-style: italic; }
+  .habit-streak { font-family: var(--font-main); font-size: 1.05rem; color: var(--accent-seal-bright); font-weight: 700; text-align: center; min-width: 44px; }
+  .habit-streak .streak-label { font-size: 0.68rem; color: var(--text-muted); display: block; letter-spacing: 0.5px; font-style: italic; font-weight: 400; }
 
-self.addEventListener('fetch', (e) => {
-  if (e.request.method !== 'GET') return;
-  e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
-      const clone = res.clone();
-      caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
-      return res;
-    }).catch(() => cached))
-  );
-});
+  /* DRAG GHOST + DROP INDICATOR */
+  .drag-ghost {
+    position: fixed;
+    pointer-events: none;
+    z-index: 2000;
+    border-radius: 6px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.7), 0 0 0 2px var(--accent-seal-bright);
+    opacity: 0.95;
+    transform: rotate(1.5deg) scale(1.02);
+    transition: none;
+  }
+  .drop-indicator {
+    position: fixed;
+    height: 3px;
+    background: var(--accent-seal-bright);
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(232,200,107,0.9);
+    z-index: 1500;
+    pointer-events: none;
+    animation: dropPulse 1s ease-in-out infinite;
+  }
+  @keyframes dropPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
 
-// Show notification (called by page or periodic sync)
-function buildNotificationBody() {
-  return self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clients => {
-    if (clients.length === 0) return null;
-    return clients[0].postMessage({ type: 'GET_INCOMPLETE_COUNT' });
-  }).catch(() => null);
-}
+  .summary-panel { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px; margin-bottom: 14px; }
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .summary-item { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 5px; padding: 12px 10px; text-align: center; }
+  .summary-item .val { font-family: var(--font-main); font-size: 1.55rem; font-weight: 700; color: #ffffff; line-height: 1; }
+  .summary-item .val.green { color: var(--accent-green-bright); }
+  .summary-item .val.red { color: var(--accent-red); }
+  .summary-item .val.gold { color: var(--accent-seal-bright); }
+  .summary-item .lbl { font-family: var(--font-main); font-size: 0.72rem; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-muted); margin-top: 6px; }
+  .missed-section { margin-top: 10px; display: none; }
+  .missed-section.visible { display: block; }
+  .missed-item {
+    display: flex; align-items: center; gap: 8px; padding: 7px 0;
+    font-family: var(--font-main); font-size: 0.9rem; color: var(--accent-red);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .missed-item:last-child { border-bottom: none; }
+  .missed-item .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-red); flex-shrink: 0; }
+  .controls { display: flex; gap: 8px; margin-bottom: 14px; }
+  .btn {
+    flex: 1; font-family: var(--font-main); font-size: 0.82rem; letter-spacing: 0.5px;
+    text-transform: uppercase; padding: 12px 8px; border-radius: 5px;
+    border: 1px solid var(--border-subtle); background: var(--bg-card);
+    color: var(--text-secondary); cursor: pointer; transition: all 0.15s;
+    font-weight: 700; text-align: center;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--accent-seal-dim); border-color: var(--accent-seal); color: #ffffff; }
+  .btn-danger { border-color: var(--accent-red); color: var(--accent-red); }
+  .btn-danger:active { background: rgba(224, 64, 64, 0.15); }
+  .btn-gold { border-color: var(--accent-seal); color: var(--accent-seal-bright); }
+  .btn-green { border-color: var(--accent-green); color: var(--accent-green-bright); }
+  .data-section { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px; margin-bottom: 14px; }
+  .data-info { font-family: var(--font-main); font-size: 0.85rem; color: var(--text-secondary); letter-spacing: 0.5px; line-height: 1.7; margin-bottom: 10px; font-style: italic; }
+  .data-info .hl { color: var(--accent-seal-bright); font-weight: 700; font-style: normal; }
+  .reminder-section { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px; margin-bottom: 14px; }
+  .reminder-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--border-subtle); }
+  .reminder-row:last-child { border-bottom: none; }
+  .reminder-label { font-family: var(--font-main); font-size: 0.88rem; color: var(--text-secondary); letter-spacing: 0.5px; }
+  .reminder-time { font-family: var(--font-main); font-size: 0.92rem; color: var(--accent-seal-bright); font-weight: 700; }
+  .reminder-input-time {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: #ffffff;
+    font-family: var(--font-main);
+    font-size: 0.95rem;
+    padding: 7px 10px;
+    border-radius: 4px;
+    width: 110px;
+    text-align: center;
+    outline: none;
+    color-scheme: dark;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .reminder-input-time:focus { border-color: var(--accent-seal); }
+  .toggle-switch {
+    width: 46px; height: 26px; background: var(--bg-card); border: 1px solid var(--border-subtle);
+    border-radius: 13px; position: relative; cursor: pointer; transition: background 0.2s, border-color 0.2s; flex-shrink: 0;
+  }
+  .toggle-switch.on { background: var(--accent-seal-dim); border-color: var(--accent-seal); }
+  .toggle-switch::after {
+    content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px;
+    border-radius: 50%; background: var(--text-muted); transition: transform 0.2s, background 0.2s;
+  }
+  .toggle-switch.on::after { transform: translateX(20px); background: #ffffff; }
+  .month-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; }
+  .month-nav-btn {
+    background: var(--bg-card); border: 1px solid var(--border-active);
+    color: var(--accent-seal-bright); font-family: var(--font-main); font-size: 1.5rem;
+    width: 44px; height: 44px; border-radius: 6px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .month-label { font-family: var(--font-main); font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #ffffff; text-align: center; flex: 1; }
+  .calendar-head { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 6px; }
+  .calendar-head div { text-align: center; font-family: var(--font-main); font-size: 0.75rem; letter-spacing: 0.5px; color: var(--text-secondary); padding: 4px 0; font-weight: 700; }
+  .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 12px; }
+  .cal-cell {
+    aspect-ratio: 1 / 1; background: var(--bg-card); border: 1px solid var(--border-subtle);
+    border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; font-family: var(--font-main); font-size: 0.88rem; color: var(--text-secondary);
+    transition: transform 0.1s, border-color 0.15s; position: relative; padding: 2px;
+  }
+  .cal-cell.empty { background: transparent; border-color: transparent; cursor: default; }
+  .cal-cell:not(.empty):active { transform: scale(0.94); }
+  .cal-cell.today { border-color: var(--accent-seal-bright); border-width: 2px; }
+  .cal-cell.selected { outline: 1px solid var(--accent-seal-bright); outline-offset: -3px; }
+  .cal-cell .cal-pct { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; font-style: italic; }
+  .cal-cell.level-1 { background: rgba(232, 200, 107, 0.18); }
+  .cal-cell.level-2 { background: rgba(232, 200, 107, 0.32); }
+  .cal-cell.level-3 { background: rgba(232, 200, 107, 0.5); color: #ffffff; }
+  .cal-cell.level-4 { background: rgba(58, 168, 98, 0.5); border-color: var(--accent-green); color: #ffffff; }
+  .legend { display: flex; align-items: center; justify-content: center; gap: 6px; font-family: var(--font-main); font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 14px; font-style: italic; }
+  .legend-swatch { width: 13px; height: 13px; border-radius: 2px; border: 1px solid var(--border-subtle); }
+  .notes-toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+  .notes-search {
+    flex: 1; background: var(--bg-card); border: 1px solid var(--border-subtle);
+    color: #ffffff; font-family: var(--font-main); font-size: 0.95rem;
+    padding: 10px 14px 10px 38px; border-radius: 20px; outline: none; transition: border-color 0.2s;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238a9bb8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'></circle><line x1='21' y1='21' x2='16.65' y2='16.65'></line></svg>");
+    background-repeat: no-repeat; background-position: 14px center;
+  }
+  .notes-search:focus { border-color: var(--accent-seal); }
+  .notes-search::placeholder { color: var(--text-muted); font-style: italic; }
+  .notes-add-btn {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--accent-seal-dim); border: 1px solid var(--accent-seal);
+    color: #ffffff; font-size: 1.5rem; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background 0.15s; line-height: 1; padding-bottom: 2px;
+  }
+  .notes-add-btn:active { background: var(--accent-seal); }
+  .notes-count { font-family: var(--font-main); font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 10px; font-style: italic; }
+  .notes-list { display: flex; flex-direction: column; gap: 8px; }
+  .note-item-wrap { position: relative; overflow: hidden; border-radius: 8px; background: var(--bg-card); }
+  .note-item-del {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 88px;
+    background: linear-gradient(90deg, #b83232, #e04040);
+    color: #ffffff; display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-main); font-size: 0.85rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer;
+    opacity: 0; transition: opacity 0.2s; border-radius: 8px 0 0 8px; pointer-events: none;
+  }
+  .note-item-wrap.swiping .note-item-del,
+  .note-item-wrap.swiped-right .note-item-del { opacity: 1; pointer-events: auto; }
+  .note-item {
+    background: var(--bg-card); border: 1px solid var(--border-subtle);
+    border-radius: 8px; padding: 12px 14px; cursor: pointer;
+    transition: transform 0.2s ease, background 0.15s;
+    position: relative; z-index: 1; will-change: transform; transform: translateX(0);
+  }
+  .note-item-wrap.swiped-right .note-item { transform: translateX(88px); }
+  .note-item:active { background: var(--bg-card-hover); }
+  .note-item-title {
+    font-family: var(--font-main); font-size: 1rem; font-weight: 700;
+    color: #ffffff; margin-bottom: 4px; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .note-item-title.empty { color: var(--text-muted); font-style: italic; }
+  .note-item-preview {
+    font-family: var(--font-main); font-size: 0.85rem; color: var(--text-secondary);
+    line-height: 1.5; overflow: hidden; display: -webkit-box;
+    -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    word-break: break-word; margin-bottom: 6px;
+  }
+  .note-item-date { font-family: var(--font-main); font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.3px; }
+  .notes-empty-state { text-align: center; padding: 50px 20px; font-family: var(--font-main); }
+  .notes-empty-state .big { font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 6px; font-weight: 700; }
+  .notes-empty-state .small { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+  .note-editor-overlay {
+    position: fixed; inset: 0; background: var(--bg-deep); z-index: 300;
+    display: none; flex-direction: column;
+    padding: calc(var(--safe-top) + 8px) 10px calc(var(--safe-bottom) + 8px);
+    overflow: hidden;
+  }
+  .note-editor-overlay.active { display: flex; }
+  .note-editor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 4px 0; }
+  .note-editor-back {
+    background: none; border: none; color: var(--accent-seal-bright);
+    font-family: var(--font-main); font-size: 1rem; font-weight: 700;
+    cursor: pointer; padding: 6px 10px 6px 0;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .note-editor-del {
+    background: none; border: none; color: var(--accent-red);
+    font-family: var(--font-main); font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; padding: 6px 10px; letter-spacing: 0.5px;
+  }
+  .note-editor-meta {
+    font-family: var(--font-main); font-size: 0.72rem; color: var(--text-muted);
+    font-style: italic; margin-bottom: 8px; padding: 0 4px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .note-editor-meta .save-ind { color: var(--accent-green-bright); font-style: normal; font-weight: 700; opacity: 0; transition: opacity 0.3s; }
+  .note-editor-meta .save-ind.show { opacity: 1; }
+  .note-editor-area {
+    flex: 1; width: 100%; background: transparent; border: none; outline: none;
+    color: #ffffff; font-family: var(--font-main); font-size: 1.05rem;
+    line-height: 1.7; resize: none; padding: 8px 4px;
+  }
+  .note-editor-area::placeholder { color: var(--text-muted); font-style: italic; }
+  .timer-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 10px 0; }
+  .timer-ring-wrap { position: relative; width: 260px; height: 260px; display: flex; align-items: center; justify-content: center; }
+  .timer-ring-svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+  .timer-ring-bg { fill: none; stroke: rgba(30, 45, 74, 0.8); stroke-width: 8; }
+  .timer-ring-fg { fill: none; stroke: var(--accent-seal-bright); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 0.3s linear, stroke 0.3s; }
+  .timer-ring-fg.running { stroke: var(--accent-green-bright); }
+  .timer-ring-fg.done { stroke: var(--accent-red); }
+  .timer-display {
+    font-family: var(--font-main); font-size: 3.2rem; font-weight: 700;
+    color: #ffffff; letter-spacing: 2px;
+    text-shadow: 0 0 20px rgba(232, 200, 107, 0.3);
+    z-index: 1; font-variant-numeric: tabular-nums;
+  }
+  .timer-label { font-family: var(--font-main); font-size: 0.8rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; font-style: italic; margin-top: -12px; }
+  .timer-presets { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; width: 100%; max-width: 400px; }
+  .timer-preset {
+    background: var(--bg-card); border: 1px solid var(--border-subtle);
+    color: var(--text-secondary); font-family: var(--font-main); font-size: 0.85rem; font-weight: 700;
+    padding: 10px 4px; border-radius: 6px; cursor: pointer; transition: all 0.15s; text-align: center;
+  }
+  .timer-preset.active { background: var(--accent-seal-dim); border-color: var(--accent-seal); color: #ffffff; }
+  .timer-custom-row { display: flex; gap: 8px; width: 100%; max-width: 400px; align-items: stretch; }
+  .timer-custom-input {
+    flex: 1; background: var(--bg-card); border: 1px solid var(--border-subtle);
+    color: #ffffff; font-family: var(--font-main); font-size: 1rem;
+    padding: 10px 14px; border-radius: 6px; outline: none; text-align: center;
+  }
+  .timer-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; max-width: 400px; }
+  .timer-ctrl-btn {
+    padding: 16px 12px; border-radius: 8px; font-family: var(--font-main);
+    font-size: 1rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    cursor: pointer; border: 1px solid; transition: all 0.15s;
+  }
+  .timer-ctrl-start { background: var(--accent-seal-dim); border-color: var(--accent-seal); color: #ffffff; }
+  .timer-ctrl-start.running { background: var(--accent-green); border-color: var(--accent-green-bright); }
+  .timer-ctrl-reset { background: var(--bg-card); border-color: var(--border-subtle); color: var(--text-secondary); }
+  .timer-session-info { font-family: var(--font-main); font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.5px; font-style: italic; text-align: center; margin-top: 4px; }
+  .timer-session-info .hl { color: var(--accent-seal-bright); font-weight: 700; font-style: normal; }
 
-self.addEventListener('message', (e) => {
-  if (!e.data) return;
-  if (e.data.type === 'SHOW_REMINDER') {
-    self.registration.showNotification('WINTER ARC', {
-      body: `${e.data.count} nhiệm vụ chưa hoàn thành`,
-      tag: 'winter-arc-daily',
-      icon: './icon-192.png',
-      badge: './icon-192.png',
-      vibrate: [200, 100, 200],
-      data: { url: './' }
+  /* STATS */
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .stat-card { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px 10px; text-align: center; transition: border-color 0.2s; }
+  .stat-card:active { border-color: var(--accent-seal); }
+  .stat-card .stat-val { font-family: var(--font-main); font-size: 1.7rem; font-weight: 700; color: var(--accent-seal-bright); line-height: 1; }
+  .stat-card .stat-lbl { font-family: var(--font-main); font-size: 0.72rem; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-muted); margin-top: 6px; }
+  .chart-box { background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 12px 10px; margin-bottom: 14px; }
+  .chart-title {
+    font-family: var(--font-main); font-size: 0.78rem; letter-spacing: 0.5px;
+    text-transform: uppercase; color: var(--accent-seal-bright);
+    margin-bottom: 10px; font-weight: 700;
+    display: inline-block; padding: 6px 12px;
+    background: var(--title-bg);
+    border-left: 3px solid var(--accent-seal-bright);
+    border-radius: 3px;
+  }
+  .chart-hint {
+    float: right;
+    font-family: var(--font-main);
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    font-style: italic;
+    letter-spacing: 0.3px;
+    padding-top: 8px;
+  }
+  .chart-canvas { display: block; width: 100%; cursor: pointer; }
+  .chart-detail {
+    margin-top: 10px;
+    padding: 11px 13px;
+    background: var(--bg-card);
+    border: 1px solid var(--accent-seal-dim);
+    border-left: 3px solid var(--accent-seal-bright);
+    border-radius: 0 5px 5px 0;
+    font-family: var(--font-main);
+    font-size: 0.86rem;
+    color: var(--text-secondary);
+    display: none;
+    line-height: 1.6;
+  }
+  .chart-detail.visible { display: block; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+  .chart-detail .detail-line { padding: 2px 0; }
+  .chart-detail strong { color: var(--accent-seal-bright); }
+  .chart-detail .detail-habit {
+    display: inline-block;
+    padding: 2px 8px;
+    margin: 2px 4px 2px 0;
+    border-radius: 3px;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+  .chart-detail .detail-habit.done { background: rgba(58,168,98,0.2); color: var(--accent-green-bright); }
+  .chart-detail .detail-habit.partial { background: rgba(232,200,107,0.2); color: var(--card-partial-text); }
+  .chart-detail .detail-habit.missed { background: rgba(224,64,64,0.18); color: var(--accent-red); }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 100; display: none; align-items: flex-end; justify-content: center; padding: 0; }
+  .modal-overlay.active { display: flex; }
+  .modal-sheet {
+    background: var(--bg-panel); border: 1px solid var(--accent-seal-dim);
+    border-bottom: none; border-radius: 16px 16px 0 0;
+    padding: 20px 16px calc(var(--safe-bottom) + 20px);
+    width: 100%; max-width: 500px; animation: slideUp 0.3s ease;
+    max-height: 85vh; overflow-y: auto;
+  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-title {
+    font-family: var(--font-main); font-size: 0.9rem; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--accent-seal-bright);
+    margin-bottom: 16px; text-align: center; font-weight: 700;
+    padding: 8px 14px;
+    background: var(--title-bg);
+    border: 1px solid var(--accent-seal);
+    border-radius: 5px;
+    box-shadow: inset 0 1px 0 rgba(232, 200, 107, 0.15);
+  }
+  .form-group { margin-bottom: 14px; }
+  .form-label { font-family: var(--font-main); font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 6px; display: block; font-weight: 700; }
+  .form-input { width: 100%; background: var(--bg-card); border: 1px solid var(--border-subtle); color: var(--text-primary); font-family: var(--font-main); font-size: 1rem; padding: 12px 14px; border-radius: 5px; outline: none; transition: border-color 0.2s; }
+  .form-input:focus { border-color: var(--accent-seal); }
+  .form-input::placeholder { color: var(--text-muted); font-style: italic; }
+  select.form-input {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23e8c86b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+  select.form-input option {
+    background: var(--bg-panel);
+    color: #ffffff;
+  }
+  .modal-actions { display: flex; gap: 8px; margin-top: 20px; }
+
+  .folder-menu-popup {
+    position: fixed;
+    background: var(--bg-panel);
+    border: 1px solid var(--accent-seal);
+    border-radius: 8px;
+    padding: 6px 0;
+    z-index: 250;
+    min-width: 180px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+    animation: fadeIn 0.15s ease;
+  }
+  .folder-menu-item {
+    padding: 11px 18px;
+    font-family: var(--font-main);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: background 0.1s;
+  }
+  .folder-menu-item:hover, .folder-menu-item:active { background: var(--bg-card); color: #ffffff; }
+  .folder-menu-item.danger { color: var(--accent-red); }
+
+  .site-footer {
+    text-align: center; padding: 20px 16px 16px; margin-top: 24px;
+    border-radius: 10px 10px 0 0;
+    background: linear-gradient(0deg, rgba(200, 168, 75, 0.1) 0%, rgba(200, 168, 75, 0.02) 60%, transparent 100%);
+    border: 1px solid var(--accent-seal-dim); border-bottom: none;
+    box-shadow: 0 -4px 20px rgba(200, 168, 75, 0.08), inset 0 1px 0 rgba(232, 200, 107, 0.15);
+    position: relative;
+  }
+  .site-footer::before { content: ''; position: absolute; left: 20%; right: 20%; top: -1px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent-seal-bright), transparent); }
+  .footer-title { font-family: var(--font-main); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-seal-bright); font-weight: 700; margin-bottom: 6px; }
+  .footer-copy { font-family: var(--font-main); font-size: 0.85rem; color: #ffffff; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .footer-email { font-family: var(--font-main); font-size: 0.9rem; color: var(--accent-seal-bright); letter-spacing: 0.5px; font-weight: 700; word-break: break-all; }
+  .toast {
+    position: fixed; bottom: calc(var(--safe-bottom) + 80px); left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--bg-card); border: 1px solid var(--accent-seal);
+    color: #ffffff; font-family: var(--font-main); font-size: 0.88rem;
+    padding: 10px 20px; border-radius: 5px; z-index: 500; opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    pointer-events: none; letter-spacing: 0.5px; text-align: center; max-width: 90vw;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(180deg, rgba(15, 22, 40, 0.95), rgba(10, 14, 26, 1));
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border-top: 1px solid var(--accent-seal-dim);
+    display: flex; justify-content: space-around;
+    padding: 6px 0 calc(var(--safe-bottom) + 6px); z-index: 50;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+  }
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    padding: 6px 4px; cursor: pointer; border: none; background: none;
+    color: var(--text-muted); font-family: var(--font-main); font-size: 0.6rem;
+    letter-spacing: 0.2px; text-transform: uppercase; transition: color 0.15s;
+    -webkit-tap-highlight-color: transparent; font-weight: 700; flex: 1;
+  }
+  .nav-item.active { color: var(--accent-seal-bright); }
+  .nav-item .nav-icon { font-size: 1.05rem; line-height: 1; }
+  .confirm-dialog { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .confirm-dialog.active { display: flex; }
+  .confirm-box { background: var(--bg-panel); border: 1px solid var(--accent-seal-dim); border-radius: 10px; padding: 22px; max-width: 340px; width: 100%; text-align: center; box-shadow: 0 8px 40px rgba(0,0,0,0.6); }
+  .confirm-box p { font-family: var(--font-main); font-size: 0.95rem; color: #ffffff; margin-bottom: 18px; line-height: 1.7; white-space: pre-line; }
+  .confirm-actions { display: flex; gap: 8px; }
+  ::-webkit-scrollbar { width: 0; }
+  @keyframes pulse-red {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(224, 64, 64, 0.5); }
+    50% { box-shadow: 0 0 0 10px rgba(224, 64, 64, 0); }
+  }
+  .alarm-active { animation: pulse-red 0.8s infinite; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div id="view-today" class="view active">
+
+    <div class="header">
+      <div class="header-badge">Hải Quân SEAL // Winter Arc</div>
+      <h1>Khóa <span class="accent">Mục Tiêu</span></h1>
+      <div class="header-sub" id="headerSub">Ngày 1 / 92</div>
+    </div>
+
+    <div class="quote-box">
+      <div class="quote-label">Châm ngôn Goggins</div>
+      <div class="quote-text" id="quoteText"></div>
+      <div class="quote-author" id="quoteAuthor"></div>
+    </div>
+
+    <div class="date-nav">
+      <button class="date-nav-btn" id="prevDay" aria-label="Ngày trước">&#8249;</button>
+      <div class="date-display">
+        <div class="day-name" id="dayName">Thứ Hai</div>
+        <div class="day-full" id="dayFull">01/01/2026</div>
+        <div class="day-count" id="dayCount">Ngày 1</div>
+      </div>
+      <button class="date-nav-btn" id="nextDay" aria-label="Ngày sau">&#8250;</button>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-header">
+        <span class="progress-label">Hoàn thành</span>
+        <span class="progress-pct" id="progressPct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <div class="habits-section" id="habitsSection">
+      <div class="section-title-bar">
+        <span class="section-title">Nhiệm vụ hôm nay <span class="count" id="habitsCount"></span></span>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <span class="toggle-btn" id="addFolderBtn">+ Folder</span>
+          <span class="toggle-btn" id="toggleHabits">Thu gọn</span>
+        </div>
+      </div>
+      <div class="habits-list" id="habitsList"></div>
+    </div>
+
+    <div class="summary-panel">
+      <div class="section-title-bar">
+        <span class="section-title">Tổng kết</span>
+        <span class="toggle-btn" id="toggleMissed">Chi tiết</span>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="val green" id="statDone">0</div>
+          <div class="lbl">Hoàn thành</div>
+        </div>
+        <div class="summary-item">
+          <div class="val red" id="statMissed">0</div>
+          <div class="lbl">Chưa xong</div>
+        </div>
+        <div class="summary-item">
+          <div class="val gold" id="statStreak">0</div>
+          <div class="lbl">Chuỗi ngày</div>
+        </div>
+        <div class="summary-item">
+          <div class="val" id="statTotal">0</div>
+          <div class="lbl">Tổng ngày</div>
+        </div>
+      </div>
+      <div class="missed-section" id="missedSection">
+        <div id="missedList"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-primary" id="addHabitBtn">+ Thêm</button>
+      <button class="btn" id="resetDayBtn">Đặt lại ngày</button>
+      <button class="btn btn-danger" id="resetAllBtn">Xóa hết</button>
+    </div>
+
+    <div class="data-section">
+      <div class="section-title-bar">
+        <span class="section-title">Dữ liệu</span>
+      </div>
+      <div class="data-info" id="dataInfo">Đang tải thông tin...</div>
+      <div class="controls" style="margin-bottom:0;">
+        <button class="btn btn-gold" id="exportBtn">Xuất JSON</button>
+        <button class="btn btn-gold" id="importBtn">Nhập JSON</button>
+      </div>
+      <input type="file" id="importFile" accept=".json,application/json" style="display:none">
+    </div>
+
+    <div class="reminder-section">
+      <div class="section-title-bar">
+        <span class="section-title">Nhắc nhở</span>
+        <span class="toggle-btn" id="testAlarmBtn">Thử</span>
+      </div>
+      <div class="reminder-row">
+        <span class="reminder-label">Bật nhắc nhở</span>
+        <div class="toggle-switch" id="reminderToggle"></div>
+      </div>
+      <div class="reminder-row">
+        <span class="reminder-label">Giờ nhắc hàng ngày</span>
+        <input type="time" class="reminder-input-time" id="reminderTime" value="20:00">
+      </div>
+      <div class="reminder-row">
+        <span class="reminder-label">Lần nhắc gần nhất</span>
+        <span class="reminder-time" id="lastReminder">--:--</span>
+      </div>
+      <div class="reminder-row">
+        <span class="reminder-label">Trạng thái</span>
+        <span class="reminder-time" id="reminderStatus">Tắt</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="view-month" class="view">
+    <div class="header">
+      <div class="header-badge">Winter Arc // Lịch tháng</div>
+      <h1>Tháng <span class="accent" id="monthHeaderNum">10</span></h1>
+      <div class="header-sub" id="monthHeaderSub">Năm 2026</div>
+    </div>
+    <div class="month-nav">
+      <button class="month-nav-btn" id="monthPrev">&#8249;</button>
+      <div class="month-label" id="monthLabel">Tháng 10/2026</div>
+      <button class="month-nav-btn" id="monthNext">&#8250;</button>
+    </div>
+    <div class="calendar-head">
+      <div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div>T7</div><div>CN</div>
+    </div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+    <div class="legend">
+      <span>0%</span>
+      <div class="legend-swatch" style="background:#141d33"></div>
+      <div class="legend-swatch" style="background:rgba(232,200,107,0.18)"></div>
+      <div class="legend-swatch" style="background:rgba(232,200,107,0.32)"></div>
+      <div class="legend-swatch" style="background:rgba(232,200,107,0.5)"></div>
+      <div class="legend-swatch" style="background:rgba(58,168,98,0.5)"></div>
+      <span>100%</span>
+    </div>
+    <div class="summary-panel">
+      <div class="section-title-bar"><span class="section-title">Tổng kết tháng</span></div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="val green" id="mDone">0</div>
+          <div class="lbl">Ngày hoàn hảo</div>
+        </div>
+        <div class="summary-item">
+          <div class="val gold" id="mAvg">0%</div>
+          <div class="lbl">TB hoàn thành</div>
+        </div>
+        <div class="summary-item">
+          <div class="val" id="mTracked">0</div>
+          <div class="lbl">Ngày có dữ liệu</div>
+        </div>
+        <div class="summary-item">
+          <div class="val red" id="mZero">0</div>
+          <div class="lbl">Ngày bỏ trống</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="view-notes" class="view">
+    <div class="header">
+      <div class="header-badge">Winter Arc // Nhật ký</div>
+      <h1>Ghi <span class="accent">Chú</span></h1>
+      <div class="header-sub">Suy ngẫm &amp; bài học</div>
+    </div>
+    <div class="notes-toolbar">
+      <input type="text" class="notes-search" id="notesSearch" placeholder="Tìm kiếm ghi chú...">
+      <button class="notes-add-btn" id="notesAddBtn" aria-label="Thêm ghi chú">+</button>
+    </div>
+    <div class="notes-count" id="notesCount"></div>
+    <div class="notes-list" id="notesList"></div>
+  </div>
+
+  <div id="view-timer" class="view">
+    <div class="header">
+      <div class="header-badge">Winter Arc // Tập trung</div>
+      <h1>Bộ <span class="accent">Đếm</span></h1>
+      <div class="header-sub">Deep work &amp; tập trung</div>
+    </div>
+    <div class="timer-wrap">
+      <div class="timer-ring-wrap">
+        <svg class="timer-ring-svg" viewBox="0 0 100 100">
+          <circle class="timer-ring-bg" cx="50" cy="50" r="45"></circle>
+          <circle class="timer-ring-fg" id="timerRing" cx="50" cy="50" r="45"
+                  stroke-dasharray="282.74" stroke-dashoffset="0"></circle>
+        </svg>
+        <div class="timer-display" id="timerDisplay">25:00</div>
+      </div>
+      <div class="timer-label" id="timerLabel">Sẵn sàng</div>
+      <div class="timer-presets" id="timerPresets">
+        <button class="timer-preset" data-min="5">5'</button>
+        <button class="timer-preset" data-min="15">15'</button>
+        <button class="timer-preset active" data-min="25">25'</button>
+        <button class="timer-preset" data-min="45">45'</button>
+        <button class="timer-preset" data-min="60">60'</button>
+      </div>
+      <div class="timer-custom-row">
+        <input type="number" class="timer-custom-input" id="timerCustomInput" placeholder="Phút tùy chỉnh" min="1" max="1440">
+        <button class="btn btn-gold" id="timerCustomSet" style="flex: 0 0 90px;">Đặt</button>
+      </div>
+      <div class="timer-controls">
+        <button class="timer-ctrl-btn timer-ctrl-start" id="timerStartBtn">Bắt đầu</button>
+        <button class="timer-ctrl-btn timer-ctrl-reset" id="timerResetBtn">Đặt lại</button>
+      </div>
+      <div class="timer-session-info">
+        Phiên hoàn thành hôm nay: <span class="hl" id="timerSessionCount">0</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="view-stats" class="view">
+    <div class="header">
+      <div class="header-badge">Winter Arc // Phân tích</div>
+      <h1>Thống <span class="accent">Kê</span></h1>
+      <div class="header-sub">Toàn bộ hành trình</div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-val" id="stTotalCheckins">0</div>
+        <div class="stat-lbl">Tổng check-in</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stAvgPct">0%</div>
+        <div class="stat-lbl">TB hoàn thành</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stBestStreak">0</div>
+        <div class="stat-lbl">Chuỗi dài nhất</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stPerfectDays">0</div>
+        <div class="stat-lbl">Ngày hoàn hảo</div>
+      </div>
+    </div>
+    <div class="chart-box">
+      <span class="chart-title">7 ngày gần nhất (% hoàn thành)</span>
+      <span class="chart-hint">Chạm cột xem chi tiết</span>
+      <canvas id="chartBar7" class="chart-canvas" style="height:150px;"></canvas>
+      <div class="chart-detail" id="detailChartBar7"></div>
+    </div>
+    <div class="chart-box">
+      <span class="chart-title">Xu hướng 30 ngày</span>
+      <span class="chart-hint">Chạm điểm xem chi tiết</span>
+      <canvas id="chartLine30" class="chart-canvas" style="height:170px;"></canvas>
+      <div class="chart-detail" id="detailChartLine30"></div>
+    </div>
+    <div class="chart-box">
+      <span class="chart-title">Hiệu suất theo nhiệm vụ (30 ngày)</span>
+      <span class="chart-hint">Chạm thanh xem chi tiết</span>
+      <canvas id="chartHabit" class="chart-canvas" style="height:220px;"></canvas>
+      <div class="chart-detail" id="detailChartHabit"></div>
+    </div>
+    <div class="chart-box">
+      <span class="chart-title">Tổng check-in theo ngày (toàn bộ)</span>
+      <span class="chart-hint">Chạm điểm xem chi tiết</span>
+      <canvas id="chartLineAll" class="chart-canvas" style="height:170px;"></canvas>
+      <div class="chart-detail" id="detailChartLineAll"></div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-title">Winter Arc // Locked In</div>
+    <div class="footer-copy">&copy; 2026 Bản quyền thuộc về</div>
+    <div class="footer-email">baobao.tran@spxexpress.com</div>
+  </footer>
+
+</div>
+
+<div class="bottom-nav">
+  <button class="nav-item active" data-view="today">
+    <span class="nav-icon">&#9632;</span>
+    Hôm nay
+  </button>
+  <button class="nav-item" data-view="month">
+    <span class="nav-icon">&#9638;</span>
+    Tháng
+  </button>
+  <button class="nav-item" data-view="notes">
+    <span class="nav-icon">&#9998;</span>
+    Ghi chú
+  </button>
+  <button class="nav-item" data-view="timer">
+    <span class="nav-icon">&#9201;</span>
+    Bộ đếm
+  </button>
+  <button class="nav-item" data-view="stats">
+    <span class="nav-icon">&#9650;</span>
+    Thống kê
+  </button>
+</div>
+
+<div class="note-editor-overlay" id="noteEditorOverlay">
+  <div class="note-editor-header">
+    <button class="note-editor-back" id="noteEditorBack">&#8249; Quay lại</button>
+    <button class="note-editor-del" id="noteEditorDelete">Xóa</button>
+  </div>
+  <div class="note-editor-meta">
+    <span id="noteEditorDate">--</span>
+    <span class="save-ind" id="noteEditorSaved">Đã lưu</span>
+  </div>
+  <textarea class="note-editor-area" id="noteEditorArea" placeholder="Bắt đầu viết..."></textarea>
+</div>
+
+<div class="modal-overlay" id="addModal">
+  <div class="modal-sheet">
+    <div class="modal-title" id="addModalTitle">Thêm nhiệm vụ</div>
+    <div class="form-group">
+      <label class="form-label" for="habitNameInput">Tên nhiệm vụ</label>
+      <input type="text" class="form-input" id="habitNameInput" placeholder="Ví dụ: Tập thể dục 30 phút" maxlength="50" autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="habitFolderInput">Folder</label>
+      <select class="form-input" id="habitFolderInput"></select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="cancelAdd">Hủy</button>
+      <button class="btn btn-primary" id="confirmAdd">Lưu</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="folderModal">
+  <div class="modal-sheet">
+    <div class="modal-title" id="folderModalTitle">Tạo folder</div>
+    <div class="form-group">
+      <label class="form-label" for="folderNameInput">Tên folder</label>
+      <input type="text" class="form-input" id="folderNameInput" placeholder="Ví dụ: Sức khỏe, Tài chính" maxlength="30" autocomplete="off">
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="cancelFolder">Hủy</button>
+      <button class="btn btn-primary" id="confirmFolder">Lưu</button>
+    </div>
+  </div>
+</div>
+
+<div class="confirm-dialog" id="confirmDialog">
+  <div class="confirm-box">
+    <p id="confirmMsg">Bạn chắc chắn?</p>
+    <div class="confirm-actions">
+      <button class="btn" id="confirmNo">Không</button>
+      <button class="btn btn-danger" id="confirmYes">Có</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+  'use strict';
+
+  const STORAGE_KEY = 'winter_arc_data_v1';
+  const EXPORT_VERSION = 5;
+  const ARC_START = '2026-10-01';
+  const ARC_END = '2026-12-31';
+  const ARC_DAYS = 92;
+
+  const QUOTES = [
+    { text: "Bạn không cần cơ bụng sáu múi nếu tâm trí bạn được rèn bằng thép.", author: "David Goggins" },
+    { text: "99 phần trăm công việc bạn làm đều không ai nhìn thấy.", author: "David Goggins" },
+    { text: "Hầu hết các cuộc chiến đều được thắng hoặc thua trong chính tâm trí ta.", author: "David Goggins" },
+    { text: "Cách duy nhất để rèn luyện sự cứng rắn tinh thần là làm những việc bạn không muốn làm.", author: "David Goggins" },
+    { text: "Ai sẽ là người vác những con thuyền?", author: "David Goggins" },
+    { text: "Chưa có điều gì trong đời tôi đến với tôi ngay từ lần thử đầu tiên.", author: "David Goggins" },
+    { text: "Nỗi đau mở ra một cánh cửa bí mật trong tâm trí.", author: "David Goggins" },
+    { text: "Bạn phải tự gọi tên chính mình. Hãy thật lòng và thẳng thắn với bản thân để sửa chữa vấn đề.", author: "David Goggins" },
+    { text: "Động lực là khi bạn bị thúc đẩy đến mức gần như ám ảnh.", author: "David Goggins" },
+    { text: "Hãy bước ra khỏi vùng an toàn. Đối mặt với tất cả những điều đó vì chúng giờ đã thuộc về bạn.", author: "David Goggins" },
+    { text: "Tâm trí bạn có lợi thế chiến thuật tối thượng đối với bạn. Nó biết rõ nỗi sợ và sự tự ti của bạn.", author: "David Goggins" },
+    { text: "Bạn phải trở thành kẻ cứng rắn nhất trong mọi căn phòng.", author: "David Goggins" },
+    { text: "Không có gì trong cuộc sống này là công bằng. Hãy chấp nhận điều đó và tiến về phía trước.", author: "David Goggins" },
+    { text: "Khi bạn nghĩ mình đã xong, thực ra bạn chỉ mới bắt đầu.", author: "David Goggins" },
+    { text: "Cuộc sống sẽ đánh bạn mỗi ngày. Điều quan trọng là bạn có đứng dậy hay không.", author: "David Goggins" },
+    { text: "Bạn không thể thương lượng với bản thân yếu đuối của mình.", author: "David Goggins" },
+    { text: "Kẻ thù lớn nhất của bạn là chính bạn trong gương.", author: "David Goggins" },
+    { text: "Thoải mái là cái bẫy. Hãy chọn sự khó khăn mỗi ngày.", author: "David Goggins" },
+    { text: "Những người thành công không trốn tránh nỗi đau. Họ đi xuyên qua nó.", author: "David Goggins" },
+    { text: "Nếu bạn muốn có kết quả mà người khác không có, bạn phải làm những việc người khác không làm.", author: "David Goggins" },
+    { text: "Cơ thể bạn có thể chịu đựng nhiều hơn bạn nghĩ. Tâm trí mới là giới hạn.", author: "David Goggins" },
+    { text: "Không có ngày nghỉ. Chỉ có ngày bạn yếu đuối hơn hoặc mạnh mẽ hơn.", author: "David Goggins" },
+    { text: "Bạn phải yêu thích sự đau khổ. Đó là nơi bạn trưởng thành.", author: "David Goggins" },
+    { text: "Khi bạn cảm thấy muốn bỏ cuộc, đó chính là lúc bạn cần tiếp tục.", author: "David Goggins" },
+    { text: "Thành công không đến từ những gì bạn làm khi có hứng. Nó đến từ những gì bạn làm khi không có hứng.", author: "David Goggins" },
+    { text: "Hãy tự hỏi mỗi ngày: Hôm nay mình đã làm gì để trở nên tốt hơn?", author: "David Goggins" },
+    { text: "Không có đường tắt. Chỉ có con đường dài và sự kiên trì.", author: "David Goggins" },
+    { text: "Bạn sẽ không bao giờ biết giới hạn của mình nếu bạn không bao giờ cố vượt qua nó.", author: "David Goggins" },
+    { text: "Tôi không bao giờ đặt ra một mục tiêu mà tôi có thể đạt được.", author: "David Goggins" },
+    { text: "Bạn đang gặp nguy hiểm khi sống một cuộc đời quá thoải mái và yếu ớt, đến mức bạn sẽ chết mà không bao giờ nhận ra tiềm năng thực sự của mình.", author: "David Goggins" },
+    { text: "Không ai quan tâm bạn đã làm gì ngày hôm qua. Hôm nay bạn đã làm gì để trở nên tốt hơn?", author: "David Goggins" },
+    { text: "Nỗi sợ hãi là người dẫn đường tối thượng của tôi.", author: "David Goggins" },
+    { text: "Khi bạn nghĩ rằng mình đã xong, bạn chỉ mới sử dụng 40% những gì cơ thể bạn có thể làm. Đó chỉ là những giới hạn mà chúng ta tự đặt ra cho bản thân.", author: "David Goggins" },
+    { text: "Hãy trở nên hơn cả động lực, hơn cả sự thúc đẩy, hãy trở nên ám ảnh đến mức người khác nghĩ bạn điên.", author: "David Goggins" },
+    { text: "Khi bạn được thúc đẩy, bất cứ điều gì trước mặt bạn, dù là phân biệt chủng tộc, phân biệt giới tính, chấn thương, ly hôn, trầm cảm, béo phì, bi kịch, hay nghèo đói, đều trở thành nhiên liệu cho sự biến đổi của bạn.", author: "David Goggins" },
+    { text: "Khi bạn ngừng đổ lỗi cho người khác về những vấn đề của mình... khi bạn ngừng trì hoãn, than vãn và phàn nàn về sự bất công của cuộc sống... thì thật đáng kinh ngạc những gì bạn có thể đạt được trong cuộc đời mình!", author: "David Goggins" },
+    { text: "Nỗi đau mở ra một cánh cửa bí mật trong tâm trí, cánh cửa dẫn đến cả hiệu suất đỉnh cao và sự tĩnh lặng tuyệt đẹp.", author: "David Goggins" }
+  ];
+
+  const DAYS_VN = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+  const MONTH_NAMES_VN = ['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'];
+
+  let state = {
+    folders: [],
+    habits: [],
+    checkins: {},
+    notes: [],
+    selectedDate: null,
+    habitsCollapsed: false,
+    reminder: { enabled: false, time: '20:00', lastNotifiedDate: null, lastReminder: null },
+    timer: { totalSec: 1500, remainingSec: 1500, running: false, endTime: null, intervalId: null },
+    timerSessions: {}
+  };
+
+  let monthViewDate = null;
+  let audioCtx = null;
+  let noteSaveTimer = null;
+  let notesSearchQuery = '';
+  let editingNoteId = null;
+  let editingHabitId = null;
+  let notesSearchDebounce = null;
+  let editingFolderId = null;
+  let editingFolderForNew = null;
+  let reminderCheckInterval = null;
+  let activeGesture = null;
+  let dragState = null;
+
+  const $ = id => document.getElementById(id);
+
+  function todayStr() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+  function parseDate(str) {
+    const [y, m, d] = str.split('-').map(Number);
+    return new Date(y, m-1, d);
+  }
+  function toISO(d) {
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+  function formatDateVN(str) {
+    const d = parseDate(str);
+    return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+  }
+  function formatDateTimeVN(ts) {
+    const d = new Date(ts);
+    const now = new Date();
+    const diffMs = now - d;
+    const diffMin = Math.floor(diffMs / 60000);
+    if (diffMin < 1) return 'Vừa xong';
+    if (diffMin < 60) return diffMin + ' phút trước';
+    const diffH = Math.floor(diffMin / 60);
+    if (diffH < 24) return diffH + ' giờ trước';
+    const diffD = Math.floor(diffH / 24);
+    if (diffD < 7) return diffD + ' ngày trước';
+    return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+  }
+  function dayOfWeekVN(str) { return DAYS_VN[parseDate(str).getDay()]; }
+  function dayNumberInArc(str) {
+    const start = parseDate(ARC_START);
+    const target = parseDate(str);
+    return Math.floor((target - start) / 86400000) + 1;
+  }
+  function dateOffset(str, days) {
+    const d = parseDate(str);
+    d.setDate(d.getDate() + days);
+    return toISO(d);
+  }
+
+  function getFolderById(id) { return state.folders.find(f => f.id === id); }
+  function getHabitsInFolder(folderId) {
+    return state.habits.filter(h => h.folderId === folderId);
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        state = Object.assign(state, parsed);
+        if (!state.checkins) state.checkins = {};
+        if (!state.notes) state.notes = [];
+        if (!state.timerSessions) state.timerSessions = {};
+        if (typeof state.habitsCollapsed !== 'boolean') state.habitsCollapsed = false;
+        if (!state.folders) state.folders = [];
+        if (!state.reminder) state.reminder = { enabled: false, time: '20:00', lastNotifiedDate: null, lastReminder: null };
+        if (typeof state.reminder.time !== 'string') state.reminder.time = '20:00';
+        if (!('lastNotifiedDate' in state.reminder)) state.reminder.lastNotifiedDate = null;
+        // Migration: ensure folders exist, assign folderId to legacy habits
+        if (state.folders.length === 0) {
+          state.folders.push({ id: 'default', name: 'Nhiệm vụ chung', collapsed: false });
+        }
+        state.habits.forEach(h => {
+          if (!h.folderId || !getFolderById(h.folderId)) h.folderId = state.folders[0].id;
+        });
+        // Legacy dayNotes / monthNotes migration
+        if (parsed.dayNotes && typeof parsed.dayNotes === 'object') {
+          Object.keys(parsed.dayNotes).forEach(k => {
+            const content = (parsed.dayNotes[k] || '').trim();
+            if (content) {
+              const already = state.notes.find(n => n._migratedKey === 'day-' + k);
+              if (!already) {
+                const dt = parseDate(k);
+                state.notes.push({
+                  id: 'n-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+                  content: 'Ghi chú ngày ' + formatDateVN(k) + '\n\n' + content,
+                  createdAt: dt.getTime(),
+                  updatedAt: dt.getTime(),
+                  _migratedKey: 'day-' + k
+                });
+              }
+            }
+          });
+        }
+        if (parsed.monthNotes && typeof parsed.monthNotes === 'object') {
+          Object.keys(parsed.monthNotes).forEach(k => {
+            const content = (parsed.monthNotes[k] || '').trim();
+            if (content) {
+              const already = state.notes.find(n => n._migratedKey === 'month-' + k);
+              if (!already) {
+                const [y, m] = k.split('-').map(Number);
+                const dt = new Date(y, m-1, 1);
+                state.notes.push({
+                  id: 'n-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+                  content: 'Ghi chú ' + MONTH_NAMES_VN[m-1] + '/' + y + '\n\n' + content,
+                  createdAt: dt.getTime(),
+                  updatedAt: dt.getTime(),
+                  _migratedKey: 'month-' + k
+                });
+              }
+            }
+          });
+        }
+      }
+    } catch (e) { console.warn('Load state failed', e); }
+  }
+  function saveState() {
+    try {
+      const notesClean = state.notes.map(n => ({
+        id: n.id, content: n.content, createdAt: n.createdAt, updatedAt: n.updatedAt
+      }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        folders: state.folders,
+        habits: state.habits,
+        checkins: state.checkins,
+        notes: notesClean,
+        timerSessions: state.timerSessions,
+        habitsCollapsed: state.habitsCollapsed,
+        reminder: {
+          enabled: state.reminder.enabled,
+          time: state.reminder.time,
+          lastNotifiedDate: state.reminder.lastNotifiedDate,
+          lastReminder: state.reminder.lastReminder
+        }
+      }));
+    } catch (e) { console.warn('Save state failed', e); }
+  }
+
+  function getCheckin(dateStr, habitId) {
+    if (!state.checkins[dateStr]) return 0;
+    return state.checkins[dateStr][habitId] || 0;
+  }
+  function setCheckin(dateStr, habitId, val) {
+    if (!state.checkins[dateStr]) state.checkins[dateStr] = {};
+    state.checkins[dateStr][habitId] = val;
+  }
+  function completionPct(dateStr) {
+    const total = state.habits.length;
+    if (total === 0) return 0;
+    let done = 0;
+    state.habits.forEach(h => { if (getCheckin(dateStr, h.id) === 2) done++; });
+    return Math.round((done / total) * 100);
+  }
+
+  // Reorder / move habit
+  function reorderHabit(habitId, targetFolderId, targetIndex) {
+    const habit = state.habits.find(h => h.id === habitId);
+    if (!habit) return;
+    const oldIdx = state.habits.indexOf(habit);
+    state.habits.splice(oldIdx, 1);
+    habit.folderId = targetFolderId;
+    const siblings = state.habits.filter(h => h.folderId === targetFolderId);
+    let insertIdx;
+    if (targetIndex >= siblings.length) {
+      if (siblings.length > 0) insertIdx = state.habits.indexOf(siblings[siblings.length - 1]) + 1;
+      else insertIdx = state.habits.length;
+    } else {
+      insertIdx = state.habits.indexOf(siblings[targetIndex]);
+    }
+    state.habits.splice(insertIdx, 0, habit);
+    saveState();
+  }
+
+  function initAudio() {
+    if (!audioCtx) {
+      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+      catch (e) { console.warn('WebAudio not supported'); }
+    }
+    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  }
+  function playBeep(freq, duration, volume, type) {
+    if (!audioCtx) return;
+    try {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type || 'square';
+      osc.frequency.value = freq || 880;
+      gain.gain.setValueAtTime(volume || 0.3, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (duration || 0.15));
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(audioCtx.currentTime);
+      osc.stop(audioCtx.currentTime + (duration || 0.15));
+    } catch (e) { console.warn('Beep failed', e); }
+  }
+  function playAlarmPattern() {
+    if (!audioCtx) return;
+    let count = 0;
+    const maxCount = 6;
+    const pattern = () => {
+      if (count >= maxCount) return;
+      playBeep(880, 0.12, 0.25, 'square');
+      setTimeout(() => {
+        playBeep(600, 0.12, 0.25, 'square');
+        count++;
+        setTimeout(pattern, 100);
+      }, 150);
+    };
+    pattern();
+  }
+  function playTimerEndAlarm() {
+    if (!audioCtx) return;
+    let count = 0;
+    const maxCount = 8;
+    const pattern = () => {
+      if (count >= maxCount) return;
+      playBeep(1200, 0.2, 0.3, 'sine');
+      setTimeout(() => {
+        playBeep(900, 0.2, 0.3, 'sine');
+        count++;
+        setTimeout(pattern, 100);
+      }, 250);
+    };
+    pattern();
+  }
+
+  // === REMINDER ===
+  function updateReminderUI() {
+    const statusEl = $('reminderStatus');
+    const lastEl = $('lastReminder');
+    const toggleEl = $('reminderToggle');
+    if (!statusEl) return;
+    if (state.reminder.enabled) {
+      statusEl.textContent = 'Bật';
+      statusEl.style.color = 'var(--accent-green-bright)';
+      toggleEl.classList.add('on');
+    } else {
+      statusEl.textContent = 'Tắt';
+      statusEl.style.color = 'var(--text-muted)';
+      toggleEl.classList.remove('on');
+    }
+    lastEl.textContent = state.reminder.lastReminder || '--:--';
+    const timeEl = $('reminderTime');
+    if (timeEl && timeEl.value !== state.reminder.time) timeEl.value = state.reminder.time;
+  }
+  function requestNotificationPermission() {
+    if ('Notification' in window && Notification.permission === 'default') {
+      return Notification.requestPermission();
+    }
+    return Promise.resolve(Notification.permission);
+  }
+  function fireReminderNotification() {
+    const today = todayStr();
+    const incomplete = state.habits.filter(h => getCheckin(today, h.id) !== 2).length;
+    const now = new Date();
+    state.reminder.lastNotifiedDate = today;
+    state.reminder.lastReminder = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+    saveState();
+    if (incomplete === 0) { updateReminderUI(); return; }
+    const body = `${incomplete} nhiệm vụ chưa hoàn thành`;
+    const title = 'WINTER ARC';
+    try {
+      if ('Notification' in window && Notification.permission === 'granted') {
+        if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+          navigator.serviceWorker.ready.then(reg => {
+            reg.showNotification(title, {
+              body, tag: 'winter-arc-daily', icon: './icon-192.png', badge: './icon-192.png',
+              vibrate: [200, 100, 200], data: { url: './' }
+            });
+          }).catch(() => {
+            try { new Notification(title, { body, tag: 'winter-arc-daily' }); } catch (e) {}
+          });
+        } else {
+          new Notification(title, { body, tag: 'winter-arc-daily', icon: './icon-192.png' });
+        }
+      }
+    } catch (e) { console.warn('Notification failed', e); }
+    initAudio();
+    playAlarmPattern();
+    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+    showToast(`Nhắc nhở: ${incomplete} nhiệm vụ chưa xong`);
+    updateReminderUI();
+  }
+  function checkReminderTime() {
+    if (!state.reminder.enabled) return;
+    if (!state.reminder.time) return;
+    const today = todayStr();
+    if (state.reminder.lastNotifiedDate === today) return;
+    const parts = state.reminder.time.split(':').map(Number);
+    if (parts.length !== 2 || parts.some(isNaN)) return;
+    const [hh, mm] = parts;
+    const now = new Date();
+    const target = new Date(now);
+    target.setHours(hh, mm, 0, 0);
+    if (now >= target) fireReminderNotification();
+  }
+  function startReminderChecker() {
+    if (reminderCheckInterval) clearInterval(reminderCheckInterval);
+    reminderCheckInterval = setInterval(checkReminderTime, 30000);
+    setTimeout(checkReminderTime, 2000);
+  }
+
+  // === TIMER ===
+  function formatTime(totalSec) {
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }
+  function setTimerTotal(minutes) {
+    if (state.timer.running) return;
+    const sec = Math.max(1, Math.min(1440, Math.floor(minutes))) * 60;
+    state.timer.totalSec = sec;
+    state.timer.remainingSec = sec;
+    updateTimerUI();
+  }
+  function startTimer() {
+    initAudio();
+    if (state.timer.running) {
+      state.timer.running = false;
+      state.timer.remainingSec = Math.max(0, Math.round((state.timer.endTime - Date.now()) / 1000));
+      if (state.timer.intervalId) { clearInterval(state.timer.intervalId); state.timer.intervalId = null; }
+      updateTimerUI();
+      return;
+    }
+    if (state.timer.remainingSec <= 0) state.timer.remainingSec = state.timer.totalSec;
+    state.timer.endTime = Date.now() + state.timer.remainingSec * 1000;
+    state.timer.running = true;
+    state.timer.intervalId = setInterval(tickTimer, 250);
+    updateTimerUI();
+  }
+  function tickTimer() {
+    const remain = Math.max(0, Math.round((state.timer.endTime - Date.now()) / 1000));
+    state.timer.remainingSec = remain;
+    if (remain <= 0) {
+      state.timer.running = false;
+      if (state.timer.intervalId) { clearInterval(state.timer.intervalId); state.timer.intervalId = null; }
+      onTimerDone();
+    }
+    updateTimerUI();
+  }
+  function onTimerDone() {
+    playTimerEndAlarm();
+    if (navigator.vibrate) navigator.vibrate([300, 100, 300, 100, 300, 100, 300]);
+    if ('Notification' in window && Notification.permission === 'granted') {
+      try {
+        new Notification('WINTER ARC // HẾT GIỜ', {
+          body: 'Phiên tập trung hoàn thành. Nghỉ ngắn rồi tiếp tục.',
+          tag: 'winter-arc-timer'
+        });
+      } catch (e) {}
+    }
+    const today = todayStr();
+    state.timerSessions[today] = (state.timerSessions[today] || 0) + 1;
+    saveState();
+    showToast('Hết giờ! Phiên tập trung hoàn thành.');
+    document.body.classList.add('alarm-active');
+    setTimeout(() => document.body.classList.remove('alarm-active'), 5000);
+    updateTimerUI();
+  }
+  function resetTimer() {
+    state.timer.running = false;
+    if (state.timer.intervalId) { clearInterval(state.timer.intervalId); state.timer.intervalId = null; }
+    state.timer.remainingSec = state.timer.totalSec;
+    state.timer.endTime = null;
+    updateTimerUI();
+  }
+  function updateTimerUI() {
+    const disp = $('timerDisplay');
+    const ring = $('timerRing');
+    const startBtn = $('timerStartBtn');
+    const label = $('timerLabel');
+    if (!disp) return;
+    disp.textContent = formatTime(state.timer.remainingSec);
+    const circumference = 2 * Math.PI * 45;
+    const pct = state.timer.totalSec > 0 ? (state.timer.remainingSec / state.timer.totalSec) : 0;
+    const offset = circumference * (1 - pct);
+    ring.setAttribute('stroke-dasharray', circumference.toFixed(2));
+    ring.setAttribute('stroke-dashoffset', offset.toFixed(2));
+    ring.classList.toggle('running', state.timer.running);
+    ring.classList.toggle('done', state.timer.remainingSec <= 0 && state.timer.totalSec > 0);
+    if (state.timer.running) {
+      startBtn.textContent = 'Tạm dừng';
+      startBtn.classList.add('running');
+      label.textContent = 'Đang tập trung';
+    } else if (state.timer.remainingSec <= 0) {
+      startBtn.textContent = 'Bắt đầu lại';
+      startBtn.classList.remove('running');
+      label.textContent = 'Hoàn thành';
+    } else if (state.timer.remainingSec < state.timer.totalSec) {
+      startBtn.textContent = 'Tiếp tục';
+      startBtn.classList.remove('running');
+      label.textContent = 'Tạm dừng';
+    } else {
+      startBtn.textContent = 'Bắt đầu';
+      startBtn.classList.remove('running');
+      label.textContent = 'Sẵn sàng';
+    }
+    const minutes = Math.round(state.timer.totalSec / 60);
+    document.querySelectorAll('.timer-preset').forEach(p => {
+      p.classList.toggle('active', parseInt(p.dataset.min, 10) === minutes);
+    });
+    const today = todayStr();
+    const cntEl = $('timerSessionCount');
+    if (cntEl) cntEl.textContent = state.timerSessions[today] || 0;
+  }
+
+  // === NOTES ===
+  function noteTitle(content) {
+    const firstLine = (content || '').split('\n').find(l => l.trim()) || '';
+    return firstLine.trim();
+  }
+  function notePreview(content) {
+    const lines = (content || '').split('\n').filter(l => l.trim());
+    if (lines.length <= 1) return '';
+    return lines.slice(1).join(' ').slice(0, 120);
+  }
+  function createNote() {
+    const now = Date.now();
+    const note = {
+      id: 'n-' + now + '-' + Math.random().toString(36).slice(2, 7),
+      content: '', createdAt: now, updatedAt: now
+    };
+    state.notes.unshift(note);
+    saveState();
+    return note;
+  }
+  function deleteNote(id) {
+    state.notes = state.notes.filter(n => n.id !== id);
+    saveState();
+  }
+  function getNoteById(id) { return state.notes.find(n => n.id === id); }
+  function openNoteEditor(noteId) {
+    editingNoteId = noteId;
+    const note = getNoteById(noteId);
+    if (!note) return;
+    $('noteEditorArea').value = note.content || '';
+    $('noteEditorDate').textContent = 'Đã sửa: ' + formatDateTimeVN(note.updatedAt);
+    $('noteEditorOverlay').classList.add('active');
+    setTimeout(() => $('noteEditorArea').focus(), 150);
+  }
+  function closeNoteEditor() {
+    $('noteEditorOverlay').classList.remove('active');
+    if (editingNoteId) {
+      const note = getNoteById(editingNoteId);
+      if (note && !note.content.trim()) deleteNote(note.id);
+    }
+    editingNoteId = null;
+    renderNotesView();
+  }
+  function flashNoteSaved() {
+    const el = $('noteEditorSaved');
+    el.classList.add('show');
+    if (noteSaveTimer) clearTimeout(noteSaveTimer);
+    noteSaveTimer = setTimeout(() => el.classList.remove('show'), 1200);
+  }
+  let noteAutosaveTimer = null;
+  function handleNoteEditorInput(e) {
+    if (!editingNoteId) return;
+    const note = getNoteById(editingNoteId);
+    if (!note) return;
+    note.content = e.target.value;
+    note.updatedAt = Date.now();
+    if (noteAutosaveTimer) clearTimeout(noteAutosaveTimer);
+    noteAutosaveTimer = setTimeout(() => {
+      saveState();
+      flashNoteSaved();
+    }, 400);
+    $('noteEditorDate').textContent = 'Đã sửa: ' + formatDateTimeVN(note.updatedAt);
+  }
+
+  function closeAllNoteSwipe() {
+    document.querySelectorAll('.note-item-wrap.swiped-right, .note-item-wrap.swiping').forEach(w => {
+      w.classList.remove('swiped-right', 'swiping');
+      const it = w.querySelector('.note-item');
+      if (it) it.style.transform = '';
     });
   }
-});
 
-self.addEventListener('periodicsync', (e) => {
-  if (e.tag !== 'winter-arc-daily-check') return;
-  e.waitUntil((async () => {
-    const clientsArr = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
-    if (clientsArr.length > 0) {
-      clientsArr[0].postMessage({ type: 'PERIODIC_CHECK' });
+  function renderNotesView() {
+    const list = $('notesList');
+    const countEl = $('notesCount');
+    list.innerHTML = '';
+    const q = notesSearchQuery.trim().toLowerCase();
+    let notes = state.notes.slice();
+    if (q) notes = notes.filter(n => (n.content || '').toLowerCase().includes(q));
+    notes.sort((a, b) => b.updatedAt - a.updatedAt);
+    countEl.textContent = notes.length === 0
+      ? (q ? 'Không tìm thấy ghi chú nào' : 'Chưa có ghi chú nào')
+      : `${notes.length} ghi chú`;
+    if (notes.length === 0) {
+      list.innerHTML = `
+        <div class="notes-empty-state">
+          <div class="big">${q ? 'Không có kết quả' : 'Chưa có ghi chú'}</div>
+          <div class="small">${q ? 'Thử từ khóa khác' : 'Nhấn + để tạo ghi chú đầu tiên'}</div>
+        </div>
+      `;
+      return;
     }
-  })());
-});
+    notes.forEach(note => {
+      const wrap = document.createElement('div');
+      wrap.className = 'note-item-wrap';
+      const delBtn = document.createElement('div');
+      delBtn.className = 'note-item-del';
+      delBtn.textContent = 'Xóa';
+      delBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showConfirm('XÓA GHI CHÚ NÀY?\nHành động không thể hoàn tác.', () => {
+          deleteNote(note.id);
+          renderNotesView();
+          showToast('Đã xóa ghi chú');
+        });
+      });
+      const item = document.createElement('div');
+      item.className = 'note-item';
+      const title = noteTitle(note.content);
+      const preview = notePreview(note.content);
+      item.innerHTML = `
+        <div class="note-item-title${title ? '' : ' empty'}">${escapeHtml(title || 'Ghi chú mới')}</div>
+        ${preview ? `<div class="note-item-preview">${escapeHtml(preview)}</div>` : ''}
+        <div class="note-item-date">${formatDateTimeVN(note.updatedAt)}</div>
+      `;
+      let sx = 0, sy = 0, moved = false;
+      const SNAP = 88;
+      const TRIGGER = 50;
+      let notePointerId = null;
+      item.addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        notePointerId = e.pointerId;
+        sx = e.clientX; sy = e.clientY; moved = false;
+      });
+      item.addEventListener('pointermove', (e) => {
+        if (e.pointerId !== notePointerId) return;
+        const dx = e.clientX - sx;
+        const dy = e.clientY - sy;
+        if (!moved && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) moved = true;
+        if (Math.abs(dx) > Math.abs(dy) && dx > 0) {
+          if (e.cancelable) e.preventDefault();
+          wrap.classList.add('swiping');
+          const off = Math.min(dx, SNAP);
+          item.style.transition = 'none';
+          item.style.transform = `translateX(${off}px)`;
+        }
+      });
+      item.addEventListener('pointerup', (e) => {
+        if (e.pointerId !== notePointerId) return;
+        notePointerId = null;
+        const dx = e.clientX - sx;
+        item.style.transition = 'transform 0.2s ease';
+        wrap.classList.remove('swiping');
+        if (dx > TRIGGER) {
+          closeAllNoteSwipe();
+          wrap.classList.add('swiped-right');
+          item.style.transform = '';
+        } else {
+          wrap.classList.remove('swiped-right');
+          item.style.transform = '';
+        }
+        setTimeout(() => { moved = false; }, 200);
+      });
+      item.addEventListener('click', () => {
+        if (moved) return;
+        if (wrap.classList.contains('swiped-right')) { closeAllNoteSwipe(); return; }
+        openNoteEditor(note.id);
+      });
+      wrap.appendChild(delBtn);
+      wrap.appendChild(item);
+      list.appendChild(wrap);
+    });
+  }
 
-self.addEventListener('notificationclick', (e) => {
-  e.notification.close();
-  const urlToOpen = (e.notification.data && e.notification.data.url) || './';
-  e.waitUntil(
-    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientsArr => {
-      for (const client of clientsArr) {
-        if ('focus' in client) { client.navigate(urlToOpen).catch(() => {}); return client.focus(); }
+  // === RENDER ===
+  function render() {
+    renderHeader();
+    renderDate();
+    renderHabitsSection();
+    renderHabits();
+    renderProgress();
+    renderSummary();
+    renderReminder();
+    updateDataInfo();
+  }
+
+  function renderHeader() {
+    const dayNum = dayNumberInArc(state.selectedDate || todayStr());
+    const sub = $('headerSub');
+    if (!sub) return;
+    if (dayNum >= 1 && dayNum <= ARC_DAYS) sub.textContent = `Ngày ${dayNum} / ${ARC_DAYS}`;
+    else sub.textContent = dayNum < 1 ? 'Trước Winter Arc' : 'Đã hoàn thành';
+  }
+  function renderDate() {
+    const d = state.selectedDate || todayStr();
+    $('dayName').textContent = dayOfWeekVN(d);
+    $('dayFull').textContent = formatDateVN(d);
+    const num = dayNumberInArc(d);
+    $('dayCount').textContent = num >= 1 && num <= ARC_DAYS ? `Ngày ${num}/${ARC_DAYS}` : (num < 1 ? 'Trước Winter Arc' : 'Hoàn thành Winter Arc');
+  }
+  function renderHabitsSection() {
+    const section = $('habitsSection');
+    const toggle = $('toggleHabits');
+    const count = $('habitsCount');
+    if (!section || !toggle || !count) return;
+    if (state.habitsCollapsed) {
+      section.classList.add('collapsed');
+      toggle.textContent = 'Mở rộng';
+    } else {
+      section.classList.remove('collapsed');
+      toggle.textContent = 'Thu gọn';
+    }
+    const dateStr = state.selectedDate || todayStr();
+    let done = 0;
+    state.habits.forEach(h => { if (getCheckin(dateStr, h.id) === 2) done++; });
+    count.textContent = `(${done}/${state.habits.length})`;
+  }
+
+  function closeAllHabitSwipe() {
+    document.querySelectorAll('.habit-swipe-wrap.swiped-right, .habit-swipe-wrap.swiped-left, .habit-swipe-wrap.swiping-right, .habit-swipe-wrap.swiping-left').forEach(w => {
+      w.classList.remove('swiped-right', 'swiped-left', 'swiping-right', 'swiping-left');
+      const c = w.querySelector('.habit-card');
+      if (c) c.style.transform = '';
+    });
+  }
+
+  // === DRAG & DROP ===
+  function startDrag(habitId, clientX, clientY, cardEl) {
+    const habit = state.habits.find(h => h.id === habitId);
+    if (!habit) return;
+    const rect = cardEl.getBoundingClientRect();
+    const ghost = cardEl.cloneNode(true);
+    ghost.classList.add('drag-ghost');
+    ghost.style.left = rect.left + 'px';
+    ghost.style.top = rect.top + 'px';
+    ghost.style.width = rect.width + 'px';
+    ghost.style.height = rect.height + 'px';
+    document.body.appendChild(ghost);
+    dragState = {
+      habitId,
+      offsetX: clientX - rect.left,
+      offsetY: clientY - rect.top,
+      ghostEl: ghost,
+      sourceCard: cardEl,
+      dropTarget: null
+    };
+    cardEl.closest('.habit-swipe-wrap').classList.add('dragging-source');
+    if (navigator.vibrate) navigator.vibrate(20);
+  }
+  function updateDrag(clientX, clientY) {
+    if (!dragState) return;
+    const ghost = dragState.ghostEl;
+    ghost.style.left = (clientX - dragState.offsetX) + 'px';
+    ghost.style.top = (clientY - dragState.offsetY) + 'px';
+    const target = hitTest(clientX, clientY);
+    dragState.dropTarget = target;
+    updateDropIndicator(target);
+  }
+  function hitTest(x, y) {
+    const headers = document.querySelectorAll('.folder-header');
+    for (const h of headers) {
+      const r = h.getBoundingClientRect();
+      if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) {
+        return { type: 'folder', folderId: h.closest('.folder-section').dataset.folderId };
       }
-      if (self.clients.openWindow) return self.clients.openWindow(urlToOpen);
-    })
-  );
-});
+    }
+    const cards = document.querySelectorAll('.habit-card');
+    for (const c of cards) {
+      if (dragState && c.dataset.habitId === dragState.habitId) continue;
+      const r = c.getBoundingClientRect();
+      if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) {
+        const folderId = c.closest('.folder-section').dataset.folderId;
+        const habitId = c.dataset.habitId;
+        const siblings = state.habits.filter(hb => hb.folderId === folderId && hb.id !== (dragState ? dragState.habitId : ''));
+        const idx = siblings.findIndex(hb => hb.id === habitId);
+        const midY = r.top + r.height / 2;
+        const insertIdx = y < midY ? idx : idx + 1;
+        return { type: 'position', folderId, index: insertIdx, targetCard: c, targetRect: r };
+      }
+    }
+    return null;
+  }
+  function updateDropIndicator(target) {
+    document.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+    document.querySelectorAll('.folder-section.drop-target').forEach(el => el.classList.remove('drop-target'));
+    if (!target) return;
+    if (target.type === 'folder') {
+      const sec = document.querySelector(`.folder-section[data-folder-id="${target.folderId}"]`);
+      if (sec) sec.classList.add('drop-target');
+    } else if (target.type === 'position') {
+      const r = target.targetRect;
+      const line = document.createElement('div');
+      line.className = 'drop-indicator';
+      line.style.left = r.left + 'px';
+      line.style.width = r.width + 'px';
+      if (target.index === 0) line.style.top = (r.top - 4) + 'px';
+      else line.style.top = (r.bottom + 1) + 'px';
+      document.body.appendChild(line);
+    }
+  }
+  function endDrag() {
+    if (!dragState) return;
+    const target = dragState.dropTarget;
+    const habitId = dragState.habitId;
+    if (dragState.ghostEl) dragState.ghostEl.remove();
+    if (dragState.sourceCard) {
+      const w = dragState.sourceCard.closest('.habit-swipe-wrap');
+      if (w) w.classList.remove('dragging-source');
+    }
+    document.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+    document.querySelectorAll('.folder-section.drop-target').forEach(el => el.classList.remove('drop-target'));
+    dragState = null;
+    if (target) {
+      if (target.type === 'folder') {
+        reorderHabit(habitId, target.folderId, 9999);
+        const folder = getFolderById(target.folderId);
+        showToast('Đã chuyển vào folder: ' + (folder ? folder.name : ''));
+      } else {
+        reorderHabit(habitId, target.folderId, target.index);
+      }
+      render();
+    }
+  }
+
+  function attachHabitGestures(wrap, card, habit) {
+    let startX = 0, startY = 0;
+    let hasMoved = false;
+    let mode = 'idle';
+    let longPressTimer = null;
+    let pointerId = null;
+    const SWIPE_TRIGGER = 50;
+    const SNAP = 88;
+    const LONG_PRESS_MS = 400;
+    const MOVE_THRESHOLD = 8;
+
+    function onDown(x, y) {
+      startX = x; startY = y;
+      hasMoved = false;
+      mode = 'idle';
+      if (longPressTimer) clearTimeout(longPressTimer);
+      longPressTimer = setTimeout(() => {
+        if (mode === 'idle' && !hasMoved) {
+          mode = 'dragging';
+          startDrag(habit.id, x, y, card);
+        }
+      }, LONG_PRESS_MS);
+    }
+    function onMove(x, y, e) {
+      const dx = x - startX;
+      const dy = y - startY;
+      const dist = Math.hypot(dx, dy);
+      if (mode === 'idle' && dist > MOVE_THRESHOLD) {
+        hasMoved = true;
+        if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
+        mode = 'swiping';
+      }
+      if (mode === 'swiping') {
+        if (Math.abs(dx) > Math.abs(dy)) {
+          if (e && e.cancelable) e.preventDefault();
+          if (dx > 0) {
+            wrap.classList.add('swiping-right');
+            wrap.classList.remove('swiping-left');
+            card.style.transition = 'none';
+            card.style.transform = `translateX(${Math.min(dx, SNAP)}px)`;
+          } else {
+            wrap.classList.add('swiping-left');
+            wrap.classList.remove('swiping-right');
+            card.style.transition = 'none';
+            card.style.transform = `translateX(${Math.max(dx, -SNAP)}px)`;
+          }
+        }
+      } else if (mode === 'dragging') {
+        if (e && e.cancelable) e.preventDefault();
+        updateDrag(x, y);
+      }
+    }
+    function onUp(x, y) {
+      if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
+      if (mode === 'swiping') {
+        const dx = x - startX;
+        card.style.transition = 'transform 0.2s ease';
+        wrap.classList.remove('swiping-right', 'swiping-left');
+        if (dx > SWIPE_TRIGGER) {
+          closeAllHabitSwipe();
+          wrap.classList.add('swiped-right');
+          card.style.transform = '';
+        } else if (dx < -SWIPE_TRIGGER) {
+          closeAllHabitSwipe();
+          wrap.classList.add('swiped-left');
+          card.style.transform = '';
+        } else {
+          wrap.classList.remove('swiped-right', 'swiped-left');
+          card.style.transform = '';
+        }
+      } else if (mode === 'dragging') {
+        endDrag();
+      }
+      mode = 'idle';
+      setTimeout(() => { hasMoved = false; }, 200);
+    }
+    function onCancel() {
+      if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
+      if (mode === 'dragging') endDrag();
+      mode = 'idle';
+    }
+
+    card.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      if (e.target.closest('button')) return;
+      if (activeGesture) return;
+      pointerId = e.pointerId;
+      activeGesture = {
+        pointerId,
+        onMove: (x, y, ev) => onMove(x, y, ev),
+        onUp: (x, y) => onUp(x, y),
+        onCancel: () => onCancel()
+      };
+      onDown(e.clientX, e.clientY);
+    });
+
+    card.addEventListener('click', () => {
+      if (hasMoved) return;
+      if (wrap.classList.contains('swiped-right') || wrap.classList.contains('swiped-left')) {
+        closeAllHabitSwipe();
+        return;
+      }
+      initAudio();
+      const dateStr = state.selectedDate || todayStr();
+      const cur = getCheckin(dateStr, habit.id);
+      const next = cur === 0 ? 1 : cur === 1 ? 2 : 0;
+      setCheckin(dateStr, habit.id, next);
+      saveState();
+      render();
+      if (next === 2) {
+        playBeep(880, 0.1, 0.2, 'sine');
+        setTimeout(() => playBeep(1320, 0.15, 0.2, 'sine'), 100);
+        if (navigator.vibrate) navigator.vibrate(30);
+      } else if (next === 1) {
+        playBeep(660, 0.08, 0.15, 'sine');
+      } else {
+        playBeep(330, 0.06, 0.1, 'sine');
+      }
+    });
+  }
+
+  function renderHabits() {
+    const list = $('habitsList');
+    list.innerHTML = '';
+    const dateStr = state.selectedDate || todayStr();
+
+    if (state.habits.length === 0) {
+      list.innerHTML = '<div style="text-align:center;padding:30px 0;font-family:var(--font-main);font-size:0.95rem;color:var(--text-muted);letter-spacing:0.5px;font-style:italic;">Chưa có nhiệm vụ nào. Nhấn "+ Folder" để tạo đề mục, sau đó "+ Thêm" để thêm nhiệm vụ.</div>';
+      return;
+    }
+
+    state.folders.forEach(folder => {
+      const habitsInFolder = getHabitsInFolder(folder.id);
+      const folderEl = document.createElement('div');
+      folderEl.className = 'folder-section' + (folder.collapsed ? ' collapsed' : '');
+      folderEl.dataset.folderId = folder.id;
+
+      let doneCount = 0;
+      habitsInFolder.forEach(h => { if (getCheckin(dateStr, h.id) === 2) doneCount++; });
+
+      const header = document.createElement('div');
+      header.className = 'folder-header';
+      header.innerHTML = `
+        <span class="folder-toggle-arrow">&#9660;</span>
+        <span class="folder-name">${escapeHtml(folder.name)}</span>
+        <span class="folder-count">${doneCount}/${habitsInFolder.length}</span>
+        <button class="folder-menu-btn" aria-label="Tùy chọn folder">&#8942;</button>
+      `;
+      header.addEventListener('click', (e) => {
+        if (e.target.closest('.folder-menu-btn')) return;
+        folder.collapsed = !folder.collapsed;
+        saveState();
+        renderHabits();
+      });
+      const menuBtn = header.querySelector('.folder-menu-btn');
+      menuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openFolderMenu(folder, menuBtn);
+      });
+      folderEl.appendChild(header);
+
+      const body = document.createElement('div');
+      body.className = 'folder-body';
+
+      if (habitsInFolder.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'folder-empty';
+        empty.textContent = 'Kéo nhiệm vụ vào đây hoặc nhấn giữ để kéo';
+        body.appendChild(empty);
+      } else {
+        habitsInFolder.forEach(h => {
+          const val = getCheckin(dateStr, h.id);
+          const wrap = document.createElement('div');
+          wrap.className = 'habit-swipe-wrap';
+
+          const delBtn = document.createElement('div');
+          delBtn.className = 'habit-delete-btn';
+          delBtn.textContent = 'Xóa';
+          delBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showConfirm(`XÓA "${h.name.toUpperCase()}"?\nHành động này không thể hoàn tác.`, () => {
+              state.habits = state.habits.filter(x => x.id !== h.id);
+              Object.keys(state.checkins).forEach(d => {
+                if (state.checkins[d]) delete state.checkins[d][h.id];
+              });
+              saveState();
+              render();
+              showToast('Đã xóa nhiệm vụ');
+              playBeep(330, 0.15, 0.2, 'sawtooth');
+            });
+          });
+
+          const editBtn = document.createElement('div');
+          editBtn.className = 'habit-edit-btn';
+          editBtn.textContent = 'Sửa';
+          editBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeAllHabitSwipe();
+            openEditHabitModal(h);
+          });
+
+          const card = document.createElement('div');
+          card.className = 'habit-card';
+          card.dataset.habitId = h.id;
+          if (val === 2) card.classList.add('done');
+          else if (val === 1) card.classList.add('partial');
+
+          let streak = 0;
+          let checkDate = dateStr;
+          while (true) {
+            const v = getCheckin(checkDate, h.id);
+            if (v === 2) { streak++; checkDate = dateOffset(checkDate, -1); }
+            else break;
+            if (streak > 365) break;
+          }
+          const metaText = val === 2 ? 'Hoàn thành' : val === 1 ? 'Một phần' : 'Chưa làm';
+          card.innerHTML = `
+            <div class="habit-check">${val === 2 ? '&#10003;' : val === 1 ? '&#8212;' : ''}</div>
+            <div class="habit-info">
+              <div class="habit-name">${escapeHtml(h.name)}</div>
+              <div class="habit-meta">${metaText}</div>
+            </div>
+            <div class="habit-streak">
+              ${streak}
+              <span class="streak-label">Chuỗi</span>
+            </div>
+          `;
+          attachHabitGestures(wrap, card, h);
+          wrap.appendChild(delBtn);
+          wrap.appendChild(editBtn);
+          wrap.appendChild(card);
+          body.appendChild(wrap);
+        });
+      }
+      folderEl.appendChild(body);
+      list.appendChild(folderEl);
+    });
+  }
+
+  function renderProgress() {
+    const dateStr = state.selectedDate || todayStr();
+    const total = state.habits.length;
+    if (total === 0) { $('progressPct').textContent = '0%'; $('progressFill').style.width = '0%'; return; }
+    let done = 0;
+    state.habits.forEach(h => { if (getCheckin(dateStr, h.id) === 2) done++; });
+    const pct = Math.round((done / total) * 100);
+    $('progressPct').textContent = pct + '%';
+    $('progressFill').style.width = pct + '%';
+  }
+
+  function renderSummary() {
+    const dateStr = state.selectedDate || todayStr();
+    const total = state.habits.length;
+    let done = 0, missed = 0;
+    state.habits.forEach(h => {
+      const v = getCheckin(dateStr, h.id);
+      if (v === 2) done++; else missed++;
+    });
+    $('statDone').textContent = done;
+    $('statMissed').textContent = missed;
+    let streak = 0;
+    let checkDate = dateStr;
+    if (total > 0) {
+      while (true) {
+        let allDone = true;
+        for (const h of state.habits) {
+          if (getCheckin(checkDate, h.id) !== 2) { allDone = false; break; }
+        }
+        if (allDone) { streak++; checkDate = dateOffset(checkDate, -1); }
+        else break;
+        if (streak > 365) break;
+      }
+    }
+    $('statStreak').textContent = streak;
+    const trackedDays = Object.keys(state.checkins).filter(d => {
+      const c = state.checkins[d];
+      return c && Object.values(c).some(v => v > 0);
+    }).length;
+    $('statTotal').textContent = trackedDays;
+    const missedList = $('missedList');
+    missedList.innerHTML = '';
+    if (total > 0 && missed > 0) {
+      state.habits.forEach(h => {
+        const v = getCheckin(dateStr, h.id);
+        if (v !== 2) {
+          const div = document.createElement('div');
+          div.className = 'missed-item';
+          div.innerHTML = `<span class="dot"></span> ${escapeHtml(h.name)} ${v === 1 ? '(một phần)' : ''}`;
+          missedList.appendChild(div);
+        }
+      });
+    } else if (missed === 0 && total > 0) {
+      missedList.innerHTML = '<div style="font-family:var(--font-main);font-size:0.9rem;color:var(--accent-green-bright);padding:6px 0;letter-spacing:0.5px;font-weight:700;">Tất cả đã hoàn thành. Tiếp tục giữ vững.</div>';
+    }
+  }
+
+  function renderReminder() {
+    updateReminderUI();
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // === FOLDER MENU ===
+  function openFolderMenu(folder, anchorBtn) {
+    document.querySelectorAll('.folder-menu-popup').forEach(el => el.remove());
+    const popup = document.createElement('div');
+    popup.className = 'folder-menu-popup';
+    const r = anchorBtn.getBoundingClientRect();
+    popup.style.top = (r.bottom + 4) + 'px';
+    popup.style.right = Math.max(8, window.innerWidth - r.right) + 'px';
+    popup.innerHTML = `
+      <div class="folder-menu-item" data-action="rename">Đổi tên folder</div>
+      <div class="folder-menu-item" data-action="add">Thêm nhiệm vụ vào folder</div>
+      <div class="folder-menu-item danger" data-action="delete">Xóa folder</div>
+    `;
+    document.body.appendChild(popup);
+    setTimeout(() => {
+      const close = (e) => {
+        if (!popup.contains(e.target)) {
+          popup.remove();
+          document.removeEventListener('pointerdown', close);
+        }
+      };
+      document.addEventListener('pointerdown', close);
+    }, 0);
+    popup.querySelectorAll('.folder-menu-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const action = item.dataset.action;
+        popup.remove();
+        if (action === 'rename') openRenameFolder(folder);
+        else if (action === 'add') openAddHabitToFolder(folder);
+        else if (action === 'delete') confirmDeleteFolder(folder);
+      });
+    });
+  }
+  function openRenameFolder(folder) {
+    editingFolderId = folder.id;
+    $('folderModalTitle').textContent = 'Đổi tên folder';
+    $('folderNameInput').value = folder.name;
+    $('folderModal').classList.add('active');
+    setTimeout(() => { $('folderNameInput').focus(); $('folderNameInput').select(); }, 300);
+  }
+  function confirmDeleteFolder(folder) {
+    const habitsCount = getHabitsInFolder(folder.id).length;
+    if (state.folders.length <= 1) {
+      showToast('Không thể xóa folder cuối cùng');
+      return;
+    }
+    const otherFolder = state.folders.find(f => f.id !== folder.id);
+    showConfirm(
+      `XÓA FOLDER "${folder.name.toUpperCase()}"?\n` +
+      (habitsCount > 0 ? `${habitsCount} nhiệm vụ sẽ được chuyển sang folder "${otherFolder.name}".` : ''),
+      () => {
+        state.habits.forEach(h => { if (h.folderId === folder.id) h.folderId = otherFolder.id; });
+        state.folders = state.folders.filter(f => f.id !== folder.id);
+        saveState();
+        render();
+        showToast('Đã xóa folder');
+      }
+    );
+  }
+  function openAddHabitToFolder(folder) {
+    openAddHabitModal(folder.id);
+  }
+
+  // === MODAL ===
+  function populateFolderSelect(selectedId) {
+    const sel = $('habitFolderInput');
+    sel.innerHTML = '';
+    state.folders.forEach(f => {
+      const opt = document.createElement('option');
+      opt.value = f.id;
+      opt.textContent = f.name;
+      if (f.id === selectedId) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  }
+  function openAddHabitModal(defaultFolderId) {
+    editingHabitId = null;
+    $('addModalTitle').textContent = 'Thêm nhiệm vụ';
+    $('habitNameInput').value = '';
+    populateFolderSelect(defaultFolderId || (state.folders[0] && state.folders[0].id));
+    $('addModal').classList.add('active');
+    setTimeout(() => $('habitNameInput').focus(), 300);
+  }
+  function openEditHabitModal(habit) {
+    editingHabitId = habit.id;
+    $('addModalTitle').textContent = 'Sửa nhiệm vụ';
+    $('habitNameInput').value = habit.name;
+    populateFolderSelect(habit.folderId);
+    $('addModal').classList.add('active');
+    setTimeout(() => { $('habitNameInput').focus(); $('habitNameInput').select(); }, 300);
+  }
+
+  // === MONTH ===
+  function renderMonthView() {
+    if (!monthViewDate) monthViewDate = parseDate(state.selectedDate || todayStr());
+    const year = monthViewDate.getFullYear();
+    const month = monthViewDate.getMonth();
+    $('monthLabel').textContent = `Tháng ${month + 1}/${year}`;
+    $('monthHeaderNum').textContent = month + 1;
+    $('monthHeaderSub').textContent = `Năm ${year}`;
+    const first = new Date(year, month, 1);
+    const last = new Date(year, month + 1, 0);
+    const daysInMonth = last.getDate();
+    const startCol = (first.getDay() + 6) % 7;
+    const grid = $('calendarGrid');
+    grid.innerHTML = '';
+    for (let i = 0; i < startCol; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'cal-cell empty';
+      grid.appendChild(cell);
+    }
+    const todayIso = todayStr();
+    const selectedIso = state.selectedDate || todayIso;
+    let tracked = 0, perfect = 0, sumPct = 0, zero = 0;
+    for (let day = 1; day <= daysInMonth; day++) {
+      const d = new Date(year, month, day);
+      const iso = toISO(d);
+      const pct = completionPct(iso);
+      const hasData = state.checkins[iso] && Object.values(state.checkins[iso]).some(v => v > 0);
+      if (hasData) { tracked++; sumPct += pct; if (pct === 100) perfect++; }
+      else if (state.habits.length > 0 && iso <= todayIso) zero++;
+      const cell = document.createElement('div');
+      cell.className = 'cal-cell';
+      if (iso === todayIso) cell.classList.add('today');
+      if (iso === selectedIso) cell.classList.add('selected');
+      if (pct >= 100) cell.classList.add('level-4');
+      else if (pct >= 67) cell.classList.add('level-3');
+      else if (pct >= 34) cell.classList.add('level-2');
+      else if (pct > 0) cell.classList.add('level-1');
+      cell.innerHTML = `<span>${day}</span>${pct > 0 ? `<span class="cal-pct">${pct}%</span>` : ''}`;
+      cell.addEventListener('click', () => {
+        state.selectedDate = iso;
+        monthViewDate = parseDate(iso);
+        switchView('today');
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.view === 'today'));
+      });
+      grid.appendChild(cell);
+    }
+    $('mDone').textContent = perfect;
+    $('mAvg').textContent = tracked > 0 ? Math.round(sumPct / tracked) + '%' : '0%';
+    $('mTracked').textContent = tracked;
+    $('mZero').textContent = zero;
+  }
+
+  // === CHART DRAWING ===
+  function getCtx(canvas) {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return null;
+    canvas.width = Math.round(rect.width * dpr);
+    canvas.height = Math.round(rect.height * dpr);
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { ctx, w: rect.width, h: rect.height };
+  }
+  function chartFont(size) { return size + 'px Arial, Helvetica, sans-serif'; }
+  function drawGrid(ctx, pad, plotW, plotH) {
+    ctx.strokeStyle = 'rgba(30, 45, 74, 0.8)';
+    ctx.lineWidth = 1;
+    ctx.font = chartFont(11);
+    ctx.fillStyle = '#8a9bb8';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    [0, 25, 50, 75, 100].forEach(v => {
+      const y = pad.top + plotH * (1 - v / 100);
+      ctx.beginPath();
+      ctx.moveTo(pad.left, y);
+      ctx.lineTo(pad.left + plotW, y);
+      ctx.stroke();
+      ctx.fillText(v + '', pad.left - 4, y);
+    });
+  }
+  function drawBarChart(canvas, values, labels, highlightIdx, meta) {
+    const setup = getCtx(canvas);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+    const pad = { top: 10, right: 8, bottom: 26, left: 34 };
+    const plotW = w - pad.left - pad.right;
+    const plotH = h - pad.top - pad.bottom;
+    ctx.clearRect(0, 0, w, h);
+    drawGrid(ctx, pad, plotW, plotH);
+    const n = values.length;
+    canvas._hitboxes = [];
+    if (n === 0) return;
+    const gap = 4;
+    const barW = Math.max(2, (plotW - gap * (n - 1)) / n);
+    values.forEach((v, i) => {
+      const x = pad.left + i * (barW + gap);
+      const barH = plotH * (v / 100);
+      const y = pad.top + plotH - barH;
+      const grad = ctx.createLinearGradient(0, y, 0, pad.top + plotH);
+      if (highlightIdx === i) {
+        grad.addColorStop(0, '#7ee0a3');
+        grad.addColorStop(1, '#3aa862');
+      } else {
+        grad.addColorStop(0, '#e8c86b');
+        grad.addColorStop(1, '#8a7433');
+      }
+      ctx.fillStyle = grad;
+      if (barH > 0) ctx.fillRect(x, y, barW, barH);
+      else {
+        ctx.fillStyle = 'rgba(224, 64, 64, 0.3)';
+        ctx.fillRect(x, pad.top + plotH - 2, barW, 2);
+      }
+      ctx.fillStyle = '#d0d8e8';
+      ctx.font = chartFont(10);
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.fillText(labels[i], x + barW / 2, pad.top + plotH + 6);
+      canvas._hitboxes.push({
+        x, y: pad.top, w: barW, h: plotH,
+        index: i,
+        value: v,
+        label: labels[i],
+        meta: meta ? meta[i] : null
+      });
+    });
+  }
+  function drawLineChart(canvas, values, labels, opts) {
+    opts = opts || {};
+    const setup = getCtx(canvas);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+    const pad = { top: 10, right: 10, bottom: 26, left: 34 };
+    const plotW = w - pad.left - pad.right;
+    const plotH = h - pad.top - pad.bottom;
+    ctx.clearRect(0, 0, w, h);
+    drawGrid(ctx, pad, plotW, plotH);
+    const n = values.length;
+    canvas._hitboxes = [];
+    canvas._points = [];
+    if (n === 0) return;
+    const maxVal = opts.max || 100;
+    const stepX = n > 1 ? plotW / (n - 1) : 0;
+    const points = values.map((v, i) => ({
+      x: pad.left + i * stepX,
+      y: pad.top + plotH * (1 - Math.min(v, maxVal) / maxVal)
+    }));
+    canvas._points = points;
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, pad.top + plotH);
+    points.forEach(p => ctx.lineTo(p.x, p.y));
+    ctx.lineTo(points[n - 1].x, pad.top + plotH);
+    ctx.closePath();
+    const fillGrad = ctx.createLinearGradient(0, pad.top, 0, pad.top + plotH);
+    fillGrad.addColorStop(0, 'rgba(232, 200, 107, 0.35)');
+    fillGrad.addColorStop(1, 'rgba(232, 200, 107, 0.02)');
+    ctx.fillStyle = fillGrad;
+    ctx.fill();
+    ctx.beginPath();
+    points.forEach((p, i) => { if (i === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y); });
+    ctx.strokeStyle = '#e8c86b';
+    ctx.lineWidth = 2;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.stroke();
+    if (n <= 35) {
+      points.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#e8c86b';
+        ctx.fill();
+      });
+    }
+    ctx.fillStyle = '#d0d8e8';
+    ctx.font = chartFont(10);
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    const labelStep = Math.max(1, Math.ceil(n / 6));
+    labels.forEach((lbl, i) => {
+      if (i % labelStep === 0 || i === n - 1) ctx.fillText(lbl, points[i].x, pad.top + plotH + 6);
+    });
+    canvas._hitboxes = points.map((p, i) => ({
+      x: p.x - 8, y: pad.top, w: 16, h: plotH,
+      index: i, value: values[i], label: labels[i],
+      meta: opts.meta ? opts.meta[i] : null
+    }));
+  }
+  function drawHBarChart(canvas, values, labels, meta) {
+    const setup = getCtx(canvas);
+    if (!setup) return;
+    const { ctx, w, h } = setup;
+    const pad = { top: 8, right: 34, bottom: 8, left: 110 };
+    const plotW = w - pad.left - pad.right;
+    const plotH = h - pad.top - pad.bottom;
+    ctx.clearRect(0, 0, w, h);
+    canvas._hitboxes = [];
+    const n = values.length;
+    if (n === 0) {
+      ctx.fillStyle = '#8a9bb8';
+      ctx.font = chartFont(12);
+      ctx.textAlign = 'center';
+      ctx.fillText('Chưa có dữ liệu', w / 2, h / 2);
+      return;
+    }
+    const maxVal = Math.max(1, ...values);
+    const rowH = plotH / n;
+    const barH = Math.min(18, rowH * 0.65);
+    values.forEach((v, i) => {
+      const y = pad.top + i * rowH + (rowH - barH) / 2;
+      const barW = (v / maxVal) * plotW;
+      ctx.fillStyle = '#d0d8e8';
+      ctx.font = chartFont(11);
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      let lbl = labels[i];
+      if (lbl.length > 16) lbl = lbl.slice(0, 15) + '\u2026';
+      ctx.fillText(lbl, pad.left - 6, y + barH / 2);
+      ctx.fillStyle = 'rgba(30, 45, 74, 0.5)';
+      ctx.fillRect(pad.left, y, plotW, barH);
+      const grad = ctx.createLinearGradient(pad.left, 0, pad.left + plotW, 0);
+      grad.addColorStop(0, '#8a7433');
+      grad.addColorStop(1, '#e8c86b');
+      ctx.fillStyle = grad;
+      ctx.fillRect(pad.left, y, barW, barH);
+      ctx.fillStyle = '#e8c86b';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(v + '', pad.left + barW + 4, y + barH / 2);
+      canvas._hitboxes.push({
+        x: pad.left, y: y - rowH / 2, w: plotW + 40, h: rowH,
+        index: i, value: v, label: labels[i],
+        meta: meta ? meta[i] : null
+      });
+    });
+  }
+
+  // === CHART CLICK DETAIL ===
+  function handleChartClick(e) {
+    const canvas = e.currentTarget;
+    const hitboxes = canvas._hitboxes;
+    if (!hitboxes || hitboxes.length === 0) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const hit = hitboxes.find(h => x >= h.x && x <= h.x + h.w && y >= h.y && y <= h.y + h.h);
+    if (!hit) return;
+    showChartDetail(canvas.id, hit);
+  }
+  function showChartDetail(canvasId, hit) {
+    const detailId = 'detail' + canvasId.charAt(0).toUpperCase() + canvasId.slice(1);
+    const el = document.getElementById(detailId);
+    if (!el) return;
+    let html = '';
+    if (canvasId === 'chartBar7' || canvasId === 'chartLine30') {
+      const dateStr = hit.meta && hit.meta.date;
+      const pct = hit.value;
+      html = `<div class="detail-line"><strong>Ngày ${hit.label}</strong> — Hoàn thành: <strong>${pct}%</strong></div>`;
+      if (dateStr) {
+        const total = state.habits.length;
+        let done = 0, partial = 0, missed = 0;
+        state.habits.forEach(h => {
+          const v = getCheckin(dateStr, h.id);
+          if (v === 2) done++; else if (v === 1) partial++; else missed++;
+        });
+        html += `<div class="detail-line">Hoàn thành: <span style="color:var(--accent-green-bright);font-weight:700;">${done}</span> | Một phần: <span style="color:var(--card-partial-text);font-weight:700;">${partial}</span> | Chưa làm: <span style="color:var(--accent-red);font-weight:700;">${missed}</span> / ${total}</div>`;
+        if (state.habits.length > 0) {
+          html += '<div class="detail-line" style="margin-top:6px;">';
+          state.habits.forEach(h => {
+            const v = getCheckin(dateStr, h.id);
+            const cls = v === 2 ? 'done' : v === 1 ? 'partial' : 'missed';
+            const mark = v === 2 ? '✓' : v === 1 ? '~' : '×';
+            html += `<span class="detail-habit ${cls}">${mark} ${escapeHtml(h.name)}</span>`;
+          });
+          html += '</div>';
+        }
+      }
+    } else if (canvasId === 'chartHabit') {
+      const habit = hit.meta && hit.meta.habit;
+      const count = hit.value;
+      const pct = Math.round((count / 30) * 100);
+      html = `<div class="detail-line"><strong>${escapeHtml(hit.label)}</strong></div>`;
+      html += `<div class="detail-line">Hoàn thành: <strong>${count}</strong>/30 ngày (${pct}%)</div>`;
+      if (habit) {
+        let streak = 0;
+        const today = todayStr();
+        let d = today;
+        while (getCheckin(d, habit.id) === 2) { streak++; d = dateOffset(d, -1); if (streak > 365) break; }
+        html += `<div class="detail-line">Chuỗi hiện tại: <strong>${streak}</strong> ngày</div>`;
+      }
+    } else if (canvasId === 'chartLineAll') {
+      const dateStr = hit.meta && hit.meta.date;
+      html = `<div class="detail-line"><strong>Ngày ${hit.label}</strong></div>`;
+      html += `<div class="detail-line">Tổng check-in: <strong>${hit.value}</strong></div>`;
+      if (dateStr) {
+        const pct = completionPct(dateStr);
+        html += `<div class="detail-line">Hoàn thành: <strong>${pct}%</strong></div>`;
+      }
+    }
+    el.innerHTML = html;
+    el.classList.add('visible');
+  }
+
+  // === STATS ===
+  function computeStats() {
+    let totalCheckins = 0;
+    Object.values(state.checkins).forEach(day => {
+      Object.values(day).forEach(v => { if (v > 0) totalCheckins++; });
+    });
+    const dataDates = Object.keys(state.checkins).filter(d =>
+      state.checkins[d] && Object.values(state.checkins[d]).some(v => v > 0)
+    ).sort();
+    let sumPct = 0, perfectDays = 0;
+    dataDates.forEach(d => {
+      const p = completionPct(d);
+      sumPct += p;
+      if (p === 100) perfectDays++;
+    });
+    const avgPct = dataDates.length > 0 ? Math.round(sumPct / dataDates.length) : 0;
+    let best = 0, cur = 0, prev = null;
+    dataDates.forEach(ds => {
+      const p = completionPct(ds);
+      if (p === 100) {
+        if (prev && dateOffset(prev, 1) === ds) cur++;
+        else cur = 1;
+        if (cur > best) best = cur;
+      } else cur = 0;
+      prev = ds;
+    });
+    return { totalCheckins, avgPct, bestStreak: best, perfectDays, dataDates };
+  }
+
+  function renderStats() {
+    const stats = computeStats();
+    $('stTotalCheckins').textContent = stats.totalCheckins;
+    $('stAvgPct').textContent = stats.avgPct + '%';
+    $('stBestStreak').textContent = stats.bestStreak;
+    $('stPerfectDays').textContent = stats.perfectDays;
+
+    const baseDate = state.selectedDate || todayStr();
+    const bar7Vals = [], bar7Labels = [], bar7Meta = [];
+    for (let i = 6; i >= 0; i--) {
+      const ds = dateOffset(baseDate, -i);
+      bar7Vals.push(completionPct(ds));
+      const d = parseDate(ds);
+      bar7Labels.push(`${d.getDate()}/${d.getMonth() + 1}`);
+      bar7Meta.push({ date: ds });
+    }
+    drawBarChart($('chartBar7'), bar7Vals, bar7Labels, 6, bar7Meta);
+    document.getElementById('detailChartBar7').classList.remove('visible');
+
+    const line30Vals = [], line30Labels = [], line30Meta = [];
+    for (let i = 29; i >= 0; i--) {
+      const ds = dateOffset(baseDate, -i);
+      line30Vals.push(completionPct(ds));
+      const d = parseDate(ds);
+      line30Labels.push(`${d.getDate()}/${d.getMonth() + 1}`);
+      line30Meta.push({ date: ds });
+    }
+    drawLineChart($('chartLine30'), line30Vals, line30Labels, { meta: line30Meta });
+    document.getElementById('detailChartLine30').classList.remove('visible');
+
+    if (state.habits.length > 0) {
+      const habitLabels = [], habitValues = [], habitMeta = [];
+      state.habits.forEach(h => {
+        let count = 0;
+        for (let i = 0; i < 30; i++) {
+          const ds = dateOffset(baseDate, -i);
+          if (getCheckin(ds, h.id) === 2) count++;
+        }
+        habitLabels.push(h.name);
+        habitValues.push(count);
+        habitMeta.push({ habit: h });
+      });
+      drawHBarChart($('chartHabit'), habitValues, habitLabels, habitMeta);
+    } else {
+      drawHBarChart($('chartHabit'), [], []);
+    }
+    document.getElementById('detailChartHabit').classList.remove('visible');
+
+    const allDates = stats.dataDates;
+    if (allDates.length > 0) {
+      const minDate = parseDate(allDates[0]);
+      const maxDate = parseDate(allDates[allDates.length - 1]);
+      const spanDays = Math.floor((maxDate - minDate) / 86400000) + 1;
+      const step = Math.max(1, Math.ceil(spanDays / 120));
+      const lineVals = [], lineLabels = [], lineMeta = [];
+      for (let i = 0; i <= spanDays; i += step) {
+        const d = new Date(minDate);
+        d.setDate(d.getDate() + i);
+        const ds = toISO(d);
+        let c = 0;
+        if (state.checkins[ds]) Object.values(state.checkins[ds]).forEach(v => { if (v > 0) c++; });
+        lineVals.push(c);
+        lineLabels.push(`${d.getDate()}/${d.getMonth() + 1}`);
+        lineMeta.push({ date: ds });
+      }
+      const maxC = Math.max(1, ...lineVals);
+      drawLineChart($('chartLineAll'), lineVals, lineLabels, { max: maxC, meta: lineMeta });
+    } else {
+      drawLineChart($('chartLineAll'), [], []);
+    }
+    document.getElementById('detailChartLineAll').classList.remove('visible');
+  }
+
+  // === VIEW SWITCH ===
+  function switchView(view) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const el = document.getElementById('view-' + view);
+    if (el) el.classList.add('active');
+    if (view === 'stats') {
+      requestAnimationFrame(() => requestAnimationFrame(renderStats));
+    } else if (view === 'month') {
+      renderMonthView();
+    } else if (view === 'notes') {
+      renderNotesView();
+    } else if (view === 'timer') {
+      updateTimerUI();
+    } else {
+      render();
+    }
+  }
+
+  let quoteIndex = 0;
+  let quoteTimerId = null;
+  function displayQuote(idx) {
+    const el = $('quoteText');
+    const authorEl = $('quoteAuthor');
+    if (!el || !authorEl) return;
+    const q = QUOTES[idx % QUOTES.length];
+    el.textContent = '"' + q.text + '"';
+    authorEl.textContent = q.author;
+  }
+  function rotateQuote() {
+    const el = $('quoteText');
+    if (!el) return;
+    el.classList.add('fade-out');
+    setTimeout(() => {
+      quoteIndex = (quoteIndex + 1) % QUOTES.length;
+      displayQuote(quoteIndex);
+      el.classList.remove('fade-out');
+    }, 400);
+  }
+  function startQuoteRotation() {
+    try {
+      displayQuote(0);
+      quoteIndex = 0;
+      if (quoteTimerId) clearInterval(quoteTimerId);
+      quoteTimerId = setInterval(rotateQuote, 15000);
+    } catch (e) { console.warn('Quote rotation error:', e); }
+  }
+
+  let toastTimer = null;
+  function showToast(msg) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+  }
+  let confirmCallback = null;
+  function showConfirm(msg, cb) {
+    $('confirmMsg').textContent = msg;
+    confirmCallback = cb;
+    $('confirmYes').textContent = 'Có';
+    $('confirmNo').style.display = '';
+    $('confirmDialog').classList.add('active');
+  }
+
+  // === IMPORT / EXPORT ===
+  function buildExportObject() {
+    return {
+      _meta: {
+        app: 'winter-arc', version: EXPORT_VERSION,
+        exportedAt: new Date().toISOString(),
+        arcStart: ARC_START, arcEnd: ARC_END, arcDays: ARC_DAYS
+      },
+      folders: state.folders.map(f => ({ id: f.id, name: f.name, collapsed: !!f.collapsed })),
+      habits: state.habits.map(h => ({ id: h.id, name: h.name, folderId: h.folderId })),
+      checkins: state.checkins,
+      notes: state.notes.map(n => ({ id: n.id, content: n.content, createdAt: n.createdAt, updatedAt: n.updatedAt })),
+      timerSessions: state.timerSessions,
+      reminder: {
+        enabled: state.reminder.enabled,
+        time: state.reminder.time,
+        lastNotifiedDate: state.reminder.lastNotifiedDate,
+        lastReminder: state.reminder.lastReminder
+      }
+    };
+  }
+  function exportData() {
+    try {
+      const data = buildExportObject();
+      const json = JSON.stringify(data, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const d = new Date();
+      const stamp = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`;
+      const filename = `winter-arc-${stamp}.json`;
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      showToast('Đã xuất: ' + filename);
+      playBeep(880, 0.1, 0.2, 'sine');
+      setTimeout(() => playBeep(1320, 0.15, 0.2, 'sine'), 100);
+    } catch (e) { showToast('Xuất thất bại'); }
+  }
+  function validateImport(raw) {
+    if (!raw || typeof raw !== 'object') return { ok: false, reason: 'File không phải JSON object' };
+    if (!Array.isArray(raw.habits)) return { ok: false, reason: 'Thiếu trường "habits"' };
+    if (!raw.checkins || typeof raw.checkins !== 'object' || Array.isArray(raw.checkins)) return { ok: false, reason: 'Thiếu trường "checkins"' };
+    for (let i = 0; i < raw.habits.length; i++) {
+      const h = raw.habits[i];
+      if (!h || typeof h !== 'object') return { ok: false, reason: `Habit #${i+1} không hợp lệ` };
+      if (typeof h.id !== 'string' || !h.id) return { ok: false, reason: `Habit #${i+1} thiếu id` };
+      if (typeof h.name !== 'string' || !h.name.trim()) return { ok: false, reason: `Habit #${i+1} thiếu name` };
+    }
+    const dateRe = /^\d{4}-\d{2}-\d{2}$/;
+    for (const k of Object.keys(raw.checkins)) {
+      if (!dateRe.test(k)) return { ok: false, reason: `Ngày "${k}" sai định dạng` };
+      const day = raw.checkins[k];
+      if (!day || typeof day !== 'object' || Array.isArray(day)) return { ok: false, reason: `Dữ liệu ngày ${k} không hợp lệ` };
+      for (const hid in day) {
+        const v = day[hid];
+        if (v !== 0 && v !== 1 && v !== 2) return { ok: false, reason: `Giá trị check-in ngày ${k} không hợp lệ` };
+      }
+    }
+    return { ok: true, data: raw };
+  }
+  function summarizeImport(data) {
+    return {
+      folderCount: Array.isArray(data.folders) ? data.folders.length : 0,
+      habitCount: data.habits.length,
+      dayCount: Object.keys(data.checkins).length,
+      noteCount: Array.isArray(data.notes) ? data.notes.length : 0
+    };
+  }
+  function applyImport(data) {
+    state.folders = Array.isArray(data.folders) ? data.folders.map(f => ({
+      id: f.id || ('f-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7)),
+      name: f.name || 'Folder',
+      collapsed: !!f.collapsed
+    })) : [];
+    if (state.folders.length === 0) state.folders.push({ id: 'default', name: 'Nhiệm vụ chung', collapsed: false });
+    state.habits = data.habits.map(h => ({
+      id: h.id,
+      name: h.name,
+      folderId: (h.folderId && getFolderById(h.folderId)) ? h.folderId : state.folders[0].id
+    }));
+    state.checkins = data.checkins;
+    state.notes = Array.isArray(data.notes) ? data.notes.map(n => ({
+      id: n.id || 'n-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+      content: n.content || '',
+      createdAt: n.createdAt || Date.now(),
+      updatedAt: n.updatedAt || Date.now()
+    })) : [];
+    state.timerSessions = (data.timerSessions && typeof data.timerSessions === 'object') ? data.timerSessions : {};
+    if (data.reminder && typeof data.reminder === 'object') {
+      state.reminder.enabled = !!data.reminder.enabled;
+      state.reminder.time = typeof data.reminder.time === 'string' ? data.reminder.time : '20:00';
+      state.reminder.lastNotifiedDate = data.reminder.lastNotifiedDate || null;
+      state.reminder.lastReminder = data.reminder.lastReminder || null;
+    } else {
+      state.reminder = { enabled: false, time: '20:00', lastNotifiedDate: null, lastReminder: null };
+    }
+    saveState();
+    if (state.reminder.enabled) { requestNotificationPermission(); }
+    render();
+    updateDataInfo();
+  }
+  function handleImportFile(file) {
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { showToast('File quá lớn (tối đa 5MB)'); return; }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      let parsed;
+      try { parsed = JSON.parse(e.target.result); }
+      catch (err) { showToast('File không phải JSON hợp lệ'); return; }
+      const result = validateImport(parsed);
+      if (!result.ok) {
+        showToast('Dữ liệu không hợp lệ');
+        showConfirm('LỖI NHẬP DỮ LIỆU\n\n' + result.reason, () => {});
+        $('confirmYes').textContent = 'Đóng';
+        $('confirmNo').style.display = 'none';
+        return;
+      }
+      const info = summarizeImport(result.data);
+      showConfirm(
+        `FILE HỢP LỆ\n\n- Số folder: ${info.folderCount}\n- Số nhiệm vụ: ${info.habitCount}\n- Ngày có dữ liệu: ${info.dayCount}\n- Số ghi chú: ${info.noteCount}\n\nGHI ĐÈ TOÀN BỘ DỮ LIỆU HIỆN TẠI?\nHành động này không thể hoàn tác.`,
+        () => {
+          applyImport(result.data);
+          showToast('Đã nhập dữ liệu thành công');
+          playBeep(660, 0.1, 0.2, 'sine');
+          setTimeout(() => playBeep(990, 0.15, 0.2, 'sine'), 100);
+        }
+      );
+    };
+    reader.onerror = () => showToast('Không đọc được file');
+    reader.readAsText(file);
+  }
+  function updateDataInfo() {
+    const habitCount = state.habits.length;
+    const folderCount = state.folders.length;
+    const dayCount = Object.keys(state.checkins).filter(d =>
+      state.checkins[d] && Object.values(state.checkins[d]).some(v => v > 0)
+    ).length;
+    let totalCheckins = 0;
+    Object.values(state.checkins).forEach(day => {
+      Object.values(day).forEach(v => { if (v > 0) totalCheckins++; });
+    });
+    const el = $('dataInfo');
+    if (el) {
+      el.innerHTML = `Folder: <span class="hl">${folderCount}</span> | Nhiệm vụ: <span class="hl">${habitCount}</span> | Ngày có dữ liệu: <span class="hl">${dayCount}</span> | Check-in: <span class="hl">${totalCheckins}</span> | Ghi chú: <span class="hl">${state.notes.length}</span>`;
+    }
+  }
+
+  // === SERVICE WORKER ===
+  function registerServiceWorker() {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then((reg) => {
+            console.log('SW registered:', reg.scope);
+            // Optional: request periodic background sync if available
+            if ('periodicSync' in reg) {
+              reg.periodicSync.register('winter-arc-daily-check', {
+                minInterval: 12 * 60 * 60 * 1000
+              }).catch(() => {});
+            }
+          })
+          .catch((err) => console.warn('SW registration failed:', err));
+      });
+    }
+  }
+  function requestPersistentStorage() {
+    if (navigator.storage && navigator.storage.persist) {
+      navigator.storage.persist().then((granted) => {
+        console.log('Persistent storage:', granted ? 'granted' : 'denied');
+      }).catch(() => {});
+    }
+  }
+
+  // === EVENTS ===
+  function bindEvents() {
+    $('prevDay').addEventListener('click', () => { state.selectedDate = dateOffset(state.selectedDate || todayStr(), -1); render(); });
+    $('nextDay').addEventListener('click', () => { state.selectedDate = dateOffset(state.selectedDate || todayStr(), 1); render(); });
+    $('toggleHabits').addEventListener('click', () => {
+      state.habitsCollapsed = !state.habitsCollapsed;
+      saveState();
+      renderHabitsSection();
+    });
+    $('addFolderBtn').addEventListener('click', () => {
+      editingFolderId = null;
+      $('folderModalTitle').textContent = 'Tạo folder';
+      $('folderNameInput').value = '';
+      $('folderModal').classList.add('active');
+      setTimeout(() => $('folderNameInput').focus(), 300);
+    });
+    $('cancelFolder').addEventListener('click', () => {
+      $('folderModal').classList.remove('active');
+      editingFolderId = null;
+    });
+    $('folderModal').addEventListener('click', (e) => {
+      if (e.target === $('folderModal')) {
+        $('folderModal').classList.remove('active');
+        editingFolderId = null;
+      }
+    });
+    $('confirmFolder').addEventListener('click', () => {
+      const name = $('folderNameInput').value.trim();
+      if (!name) { showToast('Nhập tên folder'); return; }
+      if (editingFolderId) {
+        const f = getFolderById(editingFolderId);
+        if (f) f.name = name;
+        showToast('Đã đổi tên folder');
+      } else {
+        state.folders.push({
+          id: 'f-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+          name, collapsed: false
+        });
+        showToast('Đã tạo folder: ' + name);
+      }
+      saveState();
+      $('folderModal').classList.remove('active');
+      editingFolderId = null;
+      render();
+      playBeep(660, 0.1, 0.2, 'sine');
+    });
+
+    $('addHabitBtn').addEventListener('click', () => openAddHabitModal());
+    $('cancelAdd').addEventListener('click', () => {
+      $('addModal').classList.remove('active');
+      editingHabitId = null;
+    });
+    $('addModal').addEventListener('click', (e) => {
+      if (e.target === $('addModal')) {
+        $('addModal').classList.remove('active');
+        editingHabitId = null;
+      }
+    });
+    $('confirmAdd').addEventListener('click', () => {
+      const name = $('habitNameInput').value.trim();
+      if (!name) { showToast('Nhập tên nhiệm vụ'); return; }
+      const folderId = $('habitFolderInput').value || (state.folders[0] && state.folders[0].id);
+      if (!folderId) { showToast('Cần có ít nhất một folder'); return; }
+      if (editingHabitId) {
+        const habit = state.habits.find(h => h.id === editingHabitId);
+        if (habit) {
+          habit.name = name;
+          if (habit.folderId !== folderId) {
+            const siblings = state.habits.filter(h => h.folderId === folderId);
+            const targetIndex = siblings.length;
+            reorderHabit(habit.id, folderId, targetIndex);
+          }
+          showToast('Đã sửa: ' + name);
+        }
+      } else {
+        state.habits.push({
+          id: 'h-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+          name, folderId
+        });
+        showToast('Đã thêm: ' + name);
+      }
+      saveState();
+      $('addModal').classList.remove('active');
+      editingHabitId = null;
+      render();
+      playBeep(660, 0.1, 0.2, 'sine');
+    });
+
+    $('resetDayBtn').addEventListener('click', () => {
+      showConfirm('ĐẶT LẠI TẤT CẢ CHECK-IN NGÀY NÀY?', () => {
+        const dateStr = state.selectedDate || todayStr();
+        delete state.checkins[dateStr];
+        saveState(); render();
+        showToast('Đã đặt lại ngày');
+      });
+    });
+    $('resetAllBtn').addEventListener('click', () => {
+      showConfirm('XÓA TOÀN BỘ DỮ LIỆU?\nHành động này không thể hoàn tác.', () => {
+        state.habits = []; state.checkins = {}; state.notes = [];
+        state.timerSessions = {};
+        state.folders = [{ id: 'default', name: 'Nhiệm vụ chung', collapsed: false }];
+        state.reminder.lastNotifiedDate = null;
+        state.reminder.enabled = false;
+        state.reminder.lastReminder = null;
+        resetTimer();
+        saveState(); render();
+        showToast('Đã xóa toàn bộ');
+      });
+    });
+
+    $('confirmNo').addEventListener('click', () => { $('confirmDialog').classList.remove('active'); confirmCallback = null; });
+    $('confirmYes').addEventListener('click', () => {
+      $('confirmDialog').classList.remove('active');
+      if (confirmCallback) { confirmCallback(); confirmCallback = null; }
+    });
+
+    $('toggleMissed').addEventListener('click', () => {
+      const el = $('missedSection');
+      el.classList.toggle('visible');
+      $('toggleMissed').textContent = el.classList.contains('visible') ? 'Ẩn' : 'Chi tiết';
+    });
+
+    $('reminderToggle').addEventListener('click', () => {
+      initAudio();
+      state.reminder.enabled = !state.reminder.enabled;
+      if (state.reminder.enabled) {
+        requestNotificationPermission().then(() => {
+          checkReminderTime();
+          showToast('Nhắc nhở: Bật // ' + state.reminder.time);
+        });
+      } else {
+        showToast('Nhắc nhở: Tắt');
+      }
+      saveState(); updateReminderUI();
+    });
+    $('reminderTime').addEventListener('change', (e) => {
+      let v = e.target.value;
+      if (!/^\d{2}:\d{2}$/.test(v)) return;
+      state.reminder.time = v;
+      state.reminder.lastNotifiedDate = null;
+      saveState();
+      if (state.reminder.enabled) showToast('Nhắc nhở lúc ' + v);
+      updateReminderUI();
+    });
+    $('testAlarmBtn').addEventListener('click', () => {
+      initAudio();
+      const today = todayStr();
+      const incomplete = state.habits.filter(h => getCheckin(today, h.id) !== 2).length;
+      showToast(`Thử: ${incomplete} nhiệm vụ chưa xong`);
+      playAlarmPattern();
+      if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 100]);
+      if ('Notification' in window && Notification.permission === 'granted') {
+        try { new Notification('WINTER ARC', { body: `${incomplete} nhiệm vụ chưa hoàn thành`, tag: 'winter-arc-test' }); } catch (e) {}
+      }
+    });
+
+    $('exportBtn').addEventListener('click', () => { initAudio(); exportData(); });
+    $('importBtn').addEventListener('click', () => { initAudio(); $('importFile').click(); });
+    $('importFile').addEventListener('change', (e) => {
+      const f = e.target.files && e.target.files[0];
+      if (f) handleImportFile(f);
+      e.target.value = '';
+    });
+
+    document.querySelectorAll('.nav-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        initAudio();
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        switchView(btn.dataset.view);
+      });
+    });
+
+    $('monthPrev').addEventListener('click', () => {
+      if (!monthViewDate) monthViewDate = parseDate(state.selectedDate || todayStr());
+      monthViewDate.setMonth(monthViewDate.getMonth() - 1);
+      renderMonthView();
+    });
+    $('monthNext').addEventListener('click', () => {
+      if (!monthViewDate) monthViewDate = parseDate(state.selectedDate || todayStr());
+      monthViewDate.setMonth(monthViewDate.getMonth() + 1);
+      renderMonthView();
+    });
+
+    $('notesSearch').addEventListener('input', (e) => {
+      if (notesSearchDebounce) clearTimeout(notesSearchDebounce);
+      notesSearchDebounce = setTimeout(() => {
+        notesSearchQuery = e.target.value || '';
+        renderNotesView();
+      }, 150);
+    });
+    $('notesAddBtn').addEventListener('click', () => {
+      initAudio();
+      const note = createNote();
+      openNoteEditor(note.id);
+    });
+    $('noteEditorBack').addEventListener('click', closeNoteEditor);
+    $('noteEditorDelete').addEventListener('click', () => {
+      if (!editingNoteId) return;
+      showConfirm('XÓA GHI CHÚ NÀY?\nHành động không thể hoàn tác.', () => {
+        deleteNote(editingNoteId);
+        editingNoteId = null;
+        $('noteEditorOverlay').classList.remove('active');
+        renderNotesView();
+        showToast('Đã xóa ghi chú');
+      });
+    });
+    $('noteEditorArea').addEventListener('input', handleNoteEditorInput);
+
+    document.querySelectorAll('.timer-preset').forEach(p => {
+      p.addEventListener('click', () => {
+        initAudio();
+        if (state.timer.running) { showToast('Đang chạy, hãy đặt lại trước'); return; }
+        setTimerTotal(parseInt(p.dataset.min, 10));
+      });
+    });
+    $('timerCustomSet').addEventListener('click', () => {
+      initAudio();
+      if (state.timer.running) { showToast('Đang chạy, hãy đặt lại trước'); return; }
+      const min = parseInt($('timerCustomInput').value, 10);
+      if (isNaN(min) || min < 1) { showToast('Nhập số phút hợp lệ'); return; }
+      setTimerTotal(min);
+      showToast('Đã đặt: ' + min + ' phút');
+    });
+    $('timerStartBtn').addEventListener('click', () => { initAudio(); startTimer(); });
+    $('timerResetBtn').addEventListener('click', () => { initAudio(); resetTimer(); showToast('Đã đặt lại'); });
+
+    ['chartBar7', 'chartLine30', 'chartHabit', 'chartLineAll'].forEach(id => {
+      const c = document.getElementById(id);
+      if (c) c.addEventListener('click', handleChartClick);
+    });
+
+    // Global pointer move/up for active gesture and drag
+    document.addEventListener('pointermove', (e) => {
+      if (activeGesture && activeGesture.pointerId === e.pointerId) {
+        activeGesture.onMove(e.clientX, e.clientY, e);
+      }
+    }, { passive: false });
+    document.addEventListener('pointerup', (e) => {
+      if (activeGesture && activeGesture.pointerId === e.pointerId) {
+        const g = activeGesture;
+        activeGesture = null;
+        g.onUp(e.clientX, e.clientY);
+      }
+    });
+    document.addEventListener('pointercancel', (e) => {
+      if (activeGesture && activeGesture.pointerId === e.pointerId) {
+        const g = activeGesture;
+        activeGesture = null;
+        if (g.onCancel) g.onCancel();
+      }
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) checkReminderTime();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        $('addModal').classList.remove('active');
+        $('folderModal').classList.remove('active');
+        $('confirmDialog').classList.remove('active');
+        document.querySelectorAll('.folder-menu-popup').forEach(el => el.remove());
+        editingHabitId = null;
+        editingFolderId = null;
+      }
+    });
+
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if ($('view-stats').classList.contains('active')) renderStats();
+        if ($('view-month').classList.contains('active')) renderMonthView();
+      }, 200);
+    });
+  }
+
+  function init() {
+    try {
+      loadState();
+      if (state.folders.length === 0) {
+        state.folders = [{ id: 'default', name: 'Nhiệm vụ chung', collapsed: false }];
+      }
+      if (state.habits.length === 0) {
+        state.habits = [
+          { id: 'h1', name: 'Tập thể dục 30 phút', folderId: state.folders[0].id },
+          { id: 'h2', name: 'Đọc 10 trang sách', folderId: state.folders[0].id },
+          { id: 'h3', name: 'Uống 2 lít nước', folderId: state.folders[0].id },
+          { id: 'h4', name: 'Ngủ trước 23 giờ', folderId: state.folders[0].id },
+          { id: 'h5', name: 'Không dùng mạng xã hội', folderId: state.folders[0].id }
+        ];
+        saveState();
+      }
+      if (!state.selectedDate) state.selectedDate = todayStr();
+      const today = todayStr();
+      if (!state.checkins[today]) {
+        state.checkins[today] = {};
+        state.habits.forEach(h => { state.checkins[today][h.id] = 0; });
+        saveState();
+      }
+      state.timer.intervalId = null;
+      state.timer.running = false;
+      state.timer.endTime = null;
+      bindEvents();
+      render();
+      updateTimerUI();
+      startReminderChecker();
+      registerServiceWorker();
+      requestPersistentStorage();
+    } catch (e) {
+      console.error('Init error:', e);
+    }
+    startQuoteRotation();
+    const initAudioOnce = () => {
+      initAudio();
+      document.removeEventListener('touchstart', initAudioOnce);
+      document.removeEventListener('click', initAudioOnce);
+    };
+    document.addEventListener('touchstart', initAudioOnce, { once: true });
+    document.addEventListener('click', initAudioOnce, { once: true });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+
+})();
+</script>
+</body>
+</html>
