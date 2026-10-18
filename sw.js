@@ -1,13 +1,14 @@
 // sw.js
 // Service Worker cho Winter Arc PWA
-// - Network-first cho HTML, cache-first cho asset tĩnh
-// - Hỗ trợ notification, periodic sync, push
-// - Nhắc nhở theo khoảng phút (intervalMin)
+// - Network-first HTML, cache-first asset
+// - Hỗ trợ reminder + timer notification click
+// - SWITCH_VIEW message để mở đúng tab khi user tap notification
 
-const CACHE_NAME = 'winter-arc-v3';
+const CACHE_NAME = 'winter-arc-v4';
 const META_CACHE = 'winter-arc-meta';
 const REMINDER_STATE_PATH = '/__reminder-state';
 const PERIODIC_TAG = 'winter-arc-daily-check';
+const TIMER_NOTIFICATION_TAG = 'winter-arc-timer-running';
 const APP_SHELL = [
   './winter-arc.html',
   './manifest.json',
@@ -83,17 +84,15 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
+// ==== REMINDER STATE ====
 async function readReminderState() {
   try {
     const cache = await caches.open(META_CACHE);
     const res = await cache.match(REMINDER_STATE_PATH);
     if (!res) return null;
     return await res.json();
-  } catch (e) {
-    return null;
-  }
+  } catch (e) { return null; }
 }
-
 async function writeReminderState(state) {
   try {
     const cache = await caches.open(META_CACHE);
@@ -102,7 +101,6 @@ async function writeReminderState(state) {
     }));
   } catch (e) {}
 }
-
 async function showArcNotification(count) {
   await self.registration.showNotification('WINTER ARC', {
     body: `${count} nhiệm vụ chưa hoàn thành`,
@@ -113,18 +111,15 @@ async function showArcNotification(count) {
     data: { url: './winter-arc.html' }
   });
 }
-
 async function runReminderCheck(force) {
   const state = await readReminderState();
   if (!state) return;
   if (!state.enabled) return;
   if (!state.intervalMin || state.intervalMin < 1) return;
-
   const now = Date.now();
   const intervalMs = state.intervalMin * 60 * 1000;
   if (!force && state.lastNotifiedTimestamp && (now - state.lastNotifiedTimestamp) < intervalMs) return;
   if (!force && state.incompleteCount <= 0) return;
-
   await showArcNotification(state.incompleteCount || 0);
   state.lastNotifiedTimestamp = now;
   await writeReminderState(state);
@@ -160,13 +155,19 @@ self.addEventListener('push', (event) => {
   );
 });
 
+// ==== NOTIFICATION CLICK ====
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  const targetUrl = (event.notification.data && event.notification.data.url) || './winter-arc.html';
+  const data = event.notification.data || {};
+  const targetUrl = data.url || './winter-arc.html';
+  const view = data.view;
   event.waitUntil(
     self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientsArr) => {
       for (const client of clientsArr) {
         if ('focus' in client) {
+          if (view && client.postMessage) {
+            try { client.postMessage({ type: 'SWITCH_VIEW', view: view }); } catch (e) {}
+          }
           if ('navigate' in client) client.navigate(targetUrl).catch(() => {});
           return client.focus();
         }
@@ -176,6 +177,7 @@ self.addEventListener('notificationclick', (event) => {
   );
 });
 
+// ==== MESSAGE ====
 self.addEventListener('message', (event) => {
   const data = event.data || {};
 
@@ -196,6 +198,14 @@ self.addEventListener('message', (event) => {
 
   if (data.type === 'CHECK_REMINDER_NOW') {
     event.waitUntil(runReminderCheck(true));
+    return;
+  }
+
+  if (data.type === 'HIDE_TIMER_NOTIFICATION') {
+    event.waitUntil((async () => {
+      const notifications = await self.registration.getNotifications({ tag: TIMER_NOTIFICATION_TAG });
+      notifications.forEach(n => n.close());
+    })());
     return;
   }
 });
